@@ -203,3 +203,41 @@ canvas {
         grid-template-columns: 1fr;
     }
 }
+
+.range-control {
+    margin: 10px 0;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.range-control label {
+    margin-right: 10px;
+    font-weight: normal;
+}
+
+.range-control input[type="range"] {
+    flex: 1;
+    min-width: 200px;
+    margin: 0 10px;
+}
+
+#frequency-display-value {
+    font-weight: bold;
+    min-width: 70px;
+}
+
+@media (max-width: 600px) {
+    .range-control {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .range-control input[type="range"] {
+        width: 100%;
+        margin: 10px 0;
+    }
+}
