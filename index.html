@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Room Acoustics Calculator</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Room Acoustics Calculator</h1>
+        
+        <div class="tabs">
+            <button class="tab-button active" data-tab="resonance">Risonanza Armonica</button>
+            <button class="tab-button" data-tab="standing-waves">Onde Stazionarie</button>
+        </div>
+        
+        <div class="tab-content active" id="resonance">
+            <h2>Calcolo Frequenze di Risonanza</h2>
+            <div class="input-form">
+                <div class="input-group">
+                    <label for="room-length">Lunghezza (m):</label>
+                    <input type="number" id="room-length" step="0.01" min="0.1" value="5">
+                </div>
+                <div class="input-group">
+                    <label for="room-width">Larghezza (m):</label>
+                    <input type="number" id="room-width" step="0.01" min="0.1" value="4">
+                </div>
+                <div class="input-group">
+                    <label for="room-height">Altezza (m):</label>
+                    <input type="number" id="room-height" step="0.01" min="0.1" value="3">
+                </div>
+                <div class="input-group">
+                    <label for="sound-speed">Velocità del suono (m/s):</label>
+                    <input type="number" id="sound-speed" step="0.1" min="300" value="343">
+                </div>
+                <div class="input-group">
+                    <label for="max-modes">Numero di modi da calcolare:</label>
+                    <input type="number" id="max-modes" step="1" min="1" max="10" value="5">
+                </div>
+                <button id="calculate-resonance" class="calculate-btn">Calcola</button>
+            </div>
+            
+            <div class="results">
+                <h3>Risultati</h3>
+                <div class="result-container">
+                    <div class="result-section">
+                        <h4>Frequenze Assiali</h4>
+                        <div id="axial-results" class="result-data"></div>
+                    </div>
+                    <div class="result-section">
+                        <h4>Frequenze Tangenziali</h4>
+                        <div id="tangential-results" class="result-data"></div>
+                    </div>
+                    <div class="result-section">
+                        <h4>Frequenze Oblique</h4>
+                        <div id="oblique-results" class="result-data"></div>
+                    </div>
+                </div>
+                <div class="visualization">
+                    <h4>Visualizzazione delle Frequenze</h4>
+                    <canvas id="frequency-chart" width="800" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tab-content" id="standing-waves">
+            <h2>Calcolo Onde Stazionarie</h2>
+            <div class="input-form">
+                <div class="input-group">
+                    <label for="sw-length">Lunghezza (m):</label>
+                    <input type="number" id="sw-length" step="0.01" min="0.1" value="5">
+                </div>
+                <div class="input-group">
+                    <label for="sw-width">Larghezza (m):</label>
+                    <input type="number" id="sw-width" step="0.01" min="0.1" value="4">
+                </div>
+                <div class="input-group">
+                    <label for="sw-height">Altezza (m):</label>
+                    <input type="number" id="sw-height" step="0.01" min="0.1" value="3">
+                </div>
+                <div class="input-group">
+                    <label for="sw-sound-speed">Velocità del suono (m/s):</label>
+                    <input type="number" id="sw-sound-speed" step="0.1" min="300" value="343">
+                </div>
+                <div class="input-group">
+                    <label for="sw-max-modes">Numero di modi da calcolare:</label>
+                    <input type="number" id="sw-max-modes" step="1" min="1" max="10" value="5">
+                </div>
+                <button id="calculate-standing-waves" class="calculate-btn">Calcola</button>
+            </div>
+            
+            <div class="results">
+                <h3>Risultati</h3>
+                <div class="result-container">
+                    <div class="result-section full-width">
+                        <h4>Onde Stazionarie</h4>
+                        <div id="standing-waves-results" class="result-data"></div>
+                    </div>
+                </div>
+                <div class="visualization">
+                    <h4>Visualizzazione delle Onde Stazionarie</h4>
+                    <canvas id="standing-waves-chart" width="800" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="app.js"></script>
+</body>
+</html>
