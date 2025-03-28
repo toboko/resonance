@@ -49,10 +49,10 @@
             <div class="input-group">
                 <label for="max-modes">Numero di modi:</label>
                 <select id="max-modes" class="select-input">
-                    <option value="5">Pochi (5 modi)</option>
-                    <option value="10" selected>Medio (10 modi)</option>
-                    <option value="15">Molti (15 modi)</option>
-                    <option value="20">Molto alti (20 modi)</option>
+                    <option value="3">Basso (3 modi)</option>
+                    <option value="5">Medio (5 modi)</option>
+                    <option value="8">Alto (8 modi)</option>
+                    <option value="10" selected>Molto alto (10 modi)</option>
                     <option value="custom">Personalizzato...</option>
                 </select>
                 <div id="custom-max-modes-container" style="display: none; margin-top: 10px;">
@@ -119,16 +119,15 @@
             <div class="input-group">
                 <label for="sw-max-modes">Numero di modi:</label>
                 <select id="sw-max-modes" class="select-input">
-                    <option value="5">Pochi (5 modi)</option>
-                    <option value="10" selected>Medio (10 modi)</option>
-                    <option value="15">Molti (15 modi)</option>
-                    <option value="20">Molto alti (20 modi)</option>
+                    <option value="3">Basso (3 modi)</option>
+                    <option value="5">Medio (5 modi)</option>
+                    <option value="8">Alto (8 modi)</option>
+                    <option value="10" selected>Molto alto (10 modi)</option>
                     <option value="custom">Personalizzato...</option>
                 </select>
-
                 <div id="sw-custom-max-modes-container" style="display: none; margin-top: 10px;">
                     <label for="sw-custom-max-modes">Numero personalizzato:</label>
-                    <input type="number" id="sw-custom-max-modes" step="1" min="1" max="30" value="10">
+                    <input type="number" id="sw-custom-max-modes" step="1" min="1" max="15" value="5">
                 </div>
             </div>
             <button id="calculate-standing-waves" class="calculate-btn">Calcola</button>

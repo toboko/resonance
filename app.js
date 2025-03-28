@@ -121,64 +121,30 @@ $(document).ready(function () {
         $('#room-height').val($(this).val());
     });
 
-    // Calculate resonance frequencies
-    $('#calculate-resonance').on('click', function () {
-        const length = parseFloat($('#room-length').val());
-        const width = parseFloat($('#room-width').val());
-        const height = parseFloat($('#room-height').val());
+    // Calculate resonance and standing waves frequencies
+    $('#calculate-resonance, #calculate-standing-waves').on('click', function() {
+        // If clicked from standing waves tab, first sync values to resonance form
+        if ($(this).attr('id') === 'calculate-standing-waves') {
+            // Update resonance form with standing waves form values
+            $('#room-length').val($('#sw-length').val());
+            $('#room-width').val($('#sw-width').val());
+            $('#room-height').val($('#sw-height').val());
 
-        // Get sound speed based on selection
-        let soundSpeed;
-        if ($('#sound-speed').val() === 'custom') {
-            soundSpeed = parseFloat($('#custom-sound-speed').val());
-        } else {
-            soundSpeed = parseFloat($('#sound-speed').val());
+            $('#sound-speed').val($('#sw-sound-speed').val());
+            if ($('#sw-sound-speed').val() === 'custom') {
+                $('#custom-sound-speed-container').show();
+                $('#custom-sound-speed').val($('#sw-custom-sound-speed').val());
+            }
+
+            $('#max-modes').val($('#sw-max-modes').val());
+            if ($('#sw-max-modes').val() === 'custom') {
+                $('#custom-max-modes-container').show();
+                $('#custom-max-modes').val($('#sw-custom-max-modes').val());
+            }
         }
 
-        // Get max modes based on selection
-        let maxModes;
-        if ($('#max-modes').val() === 'custom') {
-            maxModes = parseInt($('#custom-max-modes').val());
-        } else {
-            maxModes = parseInt($('#max-modes').val());
-        }
-
-        if (isNaN(length) || isNaN(width) || isNaN(height) || isNaN(soundSpeed)) {
-            alert('Per favore, inserisci valori numerici validi per tutte le dimensioni e la velocità del suono.');
-            return;
-        }
-
-        calculateResonanceFrequencies(length, width, height, soundSpeed, maxModes);
-    });
-
-    // Calculate standing waves
-    $('#calculate-standing-waves').on('click', function () {
-        const length = parseFloat($('#sw-length').val());
-        const width = parseFloat($('#sw-width').val());
-        const height = parseFloat($('#sw-height').val());
-
-        // Get sound speed based on selection
-        let soundSpeed;
-        if ($('#sw-sound-speed').val() === 'custom') {
-            soundSpeed = parseFloat($('#sw-custom-sound-speed').val());
-        } else {
-            soundSpeed = parseFloat($('#sw-sound-speed').val());
-        }
-
-        // Get max modes based on selection
-        let maxModes;
-        if ($('#sw-max-modes').val() === 'custom') {
-            maxModes = parseInt($('#sw-custom-max-modes').val());
-        } else {
-            maxModes = parseInt($('#sw-max-modes').val());
-        }
-
-        if (isNaN(length) || isNaN(width) || isNaN(height) || isNaN(soundSpeed)) {
-            alert('Per favore, inserisci valori numerici validi per tutte le dimensioni e la velocità del suono.');
-            return;
-        }
-
-        calculateStandingWaves(length, width, height, soundSpeed, maxModes);
+        // Calculate both sections
+        calculateBothSections();
     });
 
     // Function to calculate resonance frequencies
@@ -680,7 +646,7 @@ $(document).ready(function () {
             container.append(table);
 
             // Aggiungi una nota sulla tabella
-            container.append('<p class="table-note">* I numeri nei cerchi colorati corrispondono ai marcatori nel grafico sopra</p>');
+            container.append('<p class="table-note">* I numeri nei cerchi colorati corrispondono ai marcatori nel grafico sotto</p>');
         }
 
         // Crea le tabelle per ogni tipo
@@ -1025,7 +991,7 @@ $(document).ready(function () {
         container.append(table);
 
         // Aggiungi una nota sulla tabella
-        container.append('<p class="table-note">* I numeri nei cerchi colorati corrispondono ai marcatori nel grafico sopra</p>');
+        container.append('<p class="table-note">* I numeri nei cerchi colorati corrispondono ai marcatori nel grafico sotto</p>');
 
         // Aggiungi CSS per la tabella se non è già presente in styles.css
         if (!$('#frequency-table-styles').length) {
@@ -1233,6 +1199,65 @@ $(document).ready(function () {
             $('#sw-custom-max-modes').val($('#custom-max-modes').val());
         }
     }
+
+    function calculateBothSections() {
+        // Get values from the active tab
+        const length = parseFloat($('#room-length').val());
+        const width = parseFloat($('#room-width').val());
+        const height = parseFloat($('#room-height').val());
+
+        // Get sound speed value
+        let soundSpeed;
+        if ($('#sound-speed').val() === 'custom') {
+            soundSpeed = parseFloat($('#custom-sound-speed').val());
+        } else {
+            soundSpeed = parseFloat($('#sound-speed').val());
+        }
+
+        // Get max modes value
+        let maxModes;
+        if ($('#max-modes').val() === 'custom') {
+            maxModes = parseInt($('#custom-max-modes').val());
+        } else {
+            maxModes = parseInt($('#max-modes').val());
+        }
+
+        // Calculate resonance frequencies
+        calculateResonanceFrequencies(length, width, height, soundSpeed, maxModes);
+
+        // Calculate standing waves
+        calculateStandingWaves(length, width, height, soundSpeed, maxModes);
+
+        // Sync form values between tabs
+        syncFormValues();
+    }
+
+    // Function to sync form values between tabs
+    function syncFormValues() {
+        // Sync dimensions
+        $('#sw-length').val($('#room-length').val());
+        $('#sw-width').val($('#room-width').val());
+        $('#sw-height').val($('#room-height').val());
+
+        // Sync sound speed
+        $('#sw-sound-speed').val($('#sound-speed').val());
+        if ($('#sound-speed').val() === 'custom') {
+            $('#sw-custom-sound-speed-container').show();
+            $('#sw-custom-sound-speed').val($('#custom-sound-speed').val());
+        } else {
+            $('#sw-custom-sound-speed-container').hide();
+        }
+
+        // Sync max modes
+        $('#sw-max-modes').val($('#max-modes').val());
+        if ($('#max-modes').val() === 'custom') {
+            $('#sw-custom-max-modes-container').show();
+            $('#sw-custom-max-modes').val($('#custom-max-modes').val());
+        } else {
+            $('#sw-custom-max-modes-container').hide();
+        }
+    }
+
 
     // Call the initialization function when the document is ready
     initializeFormSync();
