@@ -49,10 +49,10 @@
             <div class="input-group">
                 <label for="max-modes">Numero di modi:</label>
                 <select id="max-modes" class="select-input">
-                    <option value="3">Basso (fino a p,q,r = 3)</option>
-                    <option value="5" selected>Medio (fino a p,q,r = 5)</option>
-                    <option value="8">Alto (fino a p,q,r = 8)</option>
-                    <option value="10">Molto alto (fino a p,q,r = 10)</option>
+                    <option value="5">Pochi (5 modi)</option>
+                    <option value="10" selected>Medio (10 modi)</option>
+                    <option value="15">Molti (15 modi)</option>
+                    <option value="20">Molto alti (20 modi)</option>
                     <option value="custom">Personalizzato...</option>
                 </select>
                 <div id="custom-max-modes-container" style="display: none; margin-top: 10px;">
@@ -125,6 +125,7 @@
                     <option value="20">Molto alti (20 modi)</option>
                     <option value="custom">Personalizzato...</option>
                 </select>
+
                 <div id="sw-custom-max-modes-container" style="display: none; margin-top: 10px;">
                     <label for="sw-custom-max-modes">Numero personalizzato:</label>
                     <input type="number" id="sw-custom-max-modes" step="1" min="1" max="30" value="10">

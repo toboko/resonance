@@ -19,6 +19,14 @@ $(document).ready(function () {
         } else {
             $('#custom-sound-speed-container').hide();
         }
+        // Sync with standing waves
+        $('#sw-sound-speed').val($(this).val());
+        if ($(this).val() === 'custom') {
+            $('#sw-custom-sound-speed-container').show();
+            $('#sw-custom-sound-speed').val($('#custom-sound-speed').val());
+        } else {
+            $('#sw-custom-sound-speed-container').hide();
+        }
     });
 
     $('#sw-sound-speed').on('change', function () {
@@ -27,6 +35,23 @@ $(document).ready(function () {
         } else {
             $('#sw-custom-sound-speed-container').hide();
         }
+        // Sync with resonance
+        $('#sound-speed').val($(this).val());
+        if ($(this).val() === 'custom') {
+            $('#custom-sound-speed-container').show();
+            $('#custom-sound-speed').val($('#sw-custom-sound-speed').val());
+        } else {
+            $('#custom-sound-speed-container').hide();
+        }
+    });
+
+    // Sync custom sound speed values
+    $('#custom-sound-speed').on('input', function() {
+        $('#sw-custom-sound-speed').val($(this).val());
+    });
+
+    $('#sw-custom-sound-speed').on('input', function() {
+        $('#custom-sound-speed').val($(this).val());
     });
 
     // Handle custom max modes selection
@@ -36,6 +61,14 @@ $(document).ready(function () {
         } else {
             $('#custom-max-modes-container').hide();
         }
+        // Sync with standing waves
+        $('#sw-max-modes').val($(this).val());
+        if ($(this).val() === 'custom') {
+            $('#sw-custom-max-modes-container').show();
+            $('#sw-custom-max-modes').val($('#custom-max-modes').val());
+        } else {
+            $('#sw-custom-max-modes-container').hide();
+        }
     });
 
     $('#sw-max-modes').on('change', function () {
@@ -44,6 +77,48 @@ $(document).ready(function () {
         } else {
             $('#sw-custom-max-modes-container').hide();
         }
+        // Sync with resonance
+        $('#max-modes').val($(this).val());
+        if ($(this).val() === 'custom') {
+            $('#custom-max-modes-container').show();
+            $('#custom-max-modes').val($('#sw-custom-max-modes').val());
+        } else {
+            $('#custom-max-modes-container').hide();
+        }
+    });
+
+    // Sync custom max modes values
+    $('#custom-max-modes').on('input', function() {
+        $('#sw-custom-max-modes').val($(this).val());
+    });
+
+    $('#sw-custom-max-modes').on('input', function() {
+        $('#custom-max-modes').val($(this).val());
+    });
+
+    // Sync room dimensions
+    $('#room-length').on('input', function() {
+        $('#sw-length').val($(this).val());
+    });
+
+    $('#sw-length').on('input', function() {
+        $('#room-length').val($(this).val());
+    });
+
+    $('#room-width').on('input', function() {
+        $('#sw-width').val($(this).val());
+    });
+
+    $('#sw-width').on('input', function() {
+        $('#room-width').val($(this).val());
+    });
+
+    $('#room-height').on('input', function() {
+        $('#sw-height').val($(this).val());
+    });
+
+    $('#sw-height').on('input', function() {
+        $('#room-height').val($(this).val());
     });
 
     // Calculate resonance frequencies
@@ -113,11 +188,16 @@ $(document).ready(function () {
         const obliqueFrequencies = [];
 
         // Calculate resonance frequencies for different modes (p, q, r)
+        // We need to iterate up to maxModes for each dimension
         for (let p = 0; p <= maxModes; p++) {
             for (let q = 0; q <= maxModes; q++) {
                 for (let r = 0; r <= maxModes; r++) {
                     // Skip the (0,0,0) mode
                     if (p === 0 && q === 0 && r === 0) continue;
+
+                    // Skip modes where the sum of indices exceeds maxModes to keep calculation reasonable
+                    // This prevents excessive calculations for higher mode numbers
+                    if (p + q + r > maxModes * 2) continue;
 
                     const pComponent = p / length;
                     const qComponent = q / width;
@@ -1132,4 +1212,28 @@ $(document).ready(function () {
                 canvas.width - padding, canvas.height - 10);
         }
     }
+
+    // Initialize the sync between forms when the page loads
+    function initializeFormSync() {
+        // Set initial values from resonance to standing waves
+        $('#sw-length').val($('#room-length').val());
+        $('#sw-width').val($('#room-width').val());
+        $('#sw-height').val($('#room-height').val());
+        $('#sw-sound-speed').val($('#sound-speed').val());
+        $('#sw-max-modes').val($('#max-modes').val());
+
+        // If custom options are selected, sync those too
+        if ($('#sound-speed').val() === 'custom') {
+            $('#sw-custom-sound-speed-container').show();
+            $('#sw-custom-sound-speed').val($('#custom-sound-speed').val());
+        }
+
+        if ($('#max-modes').val() === 'custom') {
+            $('#sw-custom-max-modes-container').show();
+            $('#sw-custom-max-modes').val($('#custom-max-modes').val());
+        }
+    }
+
+    // Call the initialization function when the document is ready
+    initializeFormSync();
 });
