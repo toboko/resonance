@@ -173,7 +173,97 @@ canvas {
     border-radius: 8px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
-
+.results-summary {
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 5px;
+}
+.frequency-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 5px;
+    margin-bottom: 20px;
+    table-layout: fixed;
+}
+.frequency-table th, .frequency-table td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.frequency-table th.col-number, 
+.frequency-table td.col-number {
+    width: 60px;
+    text-align: center;
+}
+.frequency-table th.col-mode, 
+.frequency-table td.col-mode {
+    width: 110px;
+    text-align: center;
+}
+.frequency-table th.col-freq, 
+.frequency-table td.col-freq {
+    width: auto;
+    text-align: right;
+    padding-right: 20px;
+}
+.frequency-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+.p-0 {
+    padding: 0 !important;
+}
+.w-100 {
+    width: 100%;
+}
+.group-content table {
+    border-collapse: collapse;
+}
+.group-content tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+.group-header {
+    background-color: #eaeaea;
+    cursor: pointer;
+}
+.group-header:hover {
+    background-color: #e0e0e0;
+}
+.group-toggle {
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+}
+.toggle-icon {
+    margin-right: 8px;
+    font-size: 10px;
+}
+.frequency-range {
+    font-weight: normal;
+    color: #666;
+    margin-left: 10px;
+}
+.number-marker {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    color: white;
+    text-align: center;
+    line-height: 20px;
+    font-weight: bold;
+    font-size: 12px;
+}
+.table-note {
+    display: block;
+    font-size: 12px;
+    color: #666;
+    font-style: italic;
+    margin-top: 5px;
+}
 .waves-table {
     width: 100%;
     border-collapse: collapse;
