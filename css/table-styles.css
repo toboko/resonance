@@ -1,0 +1,126 @@
+/* Table Styles for Frequency Tables */
+
+/* Results summary */
+.results-summary {
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+/* Main frequency table styles */
+.frequency-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 5px;
+    margin-bottom: 20px;
+    table-layout: fixed;
+}
+
+.frequency-table th,
+.frequency-table td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Column-specific widths */
+.frequency-table th.col-number,
+.frequency-table td.col-number {
+    width: 60px;
+    text-align: center;
+}
+
+.frequency-table th.col-mode,
+.frequency-table td.col-mode {
+    width: 110px;
+    text-align: center;
+}
+
+.frequency-table th.col-freq,
+.frequency-table td.col-freq {
+    width: auto;
+    text-align: right;
+    padding-right: 20px;
+}
+
+/* Table header styling */
+.frequency-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+/* Utility classes */
+.p-0 {
+    padding: 0 !important;
+}
+
+.w-100 {
+    width: 100%;
+}
+
+/* Group content styling */
+.group-content table {
+    border-collapse: collapse;
+}
+
+.group-content tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* Group header styling */
+.group-header {
+    background-color: #eaeaea;
+    cursor: pointer;
+}
+
+.group-header:hover {
+    background-color: #e0e0e0;
+}
+
+/* Group toggle styling */
+.group-toggle {
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+}
+
+.toggle-icon {
+    margin-right: 8px;
+    font-size: 10px;
+}
+
+.frequency-range {
+    font-weight: normal;
+    color: #666;
+    margin-left: 10px;
+}
+
+/* Number marker styling */
+.number-marker {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    color: white;
+    text-align: center;
+    line-height: 20px;
+    font-weight: bold;
+    font-size: 12px;
+    margin-right: 8px;
+}
+
+/* Table note styling */
+.table-note {
+    font-size: 12px;
+    color: #666;
+    font-style: italic;
+    margin-top: 5px;
+}
+
+/* Standing waves table specific styles */
+.frequency-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}

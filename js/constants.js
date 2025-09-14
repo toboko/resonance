@@ -18,6 +18,9 @@ const COLORS = {
     TANGENTIAL: '#36a2eb', // Blue
     OBLIQUE: '#ffce56',    // Yellow
 
+    // Combined signal
+    COMBINED: '#9c88ff',   // Purple
+
     // Dimensions
     LENGTH: '#ff6384',     // Red
     WIDTH: '#36a2eb',      // Blue
