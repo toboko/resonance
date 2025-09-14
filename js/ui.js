@@ -64,11 +64,13 @@ function setupSoundSpeedSync() {
 // Sync max modes values between tabs
 function setupMaxModesSync() {
     $('#max-modes').on('input', function() {
-        $('#sw-max-modes').val($(this).val());
+        const validatedValue = validateMaxModes(this);
+        $('#sw-max-modes').val(validatedValue);
     });
 
     $('#sw-max-modes').on('input', function() {
-        $('#max-modes').val($(this).val());
+        const validatedValue = validateMaxModes(this);
+        $('#max-modes').val(validatedValue);
     });
 }
 
@@ -99,6 +101,25 @@ function setupRoomDimensionsSync() {
     });
 }
 
+// Function to validate and clamp max modes value
+function validateMaxModes(inputElement) {
+    let value = parseInt($(inputElement).val());
+
+    // Clamp value between 1 and 10
+    if (isNaN(value) || value < 1) {
+        value = 1;
+    } else if (value > 10) {
+        value = 10;
+    }
+
+    // Update the input value if it was clamped
+    if ($(inputElement).val() != value) {
+        $(inputElement).val(value);
+    }
+
+    return value;
+}
+
 // Auto-update calculations when inputs change
 function setupAutoUpdateHandlers() {
     // Debounce function to limit update frequency
@@ -122,6 +143,11 @@ function setupAutoUpdateHandlers() {
     // Add change and input event listeners to all input elements
     inputSelectors.forEach(selector => {
         $(selector).on('input change', function() {
+            // Validate max modes inputs before processing
+            if (selector === '#max-modes' || selector === '#sw-max-modes') {
+                validateMaxModes(this);
+            }
+
             // Sync values between tabs
             syncFormValues();
             // Trigger debounced update
@@ -154,12 +180,17 @@ function syncFormValues() {
         $('#sw-custom-sound-speed-container').hide();
     }
 
-    // Sync max modes
-    $('#sw-max-modes').val($('#max-modes').val());
+    // Sync max modes with validation
+    const maxModesValue = validateMaxModes('#max-modes');
+    $('#sw-max-modes').val(maxModesValue);
 }
 
 // Initialize the sync between forms when the page loads
 function initializeFormSync() {
+    // Validate initial max modes values
+    validateMaxModes('#max-modes');
+    validateMaxModes('#sw-max-modes');
+
     // Set initial values from resonance to standing waves
     $('#sw-length').val($('#room-length').val());
     $('#sw-width').val($('#room-width').val());
@@ -190,8 +221,8 @@ function setupChartControls() {
             soundSpeed = parseFloat($('#sound-speed').val());
         }
 
-        // Get max modes value
-        let maxModes = parseInt($('#max-modes').val());
+        // Get max modes value with validation
+        let maxModes = validateMaxModes('#max-modes');
 
         // Calculate resonance frequencies
         const resonanceResults = calculateResonanceFrequencies(length, width, height, soundSpeed, maxModes);
@@ -221,3 +252,4 @@ window.setupAutoUpdateHandlers = setupAutoUpdateHandlers;
 window.syncFormValues = syncFormValues;
 window.initializeFormSync = initializeFormSync;
 window.initializeUI = initializeUI;
+window.validateMaxModes = validateMaxModes;
