@@ -1,4 +1,6 @@
-import { DEFAULTS, COLORS, CHART_CONFIG } from './constants.js';
+/**
+ * Utility functions for the resonance calculator
+ */
 
 /**
  * Determines the type of mode based on the indices p, q, r.
@@ -11,7 +13,7 @@ import { DEFAULTS, COLORS, CHART_CONFIG } from './constants.js';
  *                     'tangential' if two are non-zero,
  *                     'oblique' if all three are non-zero
  */
-export function getModeType(p, q, r) {
+function getModeType(p, q, r) {
     // Count how many dimensions have a non-zero index
     const nonZeroCount = (p > 0 ? 1 : 0) + (q > 0 ? 1 : 0) + (r > 0 ? 1 : 0);
 
@@ -31,12 +33,12 @@ export function getModeType(p, q, r) {
  * @param {string} type - Mode type ('axial', 'tangential', 'oblique')
  * @returns {string} - Color hex code
  */
-export function getModeTypeColor(type) {
+function getModeTypeColor(type) {
     switch (type) {
-        case 'axial': return COLORS.AXIAL;
-        case 'tangential': return COLORS.TANGENTIAL;
-        case 'oblique': return COLORS.OBLIQUE;
-        default: return COLORS.AXIS;
+        case 'axial': return window.COLORS.AXIAL;
+        case 'tangential': return window.COLORS.TANGENTIAL;
+        case 'oblique': return window.COLORS.OBLIQUE;
+        default: return window.COLORS.AXIS;
     }
 }
 
@@ -46,12 +48,12 @@ export function getModeTypeColor(type) {
  * @param {string} dimension - Dimension name
  * @returns {string} - Color hex code
  */
-export function getDimensionColor(dimension) {
+function getDimensionColor(dimension) {
     switch (dimension) {
-        case 'Lunghezza': return COLORS.LENGTH;
-        case 'Larghezza': return COLORS.WIDTH;
-        case 'Altezza': return COLORS.HEIGHT;
-        default: return COLORS.AXIS;
+        case 'Lunghezza': return window.COLORS.LENGTH;
+        case 'Larghezza': return window.COLORS.WIDTH;
+        case 'Altezza': return window.COLORS.HEIGHT;
+        default: return window.COLORS.AXIS;
     }
 }
 
@@ -64,9 +66,9 @@ export function getDimensionColor(dimension) {
  * @param {number} step - Opacity decrease step
  * @returns {number} - Calculated opacity
  */
-export function calculateOpacity(complexity, baseOpacity = CHART_CONFIG.OPACITY.BASE,
-                                minOpacity = CHART_CONFIG.OPACITY.MIN,
-                                step = CHART_CONFIG.OPACITY.STEP) {
+function calculateOpacity(complexity, baseOpacity = window.CHART_CONFIG.OPACITY.BASE,
+                                minOpacity = window.CHART_CONFIG.OPACITY.MIN,
+                                step = window.CHART_CONFIG.OPACITY.STEP) {
     return Math.max(baseOpacity - complexity * step, minOpacity);
 }
 
@@ -77,7 +79,7 @@ export function calculateOpacity(complexity, baseOpacity = CHART_CONFIG.OPACITY.
  * @param {string} key - Key to group by
  * @returns {object} - Grouped data object
  */
-export function groupBy(data, key) {
+function groupBy(data, key) {
     return data.reduce((groups, item) => {
         const groupKey = item[key];
         if (!groups[groupKey]) {
@@ -95,6 +97,14 @@ export function groupBy(data, key) {
  * @param {string} key - Key to find max value for
  * @returns {number} - Maximum value
  */
-export function findMaxValue(data, key) {
+function findMaxValue(data, key) {
     return Math.max(...data.map(item => parseFloat(item[key])));
 }
+
+// Make utility functions available globally
+window.getModeType = getModeType;
+window.getModeTypeColor = getModeTypeColor;
+window.getDimensionColor = getDimensionColor;
+window.calculateOpacity = calculateOpacity;
+window.groupBy = groupBy;
+window.findMaxValue = findMaxValue;

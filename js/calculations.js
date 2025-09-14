@@ -122,12 +122,7 @@ function calculateBothSections() {
     }
 
     // Get max modes value
-    let maxModes;
-    if ($('#max-modes').val() === 'custom') {
-        maxModes = parseInt($('#custom-max-modes').val());
-    } else {
-        maxModes = parseInt($('#max-modes').val());
-    }
+    let maxModes = parseInt($('#max-modes').val());
 
     // Calculate resonance frequencies
     const resonanceResults = calculateResonanceFrequencies(length, width, height, soundSpeed, maxModes);

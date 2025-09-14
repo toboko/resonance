@@ -61,47 +61,14 @@ function setupSoundSpeedSync() {
     });
 }
 
-// Handle custom max modes selection
+// Sync max modes values between tabs
 function setupMaxModesSync() {
-    $('#max-modes').on('change', function () {
-        if ($(this).val() === 'custom') {
-            $('#custom-max-modes-container').show();
-        } else {
-            $('#custom-max-modes-container').hide();
-        }
-        // Sync with standing waves
+    $('#max-modes').on('input', function() {
         $('#sw-max-modes').val($(this).val());
-        if ($(this).val() === 'custom') {
-            $('#sw-custom-max-modes-container').show();
-            $('#sw-custom-max-modes').val($('#custom-max-modes').val());
-        } else {
-            $('#sw-custom-max-modes-container').hide();
-        }
     });
 
-    $('#sw-max-modes').on('change', function () {
-        if ($(this).val() === 'custom') {
-            $('#sw-custom-max-modes-container').show();
-        } else {
-            $('#sw-custom-max-modes-container').hide();
-        }
-        // Sync with resonance
+    $('#sw-max-modes').on('input', function() {
         $('#max-modes').val($(this).val());
-        if ($(this).val() === 'custom') {
-            $('#custom-max-modes-container').show();
-            $('#custom-max-modes').val($('#sw-custom-max-modes').val());
-        } else {
-            $('#custom-max-modes-container').hide();
-        }
-    });
-
-    // Sync custom max modes values
-    $('#custom-max-modes').on('input', function() {
-        $('#sw-custom-max-modes').val($(this).val());
-    });
-
-    $('#sw-custom-max-modes').on('input', function() {
-        $('#custom-max-modes').val($(this).val());
     });
 }
 
@@ -132,31 +99,42 @@ function setupRoomDimensionsSync() {
     });
 }
 
-// Calculate resonance and standing waves frequencies
-function setupCalculationHandlers() {
-    $('#calculate-resonance, #calculate-standing-waves').on('click', function() {
-        // If clicked from standing waves tab, first sync values to resonance form
-        if ($(this).attr('id') === 'calculate-standing-waves') {
-            // Update resonance form with standing waves form values
-            $('#room-length').val($('#sw-length').val());
-            $('#room-width').val($('#sw-width').val());
-            $('#room-height').val($('#sw-height').val());
+// Auto-update calculations when inputs change
+function setupAutoUpdateHandlers() {
+    // Debounce function to limit update frequency
+    let updateTimeout;
+    function debouncedUpdate() {
+        clearTimeout(updateTimeout);
+        updateTimeout = setTimeout(() => {
+            calculateBothSections();
+        }, 300); // 300ms delay to avoid too frequent updates
+    }
 
-            $('#sound-speed').val($('#sw-sound-speed').val());
-            if ($('#sw-sound-speed').val() === 'custom') {
-                $('#custom-sound-speed-container').show();
-                $('#custom-sound-speed').val($('#sw-custom-sound-speed').val());
-            }
+    // List of all input elements that should trigger updates
+    const inputSelectors = [
+        '#room-length', '#room-width', '#room-height',
+        '#sw-length', '#sw-width', '#sw-height',
+        '#sound-speed', '#sw-sound-speed',
+        '#custom-sound-speed', '#sw-custom-sound-speed',
+        '#max-modes', '#sw-max-modes'
+    ];
 
-            $('#max-modes').val($('#sw-max-modes').val());
-            if ($('#sw-max-modes').val() === 'custom') {
-                $('#custom-max-modes-container').show();
-                $('#custom-max-modes').val($('#sw-custom-max-modes').val());
-            }
-        }
+    // Add change and input event listeners to all input elements
+    inputSelectors.forEach(selector => {
+        $(selector).on('input change', function() {
+            // Sync values between tabs
+            syncFormValues();
+            // Trigger debounced update
+            debouncedUpdate();
+        });
+    });
 
-        // Calculate both sections
-        calculateBothSections();
+    // Also trigger update when custom containers are shown/hidden
+    $('#sound-speed, #sw-sound-speed, #max-modes, #sw-max-modes').on('change', function() {
+        // Small delay to allow DOM updates
+        setTimeout(() => {
+            debouncedUpdate();
+        }, 50);
     });
 }
 
@@ -178,12 +156,6 @@ function syncFormValues() {
 
     // Sync max modes
     $('#sw-max-modes').val($('#max-modes').val());
-    if ($('#max-modes').val() === 'custom') {
-        $('#sw-custom-max-modes-container').show();
-        $('#sw-custom-max-modes').val($('#custom-max-modes').val());
-    } else {
-        $('#sw-custom-max-modes-container').hide();
-    }
 }
 
 // Initialize the sync between forms when the page loads
@@ -200,11 +172,33 @@ function initializeFormSync() {
         $('#sw-custom-sound-speed-container').show();
         $('#sw-custom-sound-speed').val($('#custom-sound-speed').val());
     }
+}
 
-    if ($('#max-modes').val() === 'custom') {
-        $('#sw-custom-max-modes-container').show();
-        $('#sw-custom-max-modes').val($('#custom-max-modes').val());
-    }
+// Setup chart controls for showing/hiding signals
+function setupChartControls() {
+    $('.chart-controls input[type="checkbox"]').on('change', function() {
+        // Re-draw the chart with current visibility settings
+        const length = parseFloat($('#room-length').val());
+        const width = parseFloat($('#room-width').val());
+        const height = parseFloat($('#room-height').val());
+
+        // Get sound speed value
+        let soundSpeed;
+        if ($('#sound-speed').val() === 'custom') {
+            soundSpeed = parseFloat($('#custom-sound-speed').val());
+        } else {
+            soundSpeed = parseFloat($('#sound-speed').val());
+        }
+
+        // Get max modes value
+        let maxModes = parseInt($('#max-modes').val());
+
+        // Calculate resonance frequencies
+        const resonanceResults = calculateResonanceFrequencies(length, width, height, soundSpeed, maxModes);
+
+        // Re-draw chart with new visibility settings
+        drawResonanceChart('frequency-chart', resonanceResults.axial, resonanceResults.tangential, resonanceResults.oblique);
+    });
 }
 
 // Initialize all UI components
@@ -213,7 +207,8 @@ function initializeUI() {
     setupSoundSpeedSync();
     setupMaxModesSync();
     setupRoomDimensionsSync();
-    setupCalculationHandlers();
+    setupAutoUpdateHandlers();
+    setupChartControls();
     initializeFormSync();
 }
 
@@ -222,7 +217,7 @@ window.setupTabSwitching = setupTabSwitching;
 window.setupSoundSpeedSync = setupSoundSpeedSync;
 window.setupMaxModesSync = setupMaxModesSync;
 window.setupRoomDimensionsSync = setupRoomDimensionsSync;
-window.setupCalculationHandlers = setupCalculationHandlers;
+window.setupAutoUpdateHandlers = setupAutoUpdateHandlers;
 window.syncFormValues = syncFormValues;
 window.initializeFormSync = initializeFormSync;
 window.initializeUI = initializeUI;

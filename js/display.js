@@ -74,10 +74,111 @@ function displayStandingWavesResults(containerId, waves) {
     }
 }
 
-// Function to draw resonance chart
+// Function to generate continuous signal from frequency data
+function generateContinuousSignal(frequencies, maxFrequency, modeType, resolution = 1000) {
+    const signal = new Array(resolution).fill(0);
+    const frequencyStep = maxFrequency / resolution;
+
+    // Get the current max modes setting to make normalization adaptive
+    const maxModes = parseInt($('#max-modes').val()) || 10;
+
+    // Adaptive expected counts based on max modes setting
+    const baseMultiplier = Math.max(1, maxModes - 1); // Scale with max modes: 2→1, 3→2, 4→3, etc.
+
+    // Adaptive expected counts based on max modes setting (physically realistic)
+    const expectedCounts = {
+        'axial': Math.round(1 * baseMultiplier),      // Axial modes are less numerous
+        'tangential': Math.round(5 * baseMultiplier), // Tangential modes are intermediate
+        'oblique': Math.round(10 * baseMultiplier)     // Oblique modes are most numerous
+    };
+
+    const expectedCount = expectedCounts[modeType] || frequencies.length;
+
+    // Create frequency bands for per-band normalization
+    const numBands = 10;
+    const bandWidth = maxFrequency / numBands;
+    const frequenciesInBand = new Array(numBands).fill(0);
+
+    // Count frequencies in each band
+    frequencies.forEach(freq => {
+        const freqValue = parseFloat(freq.frequency);
+        const bandIndex = Math.min(Math.floor(freqValue / bandWidth), numBands - 1);
+        frequenciesInBand[bandIndex]++;
+    });
+
+    frequencies.forEach(freq => {
+        const freqValue = parseFloat(freq.frequency);
+        const freqIndex = Math.floor(freqValue / frequencyStep);
+
+        // Calculate complexity for amplitude scaling
+        const complexity = freq.p + freq.q + freq.r;
+        const baseAmplitude = 1.0;
+        const amplitude = Math.max(baseAmplitude - (complexity - 1) * 0.1, 0.3);
+
+        // Apply empirical amplitude scaling based on modal type (from acoustic practice)
+        let physicsAmplitude = amplitude;
+        if (modeType === 'axial') {
+            physicsAmplitude *= 1.0;    // Reference: most efficient energy transfer
+        } else if (modeType === 'tangential') {
+            physicsAmplitude *= 0.71;   // Empirical factor for tangential modes
+        } else if (modeType === 'oblique') {
+            physicsAmplitude *= 0.58;   // Empirical factor for oblique modes
+        }
+
+        // Apply stronger normalization based on expected count for this mode type
+        const normalizationFactor = Math.sqrt(expectedCount);
+        let normalizedAmplitude = amplitude / normalizationFactor;
+
+        // Apply per-band normalization to prevent crowding in dense frequency regions
+        const bandIndex = Math.min(Math.floor(freqValue / bandWidth), numBands - 1);
+        const bandNormalization = frequenciesInBand[bandIndex] > 0 ? 1 / Math.sqrt(frequenciesInBand[bandIndex]) : 1;
+        normalizedAmplitude *= bandNormalization;
+
+        // Apply tapering for high frequencies to reduce central peaking
+        const taperingFactor = Math.max(0.1, 1 - (freqValue / maxFrequency) * 0.7);
+        normalizedAmplitude *= taperingFactor;
+
+        // Create a Laplace distribution around the frequency (sharper than Gaussian)
+        const b = Math.max(freqValue * 0.01, 2); // Scale parameter for Laplace distribution
+
+        for (let i = 0; i < resolution; i++) {
+            const currentFreq = i * frequencyStep;
+            const distance = Math.abs(currentFreq - freqValue);
+
+            // Laplace distribution: (1/(2b)) * exp(-|x|/b)
+            const laplace = (1 / (2 * b)) * Math.exp(-distance / b);
+            signal[i] += normalizedAmplitude * laplace;
+        }
+    });
+
+    return signal;
+}
+
+// Function to combine multiple signals
+function combineSignals(signals) {
+    if (signals.length === 0) return [];
+
+    const length = signals[0].length;
+    const combined = new Array(length).fill(0);
+
+    signals.forEach(signal => {
+        for (let i = 0; i < length; i++) {
+            combined[i] += signal[i];
+        }
+    });
+
+    return combined;
+}
+
+// Function to draw resonance chart with continuous signals
 function drawResonanceChart(canvasId, axial, tangential, oblique) {
     const canvas = document.getElementById(canvasId);
     const ctx = canvas.getContext('2d');
+
+    // Store data on canvas for interactive redrawing
+    canvas.axialData = axial;
+    canvas.tangentialData = tangential;
+    canvas.obliqueData = oblique;
 
     // Clear canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -87,45 +188,33 @@ function drawResonanceChart(canvasId, axial, tangential, oblique) {
     const width = canvas.width - padding * 2;
     const height = canvas.height - padding * 2;
 
-    // Combine all frequencies
-    const allFrequencies = [];
-    let frequencyNumber = 1;
-
-    // Add axial frequencies with type info
-    axial.forEach(freq => {
-        allFrequencies.push({
-            ...freq,
-            type: 'axial',
-            typeLabel: 'Assiale',
-            number: frequencyNumber++
-        });
-    });
-
-    // Add tangential frequencies with type info
-    tangential.forEach(freq => {
-        allFrequencies.push({
-            ...freq,
-            type: 'tangential',
-            typeLabel: 'Tangenziale',
-            number: frequencyNumber++
-        });
-    });
-
-    // Add oblique frequencies with type info
-    oblique.forEach(freq => {
-        allFrequencies.push({
-            ...freq,
-            type: 'oblique',
-            typeLabel: 'Obliqua',
-            number: frequencyNumber++
-        });
-    });
-
-    // Sort by frequency
-    allFrequencies.sort((a, b) => parseFloat(a.frequency) - parseFloat(b.frequency));
-
-    // Find max frequency for scaling and add 80Hz padding
+    // Combine all frequencies for max frequency calculation
+    const allFrequencies = [...axial, ...tangential, ...oblique];
     const maxFrequency = Math.max(...allFrequencies.map(f => parseFloat(f.frequency))) + 80;
+
+    // Generate continuous signals for each type
+    const axialSignal = generateContinuousSignal(axial, maxFrequency, 'axial');
+    const tangentialSignal = generateContinuousSignal(tangential, maxFrequency, 'tangential');
+    const obliqueSignal = generateContinuousSignal(oblique, maxFrequency, 'oblique');
+
+    // Generate combined signal
+    const combinedSignal = combineSignals([axialSignal, tangentialSignal, obliqueSignal]);
+
+    // Get visibility settings from checkboxes
+    const showAxial = $('#show-axial').is(':checked');
+    const showTangential = $('#show-tangential').is(':checked');
+    const showOblique = $('#show-oblique').is(':checked');
+    const showCombined = $('#show-combined').is(':checked');
+
+    // Collect visible signals for amplitude scaling
+    const visibleSignals = [];
+    if (showAxial && axial.length > 0) visibleSignals.push(...axialSignal);
+    if (showTangential && tangential.length > 0) visibleSignals.push(...tangentialSignal);
+    if (showOblique && oblique.length > 0) visibleSignals.push(...obliqueSignal);
+    if (showCombined && combinedSignal.length > 0) visibleSignals.push(...combinedSignal);
+
+    // Find max amplitude for scaling (only from visible signals)
+    const maxAmplitude = visibleSignals.length > 0 ? Math.max(...visibleSignals) : 1;
 
     // Draw axes
     ctx.beginPath();
@@ -154,103 +243,202 @@ function drawResonanceChart(canvasId, axial, tangential, oblique) {
         ctx.fillText(Math.round(freqValue) + ' Hz', x, canvas.height - padding + 20);
     }
 
+    // Draw amplitude scale on y-axis
+    const amplitudeTicks = 5;
+    for (let i = 0; i <= amplitudeTicks; i++) {
+        const y = canvas.height - padding - (height * i) / amplitudeTicks;
+        const amplitudeValue = (maxAmplitude * i) / amplitudeTicks;
+
+        // Draw tick
+        ctx.beginPath();
+        ctx.moveTo(padding, y);
+        ctx.lineTo(padding - 5, y);
+        ctx.strokeStyle = '#000';
+        ctx.stroke();
+
+        // Draw label
+        ctx.fillStyle = '#000';
+        ctx.textAlign = 'right';
+        ctx.fillText(amplitudeValue.toFixed(2), padding - 10, y + 4);
+    }
+
     // Define colors for mode types
     const typeColors = {
         'axial': '#ff6384', // Red
         'tangential': '#36a2eb', // Blue
-        'oblique': '#ffce56' // Yellow
+        'oblique': '#ffce56', // Yellow
+        'combined': '#9c88ff' // Purple for combined
     };
 
-    // Group frequencies by type
-    const typeGroups = {
-        'axial': [],
-        'tangential': [],
-        'oblique': []
-    };
+    // Function to draw signal curve
+    function drawSignal(signal, color, label, alpha = 0.8) {
+        ctx.beginPath();
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 2;
+        ctx.globalAlpha = alpha;
 
-    allFrequencies.forEach(freq => {
-        typeGroups[freq.type].push(freq);
-    });
+        const step = width / signal.length;
+        let hasStarted = false;
 
-    // Draw frequency lines for each type
-    Object.entries(typeGroups).forEach(([type, frequencies]) => {
-        // Sort by complexity within each type
-        frequencies.sort((a, b) => (a.p + a.q + a.r) - (b.p + b.q + b.r));
+        for (let i = 0; i < signal.length; i++) {
+            const x = padding + (i / signal.length) * width;
+            const y = canvas.height - padding - (signal[i] / maxAmplitude) * height;
 
-        frequencies.forEach((freq, index) => {
-            const x = padding + (parseFloat(freq.frequency) / maxFrequency) * width;
-            const color = typeColors[type];
+            if (!hasStarted) {
+                ctx.moveTo(x, y);
+                hasStarted = true;
+            } else {
+                ctx.lineTo(x, y);
+            }
+        }
 
-            // Calculate complexity based on sum of mode indices (p+q+r)
-            const complexity = freq.p + freq.q + freq.r;
+        ctx.stroke();
 
-            // Calculate opacity based on complexity
-            // Lower complexity (simpler modes) = higher opacity
-            const baseOpacity = 1.0;
-            const minOpacity = 0.3;
-            const opacityStep = 0.1;
-            const opacity = Math.max(baseOpacity - (complexity - 1) * opacityStep, minOpacity);
+        // Fill area under curve
+        ctx.lineTo(padding + width, canvas.height - padding);
+        ctx.lineTo(padding, canvas.height - padding);
+        ctx.closePath();
+        ctx.globalAlpha = alpha * 0.3;
+        ctx.fillStyle = color;
+        ctx.fill();
 
-            // Draw line with appropriate opacity
-            ctx.beginPath();
-            ctx.moveTo(x, canvas.height - padding);
-            ctx.lineTo(x, padding);
-            ctx.strokeStyle = color;
-            ctx.globalAlpha = opacity;
-            ctx.stroke();
+        ctx.globalAlpha = 1.0;
+    }
 
-            // Draw numbered marker at bottom of line with the same opacity
-            ctx.beginPath();
-            ctx.arc(x, canvas.height - padding - 3, 8, 0, Math.PI * 2);
-            ctx.fillStyle = color;
-            // Keep the same opacity for the circle
-            ctx.fill();
+    // Draw individual signals based on visibility settings
+    if (showAxial && axial.length > 0) {
+        drawSignal(axialSignal, typeColors.axial, 'Assiale');
+    }
 
-            // Draw number in marker
-            ctx.fillStyle = '#fff';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.font = 'bold 9px Arial';
-            // Keep the same opacity for the number
-            ctx.fillText(freq.number, x, canvas.height - padding - 3);
+    if (showTangential && tangential.length > 0) {
+        drawSignal(tangentialSignal, typeColors.tangential, 'Tangenziale');
+    }
+
+    if (showOblique && oblique.length > 0) {
+        drawSignal(obliqueSignal, typeColors.oblique, 'Obliqua');
+    }
+
+    // Draw combined signal
+    if (showCombined && combinedSignal.length > 0) {
+        drawSignal(combinedSignal, typeColors.combined, 'Risultante', 1.0);
+    }
+
+    // Info icon removed - now using button in description
+
+    // Draw legend in top-right corner
+    const legendX = canvas.width - padding - 120;
+    let legendY = padding + 20;
+    const legendSpacing = 25;
+
+    // Count visible signals for legend
+    const visibleCount = [showAxial && axial.length > 0, showTangential && tangential.length > 0,
+                         showOblique && oblique.length > 0, showCombined && combinedSignal.length > 0]
+                         .filter(Boolean).length;
+
+    if (visibleCount > 0) {
+        // Axial
+        if (showAxial && axial.length > 0) {
+            ctx.fillStyle = typeColors['axial'];
+            ctx.fillRect(legendX, legendY, 15, 15);
+            ctx.fillStyle = '#000';
+            ctx.textAlign = 'left';
+            ctx.font = '12px Arial';
+            ctx.fillText('Assiale', legendX + 20, legendY + 12);
+            legendY += legendSpacing;
+        }
+
+        // Tangential
+        if (showTangential && tangential.length > 0) {
+            ctx.fillStyle = typeColors['tangential'];
+            ctx.fillRect(legendX, legendY, 15, 15);
+            ctx.fillStyle = '#000';
+            ctx.fillText('Tangenziale', legendX + 20, legendY + 12);
+            legendY += legendSpacing;
+        }
+
+        // Oblique
+        if (showOblique && oblique.length > 0) {
+            ctx.fillStyle = typeColors['oblique'];
+            ctx.fillRect(legendX, legendY, 15, 15);
+            ctx.fillStyle = '#000';
+            ctx.fillText('Obliqua', legendX + 20, legendY + 12);
+            legendY += legendSpacing;
+        }
+
+        // Combined
+        if (showCombined && combinedSignal.length > 0) {
+            ctx.fillStyle = typeColors['combined'];
+            ctx.fillRect(legendX, legendY, 15, 15);
+            ctx.fillStyle = '#000';
+            ctx.fillText('Risultante', legendX + 20, legendY + 12);
+        }
+    }
+
+    // Draw vertical line if mouse is over plot area
+    if (canvas.verticalLineX !== null && canvas.verticalLineX !== undefined) {
+        ctx.beginPath();
+        ctx.moveTo(canvas.verticalLineX, padding);
+        ctx.lineTo(canvas.verticalLineX, canvas.height - padding);
+        ctx.strokeStyle = '#ff0000';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // Add small circle at the top of the line
+        ctx.beginPath();
+        ctx.arc(canvas.verticalLineX, padding, 4, 0, Math.PI * 2);
+        ctx.fillStyle = '#ff0000';
+        ctx.fill();
+    }
+
+    // Add axis labels
+    ctx.fillStyle = '#000';
+    ctx.font = '14px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText('Frequenza (Hz)', canvas.width / 2, canvas.height - 10);
+
+    ctx.save();
+    ctx.translate(15, canvas.height / 2);
+    ctx.rotate(-Math.PI / 2);
+    ctx.fillText('Ampiezza', 0, 0);
+    ctx.restore();
+
+    // Add interactive frequency display
+    addInteractiveFrequencyDisplay(canvas, maxFrequency, padding, width);
+
+    // Create and display frequency table (original functionality preserved)
+    const allFrequenciesWithTypes = [];
+    let frequencyNumber = 1;
+
+    axial.forEach(freq => {
+        allFrequenciesWithTypes.push({
+            ...freq,
+            type: 'axial',
+            typeLabel: 'Assiale',
+            number: frequencyNumber++
         });
     });
 
-    // Reset opacity for legend and other elements
-    ctx.globalAlpha = 1.0;
+    tangential.forEach(freq => {
+        allFrequenciesWithTypes.push({
+            ...freq,
+            type: 'tangential',
+            typeLabel: 'Tangenziale',
+            number: frequencyNumber++
+        });
+    });
 
-    // Draw legend
-    const legendX = padding + 10;
-    const legendY = padding + 20;
+    oblique.forEach(freq => {
+        allFrequenciesWithTypes.push({
+            ...freq,
+            type: 'oblique',
+            typeLabel: 'Obliqua',
+            number: frequencyNumber++
+        });
+    });
 
-    // Axial
-    ctx.fillStyle = typeColors['axial'];
-    ctx.fillRect(legendX, legendY, 15, 15);
-    ctx.fillStyle = '#000';
-    ctx.textAlign = 'left';
-    ctx.font = '12px Arial';
-    ctx.fillText('Assiale', legendX + 20, legendY + 12);
+    allFrequenciesWithTypes.sort((a, b) => parseFloat(a.frequency) - parseFloat(b.frequency));
 
-    // Tangential
-    ctx.fillStyle = typeColors['tangential'];
-    ctx.fillRect(legendX + 100, legendY, 15, 15);
-    ctx.fillStyle = '#000';
-    ctx.fillText('Tangenziale', legendX + 120, legendY + 12);
-
-    // Oblique
-    ctx.fillStyle = typeColors['oblique'];
-    ctx.fillRect(legendX + 220, legendY, 15, 15);
-    ctx.fillStyle = '#000';
-    ctx.fillText('Obliqua', legendX + 240, legendY + 12);
-
-    // Add opacity legend
-    ctx.textAlign = 'right';
-    ctx.fillStyle = '#666';
-    ctx.font = '11px Arial';
-    ctx.fillText('* Opacità ridotta per i modi più complessi', canvas.width - padding, canvas.height - 10);
-
-    // Create and display frequency table
-    createResonanceTable('axial-results', 'tangential-results', 'oblique-results', allFrequencies);
+    createResonanceTable('axial-results', 'tangential-results', 'oblique-results', allFrequenciesWithTypes);
 }
 
 // Function to draw standing waves chart - IMPROVED VERSION
@@ -537,9 +725,6 @@ function createResonanceTable(axialContainerId, tangentialContainerId, obliqueCo
         }
 
         container.append(table);
-
-        // Aggiungi una nota sulla tabella
-        container.append('<p class="table-note">* I numeri nei cerchi colorati corrispondono ai marcatori nel grafico sotto</p>');
     }
 
     // Crea le tabelle per ogni tipo
@@ -777,6 +962,182 @@ function createFrequencyTable(containerId, data) {
     }
 }
 
+// Function to show/hide mathematical information modal
+function showMathInfoModal() {
+    $('#math-info-modal').addClass('show');
+}
+
+function hideMathInfoModal() {
+    $('#math-info-modal').removeClass('show');
+}
+
+// Initialize modal event listeners when DOM is ready
+$(document).ready(function() {
+    // Math info button click
+    $('#math-info-btn').on('click', function() {
+        showMathInfoModal();
+    });
+
+    // Modal close button
+    $('#math-info-modal .math-modal-close').on('click', function() {
+        hideMathInfoModal();
+    });
+
+    // Modal overlay click to close
+    $('#math-info-modal').on('click', function(e) {
+        if (e.target === this) {
+            hideMathInfoModal();
+        }
+    });
+
+    // Prevent modal close when clicking on content
+    $('.math-modal-content').on('click', function(e) {
+        e.stopPropagation();
+    });
+});
+
+// Function to find the closest frequency to a given x position
+function findClosestFrequency(x, frequencies, padding, width, maxFrequency) {
+    if (!frequencies || frequencies.length === 0) {
+        // Fallback to linear approximation if no data
+        const relativeX = Math.max(0, (x - padding) / width);
+        return Math.round(relativeX * maxFrequency);
+    }
+
+    // Calculate the target frequency based on x position
+    const relativeX = Math.max(0, Math.min(1, (x - padding) / width));
+    const targetFrequency = relativeX * maxFrequency;
+
+    // Find the closest frequency in the dataset
+    let closestFreq = frequencies[0];
+    let minDistance = Math.abs(parseFloat(closestFreq.frequency) - targetFrequency);
+
+    for (const freq of frequencies) {
+        const distance = Math.abs(parseFloat(freq.frequency) - targetFrequency);
+        if (distance < minDistance) {
+            minDistance = distance;
+            closestFreq = freq;
+        }
+    }
+
+    return {
+        frequency: parseFloat(closestFreq.frequency),
+        mode: closestFreq.mode,
+        type: closestFreq.type
+    };
+}
+
+// Function to add interactive frequency display with data-driven precision
+function addInteractiveFrequencyDisplay(canvas, maxFrequency, padding, width) {
+    // Remove existing frequency display
+    $('.frequency-display').remove();
+
+    // Create frequency display element in top-right
+    const frequencyDisplay = $('<div class="frequency-display">--- Hz</div>');
+    $(canvas).closest('.chart-container').append(frequencyDisplay);
+
+    // Initialize canvas properties for interactive display
+    canvas.verticalLineX = null;
+    canvas.maxFrequency = maxFrequency;
+    canvas.padding = padding;
+    canvas.plotWidth = width;
+
+    // Store frequency data for precise lookup
+    const allFrequencies = [
+        ...(canvas.axialData || []),
+        ...(canvas.tangentialData || []),
+        ...(canvas.obliqueData || [])
+    ].sort((a, b) => parseFloat(a.frequency) - parseFloat(b.frequency));
+
+    // Performance optimization variables
+    let lastUpdateTime = 0;
+    let pendingUpdate = false;
+    let lastMouseX = null;
+    let lastMouseY = null;
+    let lastDisplayedFrequency = null;
+
+    // Function to update frequency display with data-driven precision
+    function updateFrequencyDisplay(x, y) {
+        const now = performance.now();
+
+        // Throttle updates to ~60fps (every 16ms) for smoother experience
+        if (now - lastUpdateTime < 16) {
+            pendingUpdate = true;
+            lastMouseX = x;
+            lastMouseY = y;
+            return;
+        }
+
+        lastUpdateTime = now;
+        pendingUpdate = false;
+
+        // Check if mouse is within plot area (extended by 10px for better UX)
+        const inXRange = x >= padding && x <= padding + width;
+        const inYRange = y >= padding - 10 && y <= canvas.height - padding + 10;
+        const inPlotArea = inXRange && inYRange;
+
+        if (inPlotArea) {
+            // Find the closest actual frequency in the dataset
+            const closestData = findClosestFrequency(x, allFrequencies, padding, width, maxFrequency);
+            const frequency = Math.round(closestData.frequency);
+
+            // Only update if frequency changed (prevents unnecessary DOM updates)
+            if (lastDisplayedFrequency !== frequency) {
+                lastDisplayedFrequency = frequency;
+
+                // Create detailed tooltip with mode information
+                const modeText = closestData.mode ? ` (${closestData.mode})` : '';
+                const typeText = closestData.type ? ` - ${closestData.type}` : '';
+                const displayText = `${frequency} Hz${modeText}${typeText}`;
+
+                frequencyDisplay.text(displayText);
+
+                // Store vertical line position
+                canvas.verticalLineX = x;
+            }
+        } else {
+            // Mouse outside plot area
+            if (canvas.verticalLineX !== null) {
+                canvas.verticalLineX = null;
+                frequencyDisplay.text('--- Hz');
+                lastDisplayedFrequency = null;
+            }
+        }
+    }
+
+    // Function to handle pending updates
+    function processPendingUpdate() {
+        if (pendingUpdate && lastMouseX !== null && lastMouseY !== null) {
+            updateFrequencyDisplay(lastMouseX, lastMouseY);
+        }
+        requestAnimationFrame(processPendingUpdate);
+    }
+
+    // Start the update loop
+    requestAnimationFrame(processPendingUpdate);
+
+    // Add mousemove event listener with minimal processing
+    $(canvas).on('mousemove.interactive', function(e) {
+        const rect = canvas.getBoundingClientRect();
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
+
+        // Calculate precise mouse coordinates accounting for CSS scaling
+        let x = (e.clientX - rect.left) * scaleX;
+        let y = (e.clientY - rect.top) * scaleY;
+
+        updateFrequencyDisplay(x, y);
+    });
+
+    // Add mouseleave event
+    $(canvas).on('mouseleave.interactive', function() {
+        canvas.verticalLineX = null;
+        frequencyDisplay.text('--- Hz');
+        lastDisplayedFrequency = null;
+        pendingUpdate = false;
+    });
+}
+
 // Export functions for use in other modules
 window.displayResonanceResults = displayResonanceResults;
 window.displayStandingWavesResults = displayStandingWavesResults;
@@ -784,3 +1145,4 @@ window.drawResonanceChart = drawResonanceChart;
 window.drawStandingWavesChart = drawStandingWavesChart;
 window.createResonanceTable = createResonanceTable;
 window.createFrequencyTable = createFrequencyTable;
+window.addInteractiveFrequencyDisplay = addInteractiveFrequencyDisplay;

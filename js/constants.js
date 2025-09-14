@@ -1,5 +1,5 @@
 // Default values and constants for the resonance calculator
-export const DEFAULTS = {
+const DEFAULTS = {
     SOUND_SPEED_AIR_0C: 331, // Default sound speed in air at 0°C (m/s)
     SOUND_SPEED_AIR_20C: 343, // Default sound speed in air at 20°C (m/s)
     DEFAULT_MAX_MODES: 10, // Default maximum mode index
@@ -12,7 +12,7 @@ export const DEFAULTS = {
 };
 
 // Color schemes for different types of modes and dimensions
-export const COLORS = {
+const COLORS = {
     // Mode types
     AXIAL: '#ff6384',      // Red
     TANGENTIAL: '#36a2eb', // Blue
@@ -30,21 +30,21 @@ export const COLORS = {
 };
 
 // Mode type labels (Italian)
-export const MODE_LABELS = {
+const MODE_LABELS = {
     AXIAL: 'Assiale',
     TANGENTIAL: 'Tangenziale',
     OBLIQUE: 'Obliqua'
 };
 
 // Dimension labels (Italian)
-export const DIMENSION_LABELS = {
+const DIMENSION_LABELS = {
     LENGTH: 'Lunghezza',
     WIDTH: 'Larghezza',
     HEIGHT: 'Altezza'
 };
 
 // Chart configuration
-export const CHART_CONFIG = {
+const CHART_CONFIG = {
     FONT_SIZE: {
         NORMAL: '12px Arial',
         SMALL: '10px Arial',
@@ -59,7 +59,7 @@ export const CHART_CONFIG = {
 };
 
 // Form field IDs
-export const FORM_IDS = {
+const FORM_IDS = {
     // Resonance tab
     ROOM_LENGTH: 'room-length',
     ROOM_WIDTH: 'room-width',
@@ -88,7 +88,7 @@ export const FORM_IDS = {
 };
 
 // Result container IDs
-export const RESULT_IDS = {
+const RESULT_IDS = {
     AXIAL_RESULTS: 'axial-results',
     TANGENTIAL_RESULTS: 'tangential-results',
     OBLIQUE_RESULTS: 'oblique-results',
@@ -98,7 +98,17 @@ export const RESULT_IDS = {
 };
 
 // Tab IDs
-export const TAB_IDS = {
+const TAB_IDS = {
     RESONANCE: 'resonance',
     STANDING_WAVES: 'standing-waves'
 };
+
+// Make constants available globally
+window.DEFAULTS = DEFAULTS;
+window.COLORS = COLORS;
+window.MODE_LABELS = MODE_LABELS;
+window.DIMENSION_LABELS = DIMENSION_LABELS;
+window.CHART_CONFIG = CHART_CONFIG;
+window.FORM_IDS = FORM_IDS;
+window.RESULT_IDS = RESULT_IDS;
+window.TAB_IDS = TAB_IDS;
