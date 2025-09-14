@@ -294,7 +294,7 @@
             </div>
 
             <div class="math-section">
-                <h3>🔄 Passo 5: L'Algoritmo Completo</h3>
+                <h3>🔄 L'Algoritmo Completo</h3>
                 <p>Ecco la sequenza completa di trasformazioni che avvengono quando premi "Calcola". Tutto parte dalla formula fondamentale delle onde stazionarie in una stanza rettangolare:</p>
 
                 <div class="math-equation">
@@ -324,21 +324,19 @@
             </div>
 
             <div class="math-section">
-                <h3>🎯 Passo 6: L'Interattività Intelligente</h3>
-                <p><strong>Il tooltip che vedi:</strong> Quando muovi il mouse sul grafico, non stiamo semplicemente "indovinando" la frequenza. Calcoliamo matematicamente la posizione del mouse rispetto all'asse delle frequenze.</p>
-
-                <p><strong>Come funziona:</strong> Il grafico ha una larghezza nota e rappresenta un intervallo di frequenze noto. Quando il mouse si trova in una certa posizione orizzontale, calcoliamo:</p>
-
-                <div class="math-formula">
-                    <strong>posizione_relativa = (posizione_mouse - margine_sinistro) / larghezza_grafico</strong><br>
-                    <strong>frequenza = posizione_relativa × frequenza_massima</strong>
-                </div>
-
-                <p>Questo ci permette di mostrarti la frequenza esatta corrispondente a qualsiasi punto del grafico, rendendo l'esplorazione interattiva e precisa.</p>
+                <h3>🎯 Come Funziona il Tooltip</h3>
+                <p>Il tooltip mostra la frequenza esatta sotto il mouse. Ecco come funziona:</p>
+                <ol>
+                    <li><strong>Coordinate corrette:</strong> Il sistema compensa il ridimensionamento del browser per ottenere coordinate precise del mouse</li>
+                    <li><strong>Calcolo posizione:</strong> Converte la posizione orizzontale del mouse in una frequenza teorica</li>
+                    <li><strong>Ricerca nel dataset:</strong> Trova la frequenza di risonanza reale più vicina tra quelle calcolate</li>
+                    <li><strong>Display informativo:</strong> Mostra la frequenza esatta con il modo di vibrazione e il tipo</li>
+                </ol>
+                <p><strong>Perché è preciso:</strong> Non approssima, ma usa i dati reali calcolati dalla fisica della stanza.</p>
             </div>
 
             <div class="math-section">
-                <h3>🎨 Passo 7: I Colori e la Legenda</h3>
+                <h3>🎨 I Colori e la Legenda</h3>
                 <p><strong>Il significato dei colori:</strong> Ogni tipo di modo ha il suo colore per aiutarti a capire immediatamente la natura della risonanza:</p>
                 <ul>
                     <li><strong style="color: #ff6384;">Rosso (Assiale):</strong> Modi più semplici, più energetici, spesso i più importanti per l'acustica</li>
