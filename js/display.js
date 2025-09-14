@@ -352,6 +352,8 @@ function drawResonanceChart(canvasId, axial, tangential, oblique) {
             ctx.fillStyle = typeColors['tangential'];
             ctx.fillRect(legendX, legendY, 15, 15);
             ctx.fillStyle = '#000';
+            ctx.textAlign = 'left';
+            ctx.font = '12px Arial';
             ctx.fillText('Tangenziale', legendX + 20, legendY + 12);
             legendY += legendSpacing;
         }
@@ -361,6 +363,8 @@ function drawResonanceChart(canvasId, axial, tangential, oblique) {
             ctx.fillStyle = typeColors['oblique'];
             ctx.fillRect(legendX, legendY, 15, 15);
             ctx.fillStyle = '#000';
+            ctx.textAlign = 'left';
+            ctx.font = '12px Arial';
             ctx.fillText('Obliqua', legendX + 20, legendY + 12);
             legendY += legendSpacing;
         }
@@ -370,25 +374,13 @@ function drawResonanceChart(canvasId, axial, tangential, oblique) {
             ctx.fillStyle = typeColors['combined'];
             ctx.fillRect(legendX, legendY, 15, 15);
             ctx.fillStyle = '#000';
+            ctx.textAlign = 'left';
+            ctx.font = '12px Arial';
             ctx.fillText('Risultante', legendX + 20, legendY + 12);
         }
     }
 
-    // Draw vertical line if mouse is over plot area
-    if (canvas.verticalLineX !== null && canvas.verticalLineX !== undefined) {
-        ctx.beginPath();
-        ctx.moveTo(canvas.verticalLineX, padding);
-        ctx.lineTo(canvas.verticalLineX, canvas.height - padding);
-        ctx.strokeStyle = '#ff0000';
-        ctx.lineWidth = 2;
-        ctx.stroke();
 
-        // Add small circle at the top of the line
-        ctx.beginPath();
-        ctx.arc(canvas.verticalLineX, padding, 4, 0, Math.PI * 2);
-        ctx.fillStyle = '#ff0000';
-        ctx.fill();
-    }
 
     // Add axis labels
     ctx.fillStyle = '#000';
@@ -1037,7 +1029,6 @@ function addInteractiveFrequencyDisplay(canvas, maxFrequency, padding, width) {
     $(canvas).closest('.chart-container').append(frequencyDisplay);
 
     // Initialize canvas properties for interactive display
-    canvas.verticalLineX = null;
     canvas.maxFrequency = maxFrequency;
     canvas.padding = padding;
     canvas.plotWidth = width;
@@ -1092,16 +1083,12 @@ function addInteractiveFrequencyDisplay(canvas, maxFrequency, padding, width) {
 
                 frequencyDisplay.text(displayText);
 
-                // Store vertical line position
-                canvas.verticalLineX = x;
+                // Frequency display updated
             }
         } else {
             // Mouse outside plot area
-            if (canvas.verticalLineX !== null) {
-                canvas.verticalLineX = null;
-                frequencyDisplay.text('--- Hz');
-                lastDisplayedFrequency = null;
-            }
+            frequencyDisplay.text('--- Hz');
+            lastDisplayedFrequency = null;
         }
     }
 
@@ -1131,7 +1118,6 @@ function addInteractiveFrequencyDisplay(canvas, maxFrequency, padding, width) {
 
     // Add mouseleave event
     $(canvas).on('mouseleave.interactive', function() {
-        canvas.verticalLineX = null;
         frequencyDisplay.text('--- Hz');
         lastDisplayedFrequency = null;
         pendingUpdate = false;
