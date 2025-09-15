@@ -28,8 +28,12 @@
 </div>
 
 <div class="container" id="main-content">
-    <div class="intro-section">
-        <h2>Analisi Modale delle Stanze per Acustica Architettonica</h2>
+    <div class="tabs">
+        <button class="tab-button active" data-tab="resonance">Risonanza Armonica</button>
+        <button class="tab-button" data-tab="standing-waves">Onde Stazionarie</button>
+    </div>
+    <details class="intro-section">
+        <summary>Come funziona questo calcolatore di frequenze di risonanza</summary>
         <p>Questo calcolatore determina le frequenze di risonanza e le onde stazionarie in ambienti rettangolari, essenziale per il design di sale da concerto, studi di registrazione e spazi di ascolto. Basato sulla teoria delle onde acustiche, visualizza la distribuzione energetica dei modi modali usando tecniche di elaborazione del segnale avanzate.</p>
         <div class="usage-guide">
             <h3>Come Usare</h3>
@@ -40,14 +44,7 @@
                 <li>Esplora i grafici e le tabelle per identificare problemi di risonanza</li>
             </ol>
         </div>
-        <p><em>Principi Acustici: I modi di risonanza sono soluzioni stazionarie dell'equazione delle onde con condizioni al contorno rigide. Frequenze sotto la Schroeder frequency (~300-500 Hz) dominano la risposta impulsiva.</em></p>
-    </div>
-
-    <div class="tabs">
-        <button class="tab-button active" data-tab="resonance">Risonanza Armonica</button>
-        <button class="tab-button" data-tab="standing-waves">Onde Stazionarie</button>
-    </div>
-
+    </details>
     <div class="tab-content active" id="resonance">
         <h2>Calcolo Frequenze di Risonanza</h2>
         <div class="input-form">
