@@ -69,12 +69,16 @@ function findClosestFrequency(x, frequencies, padding, width, maxFrequency) {
 
 // Function to add interactive frequency display with data-driven precision
 function addInteractiveFrequencyDisplay(canvas, maxFrequency, padding, width) {
-    // Remove existing frequency display
-    $('.frequency-display').remove();
+    // Remove existing frequency display and fullscreen button
+    $('.frequency-display, .fullscreen-btn').remove();
 
     // Create frequency display element in top-right
     const frequencyDisplay = $('<div class="frequency-display">--- Hz</div>');
     $(canvas).closest('.chart-container').append(frequencyDisplay);
+
+    // Create fullscreen button for mobile (visible only on mobile)
+    const fullscreenBtn = $('<button class="fullscreen-btn" aria-label="Toggle fullscreen">⛶</button>');
+    $(canvas).closest('.chart-container').append(fullscreenBtn);
 
     // Initialize canvas properties for interactive display
     canvas.maxFrequency = maxFrequency;
@@ -169,6 +173,115 @@ function addInteractiveFrequencyDisplay(canvas, maxFrequency, padding, width) {
         frequencyDisplay.text('--- Hz');
         lastDisplayedFrequency = null;
         pendingUpdate = false;
+    });
+
+    // Fullscreen functionality
+    let isFullscreen = false;
+
+    function toggleFullscreen() {
+        const chartContainer = $(canvas).closest('.chart-container')[0];
+
+        if (!isFullscreen) {
+            // Enter fullscreen - only when user clicks the button
+            if (chartContainer.requestFullscreen) {
+                chartContainer.requestFullscreen().then(() => {
+                    isFullscreen = true;
+                    fullscreenBtn.text('⛶');
+                    fullscreenBtn.attr('aria-label', 'Exit fullscreen');
+                    console.log('Entered fullscreen mode');
+
+                    // Force chart redraw with fullscreen dimensions after a short delay
+                    setTimeout(() => {
+                        if (canvas.id === 'frequency-chart') {
+                            const event = new Event('resize');
+                            window.dispatchEvent(event);
+                        } else if (canvas.id === 'standing-waves-chart') {
+                            const event = new Event('resize');
+                            window.dispatchEvent(event);
+                        }
+                    }, 300); // Increased delay to ensure fullscreen is established
+                }).catch(err => {
+                    console.warn('Error attempting to enable fullscreen:', err);
+                    // Fallback: try fullscreen on document element
+                    if (document.documentElement.requestFullscreen) {
+                        document.documentElement.requestFullscreen().then(() => {
+                            isFullscreen = true;
+                            fullscreenBtn.text('⛶');
+                            fullscreenBtn.attr('aria-label', 'Exit fullscreen');
+                            // Scroll to chart container
+                            chartContainer.scrollIntoView({ behavior: 'smooth' });
+                            console.log('Entered document fullscreen mode');
+                        }).catch(err2 => {
+                            console.warn('Fallback fullscreen also failed:', err2);
+                        });
+                    }
+                });
+            } else {
+                console.warn('Fullscreen API not supported');
+            }
+        } else {
+            // Exit fullscreen - force exit regardless of current state
+            console.log('Attempting to exit fullscreen');
+            if (document.exitFullscreen) {
+                document.exitFullscreen().then(() => {
+                    isFullscreen = false;
+                    fullscreenBtn.text('⛶');
+                    fullscreenBtn.attr('aria-label', 'Toggle fullscreen');
+                    console.log('Successfully exited fullscreen');
+
+                    // Force chart redraw with restored dimensions
+                    setTimeout(() => {
+                        if (canvas.id === 'frequency-chart') {
+                            const event = new Event('resize');
+                            window.dispatchEvent(event);
+                        } else if (canvas.id === 'standing-waves-chart') {
+                            const event = new Event('resize');
+                            window.dispatchEvent(event);
+                        }
+                    }, 300);
+                }).catch(err => {
+                    console.warn('Error attempting to exit fullscreen:', err);
+                    // Force state reset even if exit failed
+                    isFullscreen = false;
+                    fullscreenBtn.text('⛶');
+                    fullscreenBtn.attr('aria-label', 'Toggle fullscreen');
+                });
+            } else {
+                // Force state reset if exitFullscreen not available
+                isFullscreen = false;
+                fullscreenBtn.text('⛶');
+                fullscreenBtn.attr('aria-label', 'Toggle fullscreen');
+                console.log('exitFullscreen not available, forcing state reset');
+            }
+        }
+    }
+
+    // Add fullscreen button click handler
+    fullscreenBtn.on('click', toggleFullscreen);
+
+    // Listen for fullscreen changes
+    $(document).on('fullscreenchange', function() {
+        const wasFullscreen = isFullscreen;
+        isFullscreen = !!document.fullscreenElement;
+
+        if (isFullscreen && !wasFullscreen) {
+            // Just entered fullscreen
+            fullscreenBtn.attr('aria-label', 'Exit fullscreen');
+        } else if (!isFullscreen && wasFullscreen) {
+            // Just exited fullscreen
+            fullscreenBtn.attr('aria-label', 'Toggle fullscreen');
+
+            // Force chart redraw with restored dimensions
+            setTimeout(() => {
+                if (canvas.id === 'frequency-chart') {
+                    const event = new Event('resize');
+                    window.dispatchEvent(event);
+                } else if (canvas.id === 'standing-waves-chart') {
+                    const event = new Event('resize');
+                    window.dispatchEvent(event);
+                }
+            }, 200);
+        }
     });
 }
 

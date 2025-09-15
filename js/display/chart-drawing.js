@@ -91,14 +91,31 @@ function resizeCanvasToContainer(canvas) {
     const wrapper = canvas.parentElement;
     const container = wrapper.parentElement;
     const containerWidth = container.clientWidth;
-    const containerHeight = canvas.height || 300;
+    const containerHeight = container.clientHeight || canvas.height || 300;
 
     // Calculate 1rem in pixels for compensation
     const remInPixels = parseFloat(getComputedStyle(document.documentElement).fontSize);
     const isMobile = window.innerWidth <= 768;
+    const isFullscreen = !!document.fullscreenElement && document.fullscreenElement.contains(container);
 
-    const canvasWidth = (isMobile) ? containerWidth : containerWidth - (2 * remInPixels);
-    const canvasHeight = containerHeight;
+    let canvasWidth, canvasHeight;
+
+    if (isFullscreen) {
+        // In fullscreen, use the full container dimensions for dynamic sizing
+        canvasWidth = containerWidth;
+        canvasHeight = containerHeight;
+    } else {
+        // Normal mode
+        if (isMobile) {
+            // Fixed height of 250px for mobile when not in fullscreen
+            canvasWidth = containerWidth;
+            canvasHeight = 250;
+        } else {
+            // Desktop mode
+            canvasWidth = containerWidth - (2 * remInPixels);
+            canvasHeight = containerHeight;
+        }
+    }
 
     // Set canvas size
     canvas.width = canvasWidth;
@@ -672,4 +689,3 @@ function drawStandingWavesChart(canvasId, waves) {
 // Export functions
 window.drawResonanceChart = drawResonanceChart;
 window.drawStandingWavesChart = drawStandingWavesChart;
-

@@ -605,6 +605,182 @@ canvas {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
+/* Fullscreen button - visible only on mobile */
+.fullscreen-btn {
+    display: none;
+    position: absolute;
+    top: 85px;
+    right: 20px; /* Position to the left of frequency-display */
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    border: none;
+    padding: 5px 8px;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: bold;
+    z-index: 100;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: all var(--transition-fast);
+}
+
+.fullscreen-btn:hover {
+    background: rgba(0, 0, 0, 0.9);
+    transform: scale(1.05);
+}
+
+.fullscreen-btn:active {
+    transform: scale(0.95);
+}
+
+.fullscreen-btn:focus {
+    outline: 2px solid var(--primary-500);
+    outline-offset: 2px;
+}
+
+/* Show fullscreen button on mobile devices */
+@media (max-width: 768px) {
+    .fullscreen-btn {
+        display: block;
+    }
+}
+
+/* Fullscreen styles for chart container */
+.chart-container:fullscreen {
+    width: 100vw !important;
+    height: 100vh !important; /* Full viewport height for true fullscreen */
+    background: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.chart-container:fullscreen .chart-wrapper {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.chart-container:fullscreen canvas {
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100vw;
+    max-height: 100vw;
+    object-fit: contain;
+}
+
+/* In fullscreen, reposition controls and description for better usability */
+.chart-container:fullscreen .chart-controls {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    z-index: 10000;
+    max-width: 300px;
+}
+
+.chart-container:fullscreen .chart-description {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    right: 100px; /* Leave space for fullscreen button */
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    z-index: 10000;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.chart-container:fullscreen .frequency-display {
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    padding: 10px 15px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    z-index: 10000;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Keep fullscreen button visible in fullscreen for exit */
+.chart-container:fullscreen .fullscreen-btn {
+    display: block !important;
+    position: fixed !important;
+    top: 20px !important;
+    right: 20px !important;
+    z-index: 10001 !important;
+    background: rgba(0, 0, 0, 0.9) !important;
+    color: white !important;
+    border: 2px solid white !important;
+    border-radius: 8px !important;
+    padding: 10px 15px !important;
+    font-size: 18px !important;
+    font-weight: bold !important;
+    cursor: pointer !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3) !important;
+    pointer-events: auto !important;
+}
+
+/* Ensure fullscreen works on different browsers */
+.chart-container:-webkit-full-screen {
+    width: 100vw !important;
+    height: 100vw !important;
+    background: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.chart-container:-moz-full-screen {
+    width: 100vw !important;
+    height: 100vw !important;
+    background: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.chart-container:-ms-fullscreen {
+    width: 100vw !important;
+    height: 100vw !important;
+    background: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
 /* Math Info Modal Styles */
 .math-modal-overlay {
     position: fixed;
@@ -951,7 +1127,7 @@ mjx-chtml {
 
 @media (max-width: 480px) {
     .container {
-        padding: 0.75rem;
+        padding: 0.25rem;
     }
 
     h1 {
@@ -963,7 +1139,7 @@ mjx-chtml {
     }
 
     .input-form {
-        padding: 1rem;
+        padding: .75rem;
     }
 
     .result-section {
