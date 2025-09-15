@@ -175,84 +175,69 @@ function addInteractiveFrequencyDisplay(canvas, maxFrequency, padding, width) {
         pendingUpdate = false;
     });
 
-    // Fullscreen functionality
-    let isFullscreen = false;
+    // Fullscreen functionality - use a persistent variable to avoid reset on redraws
+    if (typeof window.canvasFullscreenState === 'undefined') {
+        window.canvasFullscreenState = {};
+    }
 
-    function toggleFullscreen() {
+    // Use canvas-specific fullscreen state
+    let canvasId = canvas.id;
+    if (!window.canvasFullscreenState[canvasId]) {
+        window.canvasFullscreenState[canvasId] = !!document.fullscreenElement;
+    }
+
+    let isFullscreen = window.canvasFullscreenState[canvasId];
+
+    function enterFullscreen() {
         const chartContainer = $(canvas).closest('.chart-container')[0];
 
-        if (!isFullscreen) {
-            // Enter fullscreen - only when user clicks the button
-            if (chartContainer.requestFullscreen) {
-                chartContainer.requestFullscreen().then(() => {
-                    isFullscreen = true;
-                    fullscreenBtn.text('⛶');
-                    fullscreenBtn.attr('aria-label', 'Exit fullscreen');
-                    console.log('Entered fullscreen mode');
-
-                    // Force chart redraw with fullscreen dimensions after a short delay
-                    setTimeout(() => {
-                        if (canvas.id === 'frequency-chart') {
-                            const event = new Event('resize');
-                            window.dispatchEvent(event);
-                        } else if (canvas.id === 'standing-waves-chart') {
-                            const event = new Event('resize');
-                            window.dispatchEvent(event);
-                        }
-                    }, 300); // Increased delay to ensure fullscreen is established
-                }).catch(err => {
-                    console.warn('Error attempting to enable fullscreen:', err);
-                    // Fallback: try fullscreen on document element
-                    if (document.documentElement.requestFullscreen) {
-                        document.documentElement.requestFullscreen().then(() => {
-                            isFullscreen = true;
-                            fullscreenBtn.text('⛶');
-                            fullscreenBtn.attr('aria-label', 'Exit fullscreen');
-                            // Scroll to chart container
-                            chartContainer.scrollIntoView({ behavior: 'smooth' });
-                            console.log('Entered document fullscreen mode');
-                        }).catch(err2 => {
-                            console.warn('Fallback fullscreen also failed:', err2);
-                        });
-                    }
-                });
-            } else {
-                console.warn('Fullscreen API not supported');
-            }
+        if (chartContainer.requestFullscreen) {
+            chartContainer.requestFullscreen().then(() => {
+                // Note: isFullscreen will be set by fullscreenchange event
+            }).catch(err => {
+                console.warn('Error attempting to enable fullscreen:', err);
+                // Fallback: try fullscreen on document element
+                if (document.documentElement.requestFullscreen) {
+                    document.documentElement.requestFullscreen().then(() => {
+                        // Note: isFullscreen will be set by fullscreenchange event
+                        // Scroll to chart container
+                        chartContainer.scrollIntoView({ behavior: 'smooth' });
+                    }).catch(err2 => {
+                        console.warn('Fallback fullscreen also failed:', err2);
+                    });
+                }
+            });
         } else {
-            // Exit fullscreen - force exit regardless of current state
-            console.log('Attempting to exit fullscreen');
-            if (document.exitFullscreen) {
-                document.exitFullscreen().then(() => {
-                    isFullscreen = false;
-                    fullscreenBtn.text('⛶');
-                    fullscreenBtn.attr('aria-label', 'Toggle fullscreen');
-                    console.log('Successfully exited fullscreen');
+            console.warn('Fullscreen API not supported');
+        }
+    }
 
-                    // Force chart redraw with restored dimensions
-                    setTimeout(() => {
-                        if (canvas.id === 'frequency-chart') {
-                            const event = new Event('resize');
-                            window.dispatchEvent(event);
-                        } else if (canvas.id === 'standing-waves-chart') {
-                            const event = new Event('resize');
-                            window.dispatchEvent(event);
-                        }
-                    }, 300);
-                }).catch(err => {
-                    console.warn('Error attempting to exit fullscreen:', err);
-                    // Force state reset even if exit failed
-                    isFullscreen = false;
-                    fullscreenBtn.text('⛶');
-                    fullscreenBtn.attr('aria-label', 'Toggle fullscreen');
-                });
-            } else {
-                // Force state reset if exitFullscreen not available
+    function exitFullscreen() {
+        if (document.exitFullscreen) {
+            document.exitFullscreen().then(() => {
+                // Note: isFullscreen will be set by fullscreenchange event
+            }).catch(err => {
+                console.warn('Error attempting to exit fullscreen:', err);
+                // Force state reset even if exit failed
                 isFullscreen = false;
+                window.canvasFullscreenState[canvasId] = false; // Persist the state
                 fullscreenBtn.text('⛶');
                 fullscreenBtn.attr('aria-label', 'Toggle fullscreen');
-                console.log('exitFullscreen not available, forcing state reset');
-            }
+            });
+        } else {
+            // Force state reset if exitFullscreen not available
+            isFullscreen = false;
+            window.canvasFullscreenState[canvasId] = false; // Persist the state
+            fullscreenBtn.text('⛶');
+            fullscreenBtn.attr('aria-label', 'Toggle fullscreen');
+        }
+    }
+
+    function toggleFullscreen() {
+        if (!isFullscreen) {
+            enterFullscreen();
+        } else {
+            exitFullscreen();
         }
     }
 
@@ -263,12 +248,26 @@ function addInteractiveFrequencyDisplay(canvas, maxFrequency, padding, width) {
     $(document).on('fullscreenchange', function() {
         const wasFullscreen = isFullscreen;
         isFullscreen = !!document.fullscreenElement;
+        window.canvasFullscreenState[canvasId] = isFullscreen; // Persist the state
 
         if (isFullscreen && !wasFullscreen) {
-            // Just entered fullscreen
+            // Just entered fullscreen - update UI
+            fullscreenBtn.text('⛶');
             fullscreenBtn.attr('aria-label', 'Exit fullscreen');
+
+            // Force chart redraw with fullscreen dimensions after a short delay
+            setTimeout(() => {
+                if (canvas.id === 'frequency-chart') {
+                    const event = new Event('resize');
+                    window.dispatchEvent(event);
+                } else if (canvas.id === 'standing-waves-chart') {
+                    const event = new Event('resize');
+                    window.dispatchEvent(event);
+                }
+            }, 300);
         } else if (!isFullscreen && wasFullscreen) {
-            // Just exited fullscreen
+            // Just exited fullscreen - update UI
+            fullscreenBtn.text('⛶');
             fullscreenBtn.attr('aria-label', 'Toggle fullscreen');
 
             // Force chart redraw with restored dimensions
