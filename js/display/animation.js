@@ -212,35 +212,45 @@
             ctx.fillRect(legendX, legendY, 15, 15);
             ctx.fillStyle = '#000';
             ctx.textAlign = 'left';
+            ctx.textBaseline = 'middle';
             ctx.font = CHART_CONFIG.FONT_SIZE.LEGEND;
-            ctx.fillText('Assiale', legendX + 20, legendY + 12);
-            legendY += legendSpacing;
+            ctx.fillText('Assiale', legendX + 20, legendY + 7.5);
         }
+        legendY += legendSpacing;
 
         // Tangential
         if (showTangential && tangentialSignal.length > 0) {
             ctx.fillStyle = typeColors['tangential'];
             ctx.fillRect(legendX, legendY, 15, 15);
             ctx.fillStyle = '#000';
-            ctx.fillText('Tangenziale', legendX + 20, legendY + 12);
-            legendY += legendSpacing;
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'middle';
+            ctx.font = CHART_CONFIG.FONT_SIZE.LEGEND;
+            ctx.fillText('Tangenziale', legendX + 20, legendY + 7.5);
         }
+        legendY += legendSpacing;
 
         // Oblique
         if (showOblique && obliqueSignal.length > 0) {
             ctx.fillStyle = typeColors['oblique'];
             ctx.fillRect(legendX, legendY, 15, 15);
             ctx.fillStyle = '#000';
-            ctx.fillText('Obliqua', legendX + 20, legendY + 12);
-            legendY += legendSpacing;
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'middle';
+            ctx.font = CHART_CONFIG.FONT_SIZE.LEGEND;
+            ctx.fillText('Obliqua', legendX + 20, legendY + 7.5);
         }
+        legendY += legendSpacing;
 
         // Combined
         if (showCombined && combinedSignal.length > 0) {
             ctx.fillStyle = typeColors['combined'];
             ctx.fillRect(legendX, legendY, 15, 15);
             ctx.fillStyle = '#000';
-            ctx.fillText('Risultante', legendX + 20, legendY + 12);
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'middle';
+            ctx.font = CHART_CONFIG.FONT_SIZE.LEGEND;
+            ctx.fillText('Risultante', legendX + 20, legendY + 7.5);
         }
 
         ctx.globalAlpha = 1.0;
@@ -448,35 +458,60 @@ function animateStandingWavesChart(canvas, ctx) {
     let legendY = padding + 20;
     const legendSpacing = 25;
 
-    // Apply legend fade-in
-    const legendAlpha = progress < 0.3 ? (progress / 0.3) : 1.0;
-    ctx.globalAlpha = legendAlpha;
+    // Get visibility settings from checkboxes
+    const showLength = $('#show-length').is(':checked');
+    const showWidth = $('#show-width').is(':checked');
+    const showHeight = $('#show-height').is(':checked');
 
-    // Length
-    ctx.fillStyle = colors['Lunghezza'];
-    ctx.fillRect(legendX, legendY, 15, 15);
-    ctx.fillStyle = '#000';
-    ctx.textAlign = 'left';
-    ctx.font = CHART_CONFIG.FONT_SIZE.LEGEND;
-    ctx.fillText('Lunghezza', legendX + 20, legendY + 12);
-    legendY += legendSpacing;
+    // Count visible dimensions for legend
+    const visibleDimensions = [
+        showLength && dimensionModeWaves['Lunghezza'] && dimensionModeWaves['Lunghezza'].length > 0,
+        showWidth && dimensionModeWaves['Larghezza'] && dimensionModeWaves['Larghezza'].length > 0,
+        showHeight && dimensionModeWaves['Altezza'] && dimensionModeWaves['Altezza'].length > 0
+    ].filter(Boolean).length;
 
-    // Width
-    ctx.fillStyle = colors['Larghezza'];
-    ctx.fillRect(legendX, legendY, 15, 15);
-    ctx.fillStyle = '#000';
-    ctx.fillText('Larghezza', legendX + 20, legendY + 12);
-    legendY += legendSpacing;
+    if (visibleDimensions > 0) {
+        // Apply legend fade-in
+        const legendAlpha = progress < 0.3 ? (progress / 0.3) : 1.0;
+        ctx.globalAlpha = legendAlpha;
 
-    // Height
-    ctx.fillStyle = colors['Altezza'];
-    ctx.fillRect(legendX, legendY, 15, 15);
-    ctx.fillStyle = '#000';
-    ctx.fillText('Altezza', legendX + 20, legendY + 12);
+        // Length
+        if (showLength && dimensionModeWaves['Lunghezza'] && dimensionModeWaves['Lunghezza'].length > 0) {
+            ctx.fillStyle = colors['Lunghezza'];
+            ctx.fillRect(legendX, legendY, 15, 15);
+            ctx.fillStyle = '#000';
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'middle';
+            ctx.font = CHART_CONFIG.FONT_SIZE.LEGEND;
+            ctx.fillText('Lunghezza', legendX + 20, legendY + 7.5);
+        }
+        legendY += legendSpacing;
 
-    // Opacity legend removed - deprecated feature
+        // Width
+        if (showWidth && dimensionModeWaves['Larghezza'] && dimensionModeWaves['Larghezza'].length > 0) {
+            ctx.fillStyle = colors['Larghezza'];
+            ctx.fillRect(legendX, legendY, 15, 15);
+            ctx.fillStyle = '#000';
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'middle';
+            ctx.font = CHART_CONFIG.FONT_SIZE.LEGEND;
+            ctx.fillText('Larghezza', legendX + 20, legendY + 7.5);
+        }
+        legendY += legendSpacing;
 
-    ctx.globalAlpha = 1.0;
+        // Height
+        if (showHeight && dimensionModeWaves['Altezza'] && dimensionModeWaves['Altezza'].length > 0) {
+            ctx.fillStyle = colors['Altezza'];
+            ctx.fillRect(legendX, legendY, 15, 15);
+            ctx.fillStyle = '#000';
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'middle';
+            ctx.font = CHART_CONFIG.FONT_SIZE.LEGEND;
+            ctx.fillText('Altezza', legendX + 20, legendY + 7.5);
+        }
+
+        ctx.globalAlpha = 1.0;
+    }
 
     // Continue animation or finish
     if (progress < 1) {

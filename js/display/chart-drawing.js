@@ -293,38 +293,45 @@ function drawResonanceChart(canvasId, axial, tangential, oblique) {
             ctx.fillRect(legendX, legendY, 15, 15);
             ctx.fillStyle = '#000';
             ctx.textAlign = 'left';
+            ctx.textBaseline = 'middle';
             ctx.font = CHART_CONFIG.FONT_SIZE.LEGEND;
-            ctx.fillText('Assiale', legendX + 20, legendY + 12);
-            legendY += legendSpacing;
+            ctx.fillText('Assiale', legendX + 20, legendY + 7.5);
         }
+        legendY += legendSpacing;
 
         // Tangential
         if (showTangential && tangential.length > 0) {
             ctx.fillStyle = typeColors['tangential'];
             ctx.fillRect(legendX, legendY, 15, 15);
             ctx.fillStyle = '#000';
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'middle';
             ctx.font = CHART_CONFIG.FONT_SIZE.LEGEND;
-            ctx.fillText('Tangenziale', legendX + 20, legendY + 12);
-            legendY += legendSpacing;
+            ctx.fillText('Tangenziale', legendX + 20, legendY + 7.5);
         }
+        legendY += legendSpacing;
 
         // Oblique
         if (showOblique && oblique.length > 0) {
             ctx.fillStyle = typeColors['oblique'];
             ctx.fillRect(legendX, legendY, 15, 15);
             ctx.fillStyle = '#000';
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'middle';
             ctx.font = CHART_CONFIG.FONT_SIZE.LEGEND;
-            ctx.fillText('Obliqua', legendX + 20, legendY + 12);
-            legendY += legendSpacing;
+            ctx.fillText('Obliqua', legendX + 20, legendY + 7.5);
         }
+        legendY += legendSpacing;
 
         // Combined
         if (showCombined && combinedSignal.length > 0) {
             ctx.fillStyle = typeColors['combined'];
             ctx.fillRect(legendX, legendY, 15, 15);
             ctx.fillStyle = '#000';
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'middle';
             ctx.font = CHART_CONFIG.FONT_SIZE.LEGEND;
-            ctx.fillText('Risultante', legendX + 20, legendY + 12);
+            ctx.fillText('Risultante', legendX + 20, legendY + 7.5);
         }
     }
 
@@ -586,28 +593,33 @@ function drawStandingWavesChart(canvasId, waves) {
             ctx.fillRect(legendX, legendY, 15, 15);
             ctx.fillStyle = '#000';
             ctx.textAlign = 'left';
+            ctx.textBaseline = 'middle';
             ctx.font = CHART_CONFIG.FONT_SIZE.LEGEND;
-            ctx.fillText('Lunghezza', legendX + 20, legendY + 12);
-            legendY += legendSpacing;
+            ctx.fillText('Lunghezza', legendX + 20, legendY + 7.5);
         }
+        legendY += legendSpacing;
 
         // Width
         if (showWidth && dimensionModeWaves['Larghezza'] && dimensionModeWaves['Larghezza'].length > 0) {
             ctx.fillStyle = colors['Larghezza'];
             ctx.fillRect(legendX, legendY, 15, 15);
             ctx.fillStyle = '#000';
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'middle';
             ctx.font = CHART_CONFIG.FONT_SIZE.LEGEND;
-            ctx.fillText('Larghezza', legendX + 20, legendY + 12);
-            legendY += legendSpacing;
+            ctx.fillText('Larghezza', legendX + 20, legendY + 7.5);
         }
+        legendY += legendSpacing;
 
         // Height
         if (showHeight && dimensionModeWaves['Altezza'] && dimensionModeWaves['Altezza'].length > 0) {
             ctx.fillStyle = colors['Altezza'];
             ctx.fillRect(legendX, legendY, 15, 15);
             ctx.fillStyle = '#000';
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'middle';
             ctx.font = CHART_CONFIG.FONT_SIZE.LEGEND;
-            ctx.fillText('Altezza', legendX + 20, legendY + 12);
+            ctx.fillText('Altezza', legendX + 20, legendY + 7.5);
         }
     }
 
