@@ -4,10 +4,10 @@
 
 // Chart styling configuration constants
 const CHART_STYLE = {
-    PADDING_LEFT: 51,
+    PADDING_LEFT: 55,
     PADDING_BOTTOM: 45,
-    PADDING_TOP: 10,
-    PADDING_RIGHT: 23,
+    PADDING_TOP: 15,
+    PADDING_RIGHT: 25,
     TICK_LENGTH: 6,
     TICK_LABEL_OFFSET_X: 18,
     TICK_LABEL_OFFSET_Y: 8,

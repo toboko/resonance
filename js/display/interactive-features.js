@@ -193,12 +193,24 @@ function addInteractiveFrequencyDisplay(canvas, maxFrequency, padding, width) {
 
         if (chartContainer.requestFullscreen) {
             chartContainer.requestFullscreen().then(() => {
+                // Lock orientation to landscape for mobile fullscreen experience
+                if (screen.orientation && screen.orientation.lock) {
+                    screen.orientation.lock('landscape').catch(err => {
+                        console.warn('Could not lock orientation:', err);
+                    });
+                }
                 // Note: isFullscreen will be set by fullscreenchange event
             }).catch(err => {
                 console.warn('Error attempting to enable fullscreen:', err);
                 // Fallback: try fullscreen on document element
                 if (document.documentElement.requestFullscreen) {
                     document.documentElement.requestFullscreen().then(() => {
+                        // Lock orientation to landscape for mobile fullscreen experience
+                        if (screen.orientation && screen.orientation.lock) {
+                            screen.orientation.lock('landscape').catch(err => {
+                                console.warn('Could not lock orientation:', err);
+                            });
+                        }
                         // Note: isFullscreen will be set by fullscreenchange event
                         // Scroll to chart container
                         chartContainer.scrollIntoView({ behavior: 'smooth' });
@@ -215,9 +227,21 @@ function addInteractiveFrequencyDisplay(canvas, maxFrequency, padding, width) {
     function exitFullscreen() {
         if (document.exitFullscreen) {
             document.exitFullscreen().then(() => {
+                // Unlock orientation when exiting fullscreen
+                if (screen.orientation && screen.orientation.unlock) {
+                    screen.orientation.unlock().catch(err => {
+                        console.warn('Could not unlock orientation:', err);
+                    });
+                }
                 // Note: isFullscreen will be set by fullscreenchange event
             }).catch(err => {
                 console.warn('Error attempting to exit fullscreen:', err);
+                // Unlock orientation even on exit error
+                if (screen.orientation && screen.orientation.unlock) {
+                    screen.orientation.unlock().catch(unlockErr => {
+                        console.warn('Could not unlock orientation on exit error:', unlockErr);
+                    });
+                }
                 // Force state reset even if exit failed
                 isFullscreen = false;
                 window.canvasFullscreenState[canvasId] = false; // Persist the state
@@ -225,6 +249,12 @@ function addInteractiveFrequencyDisplay(canvas, maxFrequency, padding, width) {
                 fullscreenBtn.attr('aria-label', 'Toggle fullscreen');
             });
         } else {
+            // Unlock orientation when forcing exit
+            if (screen.orientation && screen.orientation.unlock) {
+                screen.orientation.unlock().catch(err => {
+                    console.warn('Could not unlock orientation on forced exit:', err);
+                });
+            }
             // Force state reset if exitFullscreen not available
             isFullscreen = false;
             window.canvasFullscreenState[canvasId] = false; // Persist the state
