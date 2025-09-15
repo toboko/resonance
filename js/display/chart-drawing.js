@@ -165,6 +165,7 @@ function drawResonanceChart(canvasId, axial, tangential, oblique) {
     const maxAmplitude = visibleSignals.length > 0 ? Math.max(...visibleSignals) : 1;
 
     // Draw axes
+    ctx.lineWidth = 1;
     ctx.beginPath();
     ctx.moveTo(padding, padding);
     ctx.lineTo(padding, canvas.height - padding);
@@ -188,7 +189,7 @@ function drawResonanceChart(canvasId, axial, tangential, oblique) {
         // Draw label
         ctx.fillStyle = '#000';
         ctx.textAlign = 'center';
-        ctx.font = '0.75rem Inter, sans-serif';
+        ctx.font = CHART_CONFIG.FONT_SIZE.TICK_LABEL;
         ctx.fillText(Math.round(freqValue) + ' Hz', x, canvas.height - padding + 20);
     }
 
@@ -208,7 +209,7 @@ function drawResonanceChart(canvasId, axial, tangential, oblique) {
         // Draw label
         ctx.fillStyle = '#000';
         ctx.textAlign = 'right';
-        ctx.font = '0.75rem Inter, sans-serif';
+        ctx.font = CHART_CONFIG.FONT_SIZE.TICK_LABEL;
         ctx.fillText(amplitudeValue.toFixed(2), padding - 10, y + 4);
     }
 
@@ -292,7 +293,7 @@ function drawResonanceChart(canvasId, axial, tangential, oblique) {
             ctx.fillRect(legendX, legendY, 15, 15);
             ctx.fillStyle = '#000';
             ctx.textAlign = 'left';
-            ctx.font = '0.75rem Inter, sans-serif';
+            ctx.font = CHART_CONFIG.FONT_SIZE.LEGEND;
             ctx.fillText('Assiale', legendX + 20, legendY + 12);
             legendY += legendSpacing;
         }
@@ -302,7 +303,7 @@ function drawResonanceChart(canvasId, axial, tangential, oblique) {
             ctx.fillStyle = typeColors['tangential'];
             ctx.fillRect(legendX, legendY, 15, 15);
             ctx.fillStyle = '#000';
-            ctx.font = '0.75rem Inter, sans-serif';
+            ctx.font = CHART_CONFIG.FONT_SIZE.LEGEND;
             ctx.fillText('Tangenziale', legendX + 20, legendY + 12);
             legendY += legendSpacing;
         }
@@ -312,7 +313,7 @@ function drawResonanceChart(canvasId, axial, tangential, oblique) {
             ctx.fillStyle = typeColors['oblique'];
             ctx.fillRect(legendX, legendY, 15, 15);
             ctx.fillStyle = '#000';
-            ctx.font = '0.75rem Inter, sans-serif';
+            ctx.font = CHART_CONFIG.FONT_SIZE.LEGEND;
             ctx.fillText('Obliqua', legendX + 20, legendY + 12);
             legendY += legendSpacing;
         }
@@ -322,21 +323,21 @@ function drawResonanceChart(canvasId, axial, tangential, oblique) {
             ctx.fillStyle = typeColors['combined'];
             ctx.fillRect(legendX, legendY, 15, 15);
             ctx.fillStyle = '#000';
-            ctx.font = '0.75rem Inter, sans-serif';
+            ctx.font = CHART_CONFIG.FONT_SIZE.LEGEND;
             ctx.fillText('Risultante', legendX + 20, legendY + 12);
         }
     }
 
     // Add axis labels
     ctx.fillStyle = '#000';
-    ctx.font = '0.875rem Inter, sans-serif';
+    ctx.font = CHART_CONFIG.FONT_SIZE.AXIS_LABEL;
     ctx.textAlign = 'center';
     ctx.fillText('Frequenza (Hz)', canvas.width / 2, canvas.height - 10);
 
     ctx.save();
     ctx.translate(15, canvas.height / 2);
     ctx.rotate(-Math.PI / 2);
-    ctx.font = '0.875rem Inter, sans-serif';
+    ctx.font = CHART_CONFIG.FONT_SIZE.AXIS_LABEL;
     ctx.fillText('Ampiezza', 0, 0);
     ctx.restore();
 
@@ -460,6 +461,7 @@ function drawStandingWavesChart(canvasId, waves) {
     const maxFrequency = Math.max(...waves.map(f => parseFloat(f.frequency))) + 80;
 
     // Draw axes
+    ctx.lineWidth = 1;
     ctx.beginPath();
     ctx.moveTo(padding, padding);
     ctx.lineTo(padding, canvas.height - padding);
@@ -483,7 +485,7 @@ function drawStandingWavesChart(canvasId, waves) {
         // Draw label
         ctx.fillStyle = '#000';
         ctx.textAlign = 'center';
-        ctx.font = '0.75rem Inter, sans-serif';
+        ctx.font = CHART_CONFIG.FONT_SIZE.TICK_LABEL;
         ctx.fillText(Math.round(freqValue) + ' Hz', x, canvas.height - padding + 20);
     }
 
@@ -564,7 +566,7 @@ function drawStandingWavesChart(canvasId, waves) {
             ctx.fillStyle = '#fff';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            ctx.font = 'bold 0.75rem Inter, sans-serif';
+            ctx.font = CHART_CONFIG.FONT_SIZE.BOLD;
             ctx.fillText(waveNumber, x, canvas.height - padding - 3);
         });
     });
@@ -591,7 +593,7 @@ function drawStandingWavesChart(canvasId, waves) {
             ctx.fillRect(legendX, legendY, 15, 15);
             ctx.fillStyle = '#000';
             ctx.textAlign = 'left';
-            ctx.font = '0.75rem Inter, sans-serif';
+            ctx.font = CHART_CONFIG.FONT_SIZE.LEGEND;
             ctx.fillText('Lunghezza', legendX + 20, legendY + 12);
             legendY += legendSpacing;
         }
@@ -601,7 +603,7 @@ function drawStandingWavesChart(canvasId, waves) {
             ctx.fillStyle = colors['Larghezza'];
             ctx.fillRect(legendX, legendY, 15, 15);
             ctx.fillStyle = '#000';
-            ctx.font = '0.75rem Inter, sans-serif';
+            ctx.font = CHART_CONFIG.FONT_SIZE.LEGEND;
             ctx.fillText('Larghezza', legendX + 20, legendY + 12);
             legendY += legendSpacing;
         }
@@ -611,7 +613,7 @@ function drawStandingWavesChart(canvasId, waves) {
             ctx.fillStyle = colors['Altezza'];
             ctx.fillRect(legendX, legendY, 15, 15);
             ctx.fillStyle = '#000';
-            ctx.font = '0.75rem Inter, sans-serif';
+            ctx.font = CHART_CONFIG.FONT_SIZE.LEGEND;
             ctx.fillText('Altezza', legendX + 20, legendY + 12);
         }
     }
@@ -619,7 +621,7 @@ function drawStandingWavesChart(canvasId, waves) {
     // Add opacity legend
     ctx.textAlign = 'right';
     ctx.fillStyle = '#666';
-    ctx.font = '0.75rem Inter, sans-serif';
+    ctx.font = CHART_CONFIG.FONT_SIZE.LEGEND;
     ctx.fillText('* Opacità ridotta per i modi superiori', canvas.width - padding, canvas.height - 10);
 
     // Create and display frequency table only if data hasn't changed (animation will handle it otherwise)

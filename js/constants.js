@@ -49,10 +49,10 @@ const DIMENSION_LABELS = {
 // Chart configuration
 const CHART_CONFIG = {
     FONT_SIZE: {
-        NORMAL: '12px Arial',
-        SMALL: '10px Arial',
-        BOLD: 'bold 9px Arial',
-        LEGEND: '11px Arial'
+        TICK_LABEL: '0.85rem Inter, sans-serif',
+        AXIS_LABEL: '0.875rem Inter, sans-serif',
+        LEGEND: '0.85rem Inter, sans-serif',
+        BOLD: 'bold 0.75rem Inter, sans-serif'
     },
     OPACITY: {
         BASE: 1.0,

@@ -2,17 +2,20 @@
  * Animation module for chart transitions and effects
  */
 
-// Function to animate resonance chart transitions
-function animateResonanceChart(canvas, ctx) {
-    const state = canvas.animationState;
-    const elapsed = performance.now() - state.startTime;
-    const progress = Math.min(elapsed / state.duration, 1);
+    // Function to animate resonance chart transitions
+    function animateResonanceChart(canvas, ctx) {
+        const state = canvas.animationState;
+        const elapsed = performance.now() - state.startTime;
+        const progress = Math.min(elapsed / state.duration, 1);
 
-    // Apply linear easing function for uniform animation
-    const easedProgress = easeSmoothLinear(progress);
+        // Apply linear easing function for uniform animation
+        const easedProgress = easeSmoothLinear(progress);
 
-    // Clear canvas
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+        // Resize canvas to match container
+        resizeCanvasToContainer(canvas);
+
+        // Clear canvas
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // Set dimensions
     const padding = 60;
@@ -67,6 +70,7 @@ function animateResonanceChart(canvas, ctx) {
     const maxAmplitude = visibleSignals.length > 0 ? Math.max(...visibleSignals) : 1;
 
     // Draw axes
+    ctx.lineWidth = 1;
     ctx.beginPath();
     ctx.moveTo(padding, padding);
     ctx.lineTo(padding, canvas.height - padding);
@@ -75,6 +79,7 @@ function animateResonanceChart(canvas, ctx) {
     ctx.stroke();
 
     // Draw frequency scale on x-axis
+    ctx.font = CHART_CONFIG.FONT_SIZE.TICK_LABEL;
     const numTicks = 10;
     for (let i = 0; i <= numTicks; i++) {
         const x = padding + (width * i) / numTicks;
@@ -207,7 +212,7 @@ function animateResonanceChart(canvas, ctx) {
             ctx.fillRect(legendX, legendY, 15, 15);
             ctx.fillStyle = '#000';
             ctx.textAlign = 'left';
-            ctx.font = '12px Arial';
+            ctx.font = CHART_CONFIG.FONT_SIZE.LEGEND;
             ctx.fillText('Assiale', legendX + 20, legendY + 12);
             legendY += legendSpacing;
         }
@@ -243,7 +248,7 @@ function animateResonanceChart(canvas, ctx) {
 
     // Add axis labels
     ctx.fillStyle = '#000';
-    ctx.font = '14px Arial';
+    ctx.font = CHART_CONFIG.FONT_SIZE.AXIS_LABEL;
     ctx.textAlign = 'center';
     ctx.fillText('Frequenza (Hz)', canvas.width / 2, canvas.height - 10);
 
@@ -314,6 +319,9 @@ function animateStandingWavesChart(canvas, ctx) {
     // Apply linear easing function for uniform animation
     const easedProgress = easeSmoothLinear(progress);
 
+    // Resize canvas to match container
+    resizeCanvasToContainer(canvas);
+
     // Clear canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -330,6 +338,7 @@ function animateStandingWavesChart(canvas, ctx) {
     const maxFrequency = Math.max(...currentWaves.map(f => parseFloat(f.frequency))) + 80;
 
     // Draw axes
+    ctx.lineWidth = 1;
     ctx.beginPath();
     ctx.moveTo(padding, padding);
     ctx.lineTo(padding, canvas.height - padding);
@@ -338,6 +347,7 @@ function animateStandingWavesChart(canvas, ctx) {
     ctx.stroke();
 
     // Draw frequency scale on x-axis
+    ctx.font = CHART_CONFIG.FONT_SIZE.TICK_LABEL;
     const numTicks = 10;
     for (let i = 0; i <= numTicks; i++) {
         const x = padding + (width * i) / numTicks;
@@ -431,7 +441,7 @@ function animateStandingWavesChart(canvas, ctx) {
             ctx.fillStyle = '#fff';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            ctx.font = 'bold 9px Arial';
+            ctx.font = CHART_CONFIG.FONT_SIZE.BOLD;
             ctx.fillText(waveNumber, x, canvas.height - padding - 3);
         });
     });
@@ -440,8 +450,9 @@ function animateStandingWavesChart(canvas, ctx) {
     ctx.globalAlpha = 1.0;
 
     // Draw legend with fade-in effect
-    const legendX = padding + 10;
-    const legendY = padding + 20;
+    const legendX = canvas.width - padding - 120;
+    let legendY = padding + 20;
+    const legendSpacing = 25;
 
     // Apply legend fade-in
     const legendAlpha = progress < 0.3 ? (progress / 0.3) : 1.0;
@@ -452,25 +463,27 @@ function animateStandingWavesChart(canvas, ctx) {
     ctx.fillRect(legendX, legendY, 15, 15);
     ctx.fillStyle = '#000';
     ctx.textAlign = 'left';
-    ctx.font = '12px Arial';
+    ctx.font = CHART_CONFIG.FONT_SIZE.LEGEND;
     ctx.fillText('Lunghezza', legendX + 20, legendY + 12);
+    legendY += legendSpacing;
 
     // Width
     ctx.fillStyle = colors['Larghezza'];
-    ctx.fillRect(legendX + 100, legendY, 15, 15);
+    ctx.fillRect(legendX, legendY, 15, 15);
     ctx.fillStyle = '#000';
-    ctx.fillText('Larghezza', legendX + 120, legendY + 12);
+    ctx.fillText('Larghezza', legendX + 20, legendY + 12);
+    legendY += legendSpacing;
 
     // Height
     ctx.fillStyle = colors['Altezza'];
-    ctx.fillRect(legendX + 200, legendY, 15, 15);
+    ctx.fillRect(legendX, legendY, 15, 15);
     ctx.fillStyle = '#000';
-    ctx.fillText('Altezza', legendX + 220, legendY + 12);
+    ctx.fillText('Altezza', legendX + 20, legendY + 12);
 
     // Add opacity legend
     ctx.textAlign = 'right';
     ctx.fillStyle = '#666';
-    ctx.font = '11px Arial';
+    ctx.font = CHART_CONFIG.FONT_SIZE.LEGEND;
     ctx.fillText('* Opacità ridotta per i modi superiori', canvas.width - padding, canvas.height - 10);
 
     ctx.globalAlpha = 1.0;
