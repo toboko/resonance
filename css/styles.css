@@ -116,6 +116,12 @@ h1 {
 }
 
 @media (max-width: 768px) {
+    /* Layout */
+    .container {
+        padding: 0.75rem;
+        padding-top: 5rem;
+    }
+
     .top-bar {
         padding: 1rem 1.5rem;
         top: 0;
@@ -124,12 +130,55 @@ h1 {
         z-index: 1000;
     }
 
+    /* Typography */
+    h1 {
+        font-size: 1.5rem;
+    }
+
     .top-bar h1 {
         font-size: 1.25rem;
     }
 
-    .container {
-        padding-top: 5rem;
+    /* Navigation */
+    .tab-content {
+        padding: 1rem;
+    }
+
+    /* Forms */
+    .input-form {
+        padding: 1rem;
+    }
+
+    /* Content */
+    .intro-section {
+        padding: 1rem;
+    }
+
+    .result-section {
+        padding: 1rem;
+    }
+
+    .chart-description {
+        padding: 1rem;
+        font-size: 0.8rem;
+    }
+
+    .chart-wrapper {
+        padding: 0;
+    }
+
+    /* Modals */
+    .math-modal-header h2 {
+        font-size: 1.25rem;
+    }
+
+    .math-modal-body {
+        padding: 1rem;
+    }
+
+    /* Interactive elements */
+    .fullscreen-btn {
+        display: block;
     }
 }
 
@@ -344,6 +393,7 @@ h3, h4 {
 /* Compact styling for parameter inputs to match dimension inputs */
 .input-form .parameters-group .input-group {
     max-width: 200px;
+    align-items: center;
 }
 
 .input-form .parameters-group input,
@@ -558,15 +608,6 @@ input[type="number"]::-webkit-inner-spin-button {
     padding: 0 1rem;
 }
 
-/* Remove padding on mobile devices */
-@media (max-width: 768px) {
-    .intro-section {
-        padding: 1rem;
-    }
-    .chart-wrapper {
-        padding: 0;
-    }
-}
 
 .chart-controls {
     display: flex;
@@ -751,12 +792,6 @@ canvas {
     outline-offset: 2px;
 }
 
-/* Show fullscreen button on mobile devices */
-@media (max-width: 768px) {
-    .fullscreen-btn {
-        display: block;
-    }
-}
 
 /* Fullscreen styles for chart container */
 .chart-container:fullscreen {
@@ -1214,40 +1249,6 @@ mjx-chtml {
     }
 }
 
-@media (max-width: 768px) {
-    .container {
-        padding: 0.75rem;
-    }
-
-    h1 {
-        font-size: 1.5rem;
-    }
-
-    .tab-content {
-        padding: 1rem;
-    }
-
-    .input-form {
-        padding: 1rem;
-    }
-
-    .result-section {
-        padding: 1rem;
-    }
-
-    .chart-description {
-        padding: 1rem;
-        font-size: 0.8rem;
-    }
-
-    .math-modal-header h2 {
-        font-size: 1.25rem;
-    }
-
-    .math-modal-body {
-        padding: 1rem;
-    }
-}
 
 @media (max-width: 480px) {
     .container {
