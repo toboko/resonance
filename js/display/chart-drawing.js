@@ -541,19 +541,12 @@ function drawStandingWavesChart(canvasId, waves) {
                 frequency: wave.frequency
             });
 
-            // Calculate opacity based on mode
-            // First mode: 0.9, subsequent modes: gradually decreasing but not below 0.3
-            const baseOpacity = 1;
-            const minOpacity = 0.3;
-            const opacityStep = (baseOpacity - minOpacity) / 8; // Gradual decrease
-            const opacity = Math.max(baseOpacity - (wave.mode - 1) * opacityStep, minOpacity);
-
-            // Draw line with appropriate opacity
+            // Draw line with full opacity (deprecated reduced opacity for higher modes)
             ctx.beginPath();
             ctx.moveTo(x, canvas.height - padding);
             ctx.lineTo(x, padding);
             ctx.strokeStyle = color;
-            ctx.globalAlpha = opacity;
+            ctx.globalAlpha = 1.0;
             ctx.stroke();
 
             // Draw numbered marker at bottom of line with the same opacity
@@ -618,11 +611,7 @@ function drawStandingWavesChart(canvasId, waves) {
         }
     }
 
-    // Add opacity legend
-    ctx.textAlign = 'right';
-    ctx.fillStyle = '#666';
-    ctx.font = CHART_CONFIG.FONT_SIZE.LEGEND;
-    ctx.fillText('* Opacità ridotta per i modi superiori', canvas.width - padding, canvas.height - 10);
+    // Opacity legend removed - deprecated feature
 
     // Create and display frequency table only if data hasn't changed (animation will handle it otherwise)
     if (!dataChanged) {

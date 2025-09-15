@@ -405,13 +405,7 @@ function animateStandingWavesChart(canvas, ctx) {
                 frequency: wave.frequency
             });
 
-            // Calculate opacity based on mode
-            // First mode: 0.9, subsequent modes: gradually decreasing but not below 0.3
-            const baseOpacity = 1;
-            const minOpacity = 0.3;
-            const opacityStep = (baseOpacity - minOpacity) / 8; // Gradual decrease
-            let opacity = Math.max(baseOpacity - (wave.mode - 1) * opacityStep, minOpacity);
-
+            // Draw line with full opacity (deprecated reduced opacity for higher modes)
             // Apply fade-in effect for new waves
             const isNewWave = !oldWaves.some(oldWave =>
                 oldWave.frequency === wave.frequency &&
@@ -419,11 +413,11 @@ function animateStandingWavesChart(canvas, ctx) {
                 oldWave.mode === wave.mode
             );
 
+            let opacity = 1.0;
             if (isNewWave && progress < 0.5) {
                 opacity *= (progress * 2);
             }
 
-            // Draw line with appropriate opacity
             ctx.beginPath();
             ctx.moveTo(x, canvas.height - padding);
             ctx.lineTo(x, padding);
@@ -480,11 +474,7 @@ function animateStandingWavesChart(canvas, ctx) {
     ctx.fillStyle = '#000';
     ctx.fillText('Altezza', legendX + 20, legendY + 12);
 
-    // Add opacity legend
-    ctx.textAlign = 'right';
-    ctx.fillStyle = '#666';
-    ctx.font = CHART_CONFIG.FONT_SIZE.LEGEND;
-    ctx.fillText('* Opacità ridotta per i modi superiori', canvas.width - padding, canvas.height - 10);
+    // Opacity legend removed - deprecated feature
 
     ctx.globalAlpha = 1.0;
 
