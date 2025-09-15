@@ -74,7 +74,7 @@ function createResonanceTable(axialContainerId, tangentialContainerId, obliqueCo
             <tr id="${groupHeaderId}" class="group-header">
                 <td colspan="3">
                     <div class="group-toggle">
-                        <span class="toggle-icon">▼</span>
+                        <span class="toggle-icon"><i class="fas fa-folder-open"></i></span>
                         Frequenze ${startIndex + 1}-${endIndex}
                         <span class="frequency-range">
                             (${minFreq} - ${maxFreq} Hz)
@@ -111,9 +111,10 @@ function createResonanceTable(axialContainerId, tangentialContainerId, obliqueCo
             // Aggiungi le righe del gruppo al tbody principale
             tbody.append(groupRows);
 
-            // Se non è il primo gruppo, nascondi le righe all'inizio
-            if (groupIndex > 0) {
+            // Se non è il primo gruppo delle frequenze assiali, nascondi le righe all'inizio e imposta icona chiusa
+            if (!(groupIndex === 0 && type === 'axial')) {
                 groupContent.hide();
+                groupHeader.find('.toggle-icon').html('<i class="fas fa-folder"></i>');
             }
 
             // Aggiungi il gestore di eventi per il toggle
@@ -124,9 +125,9 @@ function createResonanceTable(axialContainerId, tangentialContainerId, obliqueCo
                 // Cambia l'icona del toggle
                 const toggleIcon = $(this).find('.toggle-icon');
                 if (content.is(':visible')) {
-                    toggleIcon.text('▼');
+                    toggleIcon.html('<i class="fas fa-folder-open"></i>');
                 } else {
-                    toggleIcon.text('►');
+                    toggleIcon.html('<i class="fas fa-folder"></i>');
                 }
             });
         }
