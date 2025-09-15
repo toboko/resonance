@@ -12,7 +12,11 @@ const CHART_STYLE = {
     TICK_LABEL_OFFSET_X: 18,
     TICK_LABEL_OFFSET_Y: 8,
     AXIS_LABEL_OFFSET_X: 38,
-    AXIS_LABEL_OFFSET_Y: 41,
+    AXIS_LABEL_OFFSET_Y: 43,
+    CHART_HEIGHT: {
+        MOBILE: 250,
+        DESKTOP: 350
+    },
     FONT_SIZE: {
         TICK_LABEL: CHART_CONFIG.FONT_SIZE.TICK_LABEL,
         AXIS_LABEL: CHART_CONFIG.FONT_SIZE.AXIS_LABEL,
@@ -107,13 +111,13 @@ function resizeCanvasToContainer(canvas) {
     } else {
         // Normal mode
         if (isMobile) {
-            // Fixed height of 250px for mobile when not in fullscreen
+            // Fixed height for mobile when not in fullscreen
             canvasWidth = containerWidth;
-            canvasHeight = 250;
+            canvasHeight = CHART_STYLE.CHART_HEIGHT.MOBILE;
         } else {
-            // Desktop mode
+            // Desktop mode - fixed height to prevent dynamic resizing during scroll
             canvasWidth = containerWidth - (2 * remInPixels);
-            canvasHeight = containerHeight;
+            canvasHeight = CHART_STYLE.CHART_HEIGHT.DESKTOP;
         }
     }
 
