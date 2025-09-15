@@ -2,24 +2,102 @@
  * Chart drawing module for rendering charts and graphs
  */
 
+// Chart styling configuration constants
+const CHART_STYLE = {
+    PADDING_LEFT: 51,
+    PADDING_BOTTOM: 45,
+    PADDING_TOP: 10,
+    PADDING_RIGHT: 23,
+    TICK_LENGTH: 6,
+    TICK_LABEL_OFFSET_X: 18,
+    TICK_LABEL_OFFSET_Y: 8,
+    AXIS_LABEL_OFFSET_X: 38,
+    AXIS_LABEL_OFFSET_Y: 41,
+    FONT_SIZE: {
+        TICK_LABEL: CHART_CONFIG.FONT_SIZE.TICK_LABEL,
+        AXIS_LABEL: CHART_CONFIG.FONT_SIZE.AXIS_LABEL,
+        BOLD: CHART_CONFIG.FONT_SIZE.BOLD
+    }
+};
+
+// Function to draw axis ticks and labels (shared between main drawing and animation)
+function drawAxisTicks(ctx, canvas, leftPadding, bottomPadding, rightPadding, topPadding, maxFrequency, maxAmplitude, numTicksX, numTicksY, isAnimation = false) {
+    const chartWidth = canvas.width - leftPadding - rightPadding;
+    const chartHeight = canvas.height - topPadding - bottomPadding;
+
+    // Draw X-axis ticks
+    for (let i = 0; i <= numTicksX; i++) {
+        const x = leftPadding + (chartWidth * i) / numTicksX;
+        const freqValue = (maxFrequency * i) / numTicksX;
+
+        // Draw tick (external - pointing downward)
+        ctx.beginPath();
+        ctx.moveTo(x, canvas.height - bottomPadding);
+        ctx.lineTo(x, canvas.height - bottomPadding + CHART_STYLE.TICK_LENGTH);
+        ctx.strokeStyle = '#000';
+        ctx.stroke();
+
+        // Draw label
+        ctx.fillStyle = '#000';
+        ctx.textAlign = 'center';
+        ctx.font = CHART_STYLE.FONT_SIZE.TICK_LABEL;
+        ctx.fillText(Math.round(freqValue) + ' Hz', x, canvas.height - bottomPadding + CHART_STYLE.TICK_LABEL_OFFSET_X);
+    }
+
+    // Draw Y-axis ticks (only for resonance chart)
+    if (maxAmplitude !== undefined) {
+        for (let i = 0; i <= numTicksY; i++) {
+            const y = canvas.height - bottomPadding - (chartHeight * i) / numTicksY;
+            const amplitudeValue = (maxAmplitude * i) / numTicksY;
+
+            // Draw tick (external - pointing left)
+            ctx.beginPath();
+            ctx.moveTo(leftPadding, y);
+            ctx.lineTo(leftPadding - CHART_STYLE.TICK_LENGTH, y);
+            ctx.strokeStyle = '#000';
+            ctx.stroke();
+
+            // Draw label
+            ctx.fillStyle = '#000';
+            ctx.textAlign = 'right';
+            ctx.font = CHART_STYLE.FONT_SIZE.TICK_LABEL;
+            ctx.fillText(amplitudeValue.toFixed(2), leftPadding - CHART_STYLE.TICK_LABEL_OFFSET_Y, y + 4);
+        }
+    }
+}
+
+// Function to draw axis labels (shared between main drawing and animation)
+function drawAxisLabels(ctx, canvas, leftPadding, bottomPadding, chartType = 'resonance') {
+    // X-axis label
+    ctx.fillStyle = '#000';
+    ctx.font = CHART_STYLE.FONT_SIZE.AXIS_LABEL;
+    ctx.textAlign = 'center';
+    ctx.fillText('Frequenza (Hz)', canvas.width / 2, canvas.height - bottomPadding + CHART_STYLE.AXIS_LABEL_OFFSET_X);
+
+    // Y-axis label (only for resonance)
+    if (chartType === 'resonance') {
+        ctx.save();
+        ctx.translate(leftPadding - CHART_STYLE.AXIS_LABEL_OFFSET_Y, canvas.height / 2);
+        ctx.rotate(-Math.PI / 2);
+        ctx.font = CHART_STYLE.FONT_SIZE.AXIS_LABEL;
+        ctx.fillText('Ampiezza', 0, 0);
+        ctx.restore();
+    }
+}
+
 // Function to resize canvas to match its container
 function resizeCanvasToContainer(canvas) {
-    const container = canvas.parentElement;
+    // Get the chart-container (parent of chart-wrapper) to ignore wrapper padding
+    const wrapper = canvas.parentElement;
+    const container = wrapper.parentElement;
     const containerWidth = container.clientWidth;
     const containerHeight = canvas.height || 300;
 
-    // Check if we're on mobile (screen width <= 768px)
+    // Calculate 1rem in pixels for compensation
+    const remInPixels = parseFloat(getComputedStyle(document.documentElement).fontSize);
     const isMobile = window.innerWidth <= 768;
 
-    let canvasWidth;
-    if (isMobile) {
-        // On mobile, use full container width (no padding reduction)
-        canvasWidth = containerWidth;
-    } else {
-        // On desktop, reduce canvas width by 4rem (2rem left + 2rem right padding)
-        canvasWidth = containerWidth - (2 * 32); // 32px = 2rem (assuming 16px base font size)
-    }
-
+    const canvasWidth = (isMobile) ? containerWidth : containerWidth - (2 * remInPixels);
     const canvasHeight = containerHeight;
 
     // Set canvas size
@@ -122,7 +200,7 @@ function drawResonanceChart(canvasId, axial, tangential, oblique) {
         canvas.animationState.oldCombined = combineSignals([oldAxialSignal, oldTangentialSignal, oldObliqueSignal]);
     }
 
-    // If animating, use animation frame
+    // Use animation for smooth transitions
     if (canvas.animationState.isAnimating) {
         requestAnimationFrame(() => animateResonanceChart(canvas, ctx));
         return;
@@ -131,10 +209,13 @@ function drawResonanceChart(canvasId, axial, tangential, oblique) {
     // Clear canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Set dimensions
-    const padding = 60;
-    const width = canvas.width - padding * 2;
-    const height = canvas.height - padding * 2;
+    // Set dimensions with asymmetric padding for labels and ticks
+    const leftPadding = CHART_STYLE.PADDING_LEFT;
+    const bottomPadding = CHART_STYLE.PADDING_BOTTOM;
+    const rightPadding = CHART_STYLE.PADDING_RIGHT;
+    const topPadding = CHART_STYLE.PADDING_TOP;
+    const width = canvas.width - leftPadding - rightPadding;
+    const height = canvas.height - topPadding - bottomPadding;
 
     // Combine all frequencies for max frequency calculation
     const allFrequencies = [...axial, ...tangential, ...oblique];
@@ -167,54 +248,19 @@ function drawResonanceChart(canvasId, axial, tangential, oblique) {
     // Draw axes
     ctx.lineWidth = 1;
     ctx.beginPath();
-    ctx.moveTo(padding, padding);
-    ctx.lineTo(padding, canvas.height - padding);
-    ctx.lineTo(canvas.width - padding, canvas.height - padding);
+    ctx.moveTo(leftPadding, topPadding);
+    ctx.lineTo(leftPadding, canvas.height - bottomPadding);
+    ctx.lineTo(canvas.width - rightPadding, canvas.height - bottomPadding);
     ctx.strokeStyle = '#000';
     ctx.stroke();
 
     // Check if we're on mobile (screen width <= 768px)
     const isMobile = window.innerWidth <= 768;
 
-    // Draw frequency scale on x-axis
-    const numTicks = isMobile ? 5 : 10;
-    for (let i = 0; i <= numTicks; i++) {
-        const x = padding + (width * i) / numTicks;
-        const freqValue = (maxFrequency * i) / numTicks;
-
-        // Draw tick
-        ctx.beginPath();
-        ctx.moveTo(x, canvas.height - padding);
-        ctx.lineTo(x, canvas.height - padding + 5);
-        ctx.strokeStyle = '#000';
-        ctx.stroke();
-
-        // Draw label
-        ctx.fillStyle = '#000';
-        ctx.textAlign = 'center';
-        ctx.font = CHART_CONFIG.FONT_SIZE.TICK_LABEL;
-        ctx.fillText(Math.round(freqValue) + ' Hz', x, canvas.height - padding + 20);
-    }
-
-    // Draw amplitude scale on y-axis
-    const amplitudeTicks = 5;
-    for (let i = 0; i <= amplitudeTicks; i++) {
-        const y = canvas.height - padding - (height * i) / amplitudeTicks;
-        const amplitudeValue = (maxAmplitude * i) / amplitudeTicks;
-
-        // Draw tick
-        ctx.beginPath();
-        ctx.moveTo(padding, y);
-        ctx.lineTo(padding - 5, y);
-        ctx.strokeStyle = '#000';
-        ctx.stroke();
-
-        // Draw label
-        ctx.fillStyle = '#000';
-        ctx.textAlign = 'right';
-        ctx.font = CHART_CONFIG.FONT_SIZE.TICK_LABEL;
-        ctx.fillText(amplitudeValue.toFixed(2), padding - 10, y + 4);
-    }
+    // Draw axis ticks and labels using shared function
+    const numTicksX = isMobile ? 4 : 10;
+    const numTicksY = 4;
+    drawAxisTicks(ctx, canvas, leftPadding, bottomPadding, rightPadding, topPadding, maxFrequency, maxAmplitude, numTicksX, numTicksY);
 
     // Define colors for mode types using global constants
     const typeColors = {
@@ -235,8 +281,8 @@ function drawResonanceChart(canvasId, axial, tangential, oblique) {
         let hasStarted = false;
 
         for (let i = 0; i < signal.length; i++) {
-            const x = padding + (i / signal.length) * width;
-            const y = canvas.height - padding - (signal[i] / maxAmplitude) * height;
+            const x = leftPadding + (i / signal.length) * width;
+            const y = canvas.height - bottomPadding - (signal[i] / maxAmplitude) * height;
 
             if (!hasStarted) {
                 ctx.moveTo(x, y);
@@ -249,8 +295,8 @@ function drawResonanceChart(canvasId, axial, tangential, oblique) {
         ctx.stroke();
 
         // Fill area under curve
-        ctx.lineTo(padding + width, canvas.height - padding);
-        ctx.lineTo(padding, canvas.height - padding);
+        ctx.lineTo(leftPadding + width, canvas.height - bottomPadding);
+        ctx.lineTo(leftPadding, canvas.height - bottomPadding);
         ctx.closePath();
         ctx.globalAlpha = alpha * 0.3;
         ctx.fillStyle = color;
@@ -341,21 +387,11 @@ function drawResonanceChart(canvasId, axial, tangential, oblique) {
     }
     */
 
-    // Add axis labels
-    ctx.fillStyle = '#000';
-    ctx.font = CHART_CONFIG.FONT_SIZE.AXIS_LABEL;
-    ctx.textAlign = 'center';
-    ctx.fillText('Frequenza (Hz)', canvas.width / 2, canvas.height - 10);
-
-    ctx.save();
-    ctx.translate(15, canvas.height / 2);
-    ctx.rotate(-Math.PI / 2);
-    ctx.font = CHART_CONFIG.FONT_SIZE.AXIS_LABEL;
-    ctx.fillText('Ampiezza', 0, 0);
-    ctx.restore();
+    // Add axis labels using shared function
+    drawAxisLabels(ctx, canvas, leftPadding, bottomPadding, 'resonance');
 
     // Add interactive frequency display
-    addInteractiveFrequencyDisplay(canvas, maxFrequency, padding, width);
+    addInteractiveFrequencyDisplay(canvas, maxFrequency, leftPadding, width);
 
     // Create and display frequency table (original functionality preserved)
     const allFrequenciesWithTypes = [];
@@ -453,7 +489,7 @@ function drawStandingWavesChart(canvasId, waves) {
         canvas.animationState.newWaves = waves;
     }
 
-    // If animating, use animation frame
+    // Use animation for smooth transitions
     if (canvas.animationState.isAnimating) {
         requestAnimationFrame(() => animateStandingWavesChart(canvas, ctx));
         return;
@@ -462,10 +498,13 @@ function drawStandingWavesChart(canvasId, waves) {
     // Clear canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Set dimensions
-    const padding = 60;
-    const width = canvas.width - padding * 2;
-    const height = canvas.height - padding * 2;
+    // Set dimensions with asymmetric padding for labels and ticks
+    const leftPadding = CHART_STYLE.PADDING_LEFT;
+    const bottomPadding = CHART_STYLE.PADDING_BOTTOM;
+    const rightPadding = CHART_STYLE.PADDING_RIGHT;
+    const topPadding = CHART_STYLE.PADDING_TOP;
+    const width = canvas.width - leftPadding - rightPadding;
+    const height = canvas.height - topPadding - bottomPadding;
 
     // Sort by frequency
     waves.sort((a, b) => parseFloat(a.frequency) - parseFloat(b.frequency));
@@ -476,34 +515,18 @@ function drawStandingWavesChart(canvasId, waves) {
     // Draw axes
     ctx.lineWidth = 1;
     ctx.beginPath();
-    ctx.moveTo(padding, padding);
-    ctx.lineTo(padding, canvas.height - padding);
-    ctx.lineTo(canvas.width - padding, canvas.height - padding);
+    ctx.moveTo(leftPadding, topPadding);
+    ctx.lineTo(leftPadding, canvas.height - bottomPadding);
+    ctx.lineTo(canvas.width - rightPadding, canvas.height - bottomPadding);
     ctx.strokeStyle = '#000';
     ctx.stroke();
 
     // Check if we're on mobile (screen width <= 768px)
     const isMobile = window.innerWidth <= 768;
 
-    // Draw frequency scale on x-axis
-    const numTicks = isMobile ? 5 : 10;
-    for (let i = 0; i <= numTicks; i++) {
-        const x = padding + (width * i) / numTicks;
-        const freqValue = (maxFrequency * i) / numTicks;
-
-        // Draw tick
-        ctx.beginPath();
-        ctx.moveTo(x, canvas.height - padding);
-        ctx.lineTo(x, canvas.height - padding + 5);
-        ctx.strokeStyle = '#000';
-        ctx.stroke();
-
-        // Draw label
-        ctx.fillStyle = '#000';
-        ctx.textAlign = 'center';
-        ctx.font = CHART_CONFIG.FONT_SIZE.TICK_LABEL;
-        ctx.fillText(Math.round(freqValue) + ' Hz', x, canvas.height - padding + 20);
-    }
+    // Draw axis ticks and labels using shared function
+    const numTicksX = isMobile ? 4 : 10;
+    drawAxisTicks(ctx, canvas, leftPadding, bottomPadding, rightPadding, topPadding, maxFrequency, undefined, numTicksX, 0);
 
     // Define colors for dimensions using global constants
     const colors = {
@@ -545,7 +568,7 @@ function drawStandingWavesChart(canvasId, waves) {
         dimensionWaves.sort((a, b) => a.mode - b.mode);
 
         dimensionWaves.forEach((wave, index) => {
-            const x = padding + (parseFloat(wave.frequency) / maxFrequency) * width;
+            const x = leftPadding + (parseFloat(wave.frequency) / maxFrequency) * width;
             const color = colors[dimension];
             const waveNumber = waves.findIndex(w => w.frequency === wave.frequency && w.dimension === wave.dimension) + 1;
 
@@ -559,15 +582,15 @@ function drawStandingWavesChart(canvasId, waves) {
 
             // Draw line with full opacity (deprecated reduced opacity for higher modes)
             ctx.beginPath();
-            ctx.moveTo(x, canvas.height - padding);
-            ctx.lineTo(x, padding);
+            ctx.moveTo(x, canvas.height - bottomPadding);
+            ctx.lineTo(x, topPadding);
             ctx.strokeStyle = color;
             ctx.globalAlpha = 1.0;
             ctx.stroke();
 
             // Draw numbered marker at bottom of line with the same opacity
             ctx.beginPath();
-            ctx.arc(x, canvas.height - padding - 3, 8, 0, Math.PI * 2);
+            ctx.arc(x, canvas.height - bottomPadding - 3, 8, 0, Math.PI * 2);
             ctx.fillStyle = color;
             ctx.fill();
 
@@ -576,7 +599,7 @@ function drawStandingWavesChart(canvasId, waves) {
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             ctx.font = CHART_CONFIG.FONT_SIZE.BOLD;
-            ctx.fillText(waveNumber, x, canvas.height - padding - 3);
+            ctx.fillText(waveNumber, x, canvas.height - bottomPadding - 3);
         });
     });
 
@@ -637,6 +660,9 @@ function drawStandingWavesChart(canvasId, waves) {
 
     // Opacity legend removed - deprecated feature
 
+    // Add axis labels using shared function
+    drawAxisLabels(ctx, canvas, leftPadding, bottomPadding, 'standing-waves');
+
     // Create and display frequency table only if data hasn't changed (animation will handle it otherwise)
     if (!dataChanged) {
         createFrequencyTable('standing-waves-results', tableData);
@@ -646,3 +672,4 @@ function drawStandingWavesChart(canvasId, waves) {
 // Export functions
 window.drawResonanceChart = drawResonanceChart;
 window.drawStandingWavesChart = drawStandingWavesChart;
+

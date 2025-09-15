@@ -172,27 +172,8 @@ function setupChartControls() {
         const chartContainer = $(this).closest('.chart-container');
         const isResonanceTab = chartContainer.find('#frequency-chart').length > 0;
 
-        if (isResonanceTab) {
-            // Handle resonance chart controls
-            const length = parseFloat($('#room-length').val());
-            const width = parseFloat($('#room-width').val());
-            const height = parseFloat($('#room-height').val());
-            const soundSpeed = parseFloat($('#sound-speed').val());
-            let maxModes = validateMaxModes('#max-modes');
-
-            const resonanceResults = calculateResonanceFrequencies(length, width, height, soundSpeed, maxModes);
-            drawResonanceChart('frequency-chart', resonanceResults.axial, resonanceResults.tangential, resonanceResults.oblique);
-        } else {
-            // Handle standing waves chart controls
-            const length = parseFloat($('#sw-length').val());
-            const width = parseFloat($('#sw-width').val());
-            const height = parseFloat($('#sw-height').val());
-            const soundSpeed = parseFloat($('#sw-sound-speed').val());
-            let maxModes = validateMaxModes('#sw-max-modes');
-
-            const standingWavesResults = calculateStandingWaves(length, width, height, soundSpeed, maxModes);
-            drawStandingWavesChart('standing-waves-chart', standingWavesResults);
-        }
+        // Use the unified update function for consistency
+        calculateBothSections();
     });
 }
 
