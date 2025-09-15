@@ -177,6 +177,25 @@ function setupChartControls() {
     });
 }
 
+// Setup number input buttons for increment/decrement
+function setupNumberButtons() {
+    $('.number-btn').on('click', function() {
+        const targetId = $(this).data('target');
+        const input = $('#' + targetId);
+        let value = parseInt(input.val());
+
+        if ($(this).hasClass('plus-btn')) {
+            value += 1;
+        } else if ($(this).hasClass('minus-btn')) {
+            value -= 1;
+        }
+
+        input.val(value);
+        validateMaxModes('#' + targetId);
+        input.trigger('input');
+    });
+}
+
 // Initialize all UI components
 function initializeUI() {
     setupTabSwitching();
@@ -185,6 +204,7 @@ function initializeUI() {
     setupRoomDimensionsSync();
     setupAutoUpdateHandlers();
     setupChartControls();
+    setupNumberButtons();
     initializeFormSync();
 }
 

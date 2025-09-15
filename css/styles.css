@@ -1404,3 +1404,45 @@ button:focus {
     white-space: nowrap;
     border: 0;
 }
+
+/* Number input container and buttons */
+.number-input-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.number-btn {
+    width: 30px;
+    height: 30px;
+    border: none;
+    background: var(--primary-500);
+    color: white;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-fast);
+}
+
+.number-btn:hover {
+    background: var(--primary-600);
+    transform: scale(1.05);
+}
+
+.number-btn:active {
+    transform: scale(0.95);
+}
+
+.number-btn:focus {
+    outline: 2px solid var(--primary-700);
+    outline-offset: 2px;
+}
+
+/* Specific styling for max-modes input */
+#max-modes, #sw-max-modes {
+    max-width: 42px;
+}

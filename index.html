@@ -50,7 +50,11 @@
                 </div>
                 <div class="input-group dimension-input">
                     <label for="max-modes">Numero di modi:</label>
-                    <input type="number" id="max-modes" step="1" min="1" max="10" value="5">
+                    <div class="number-input-container">
+                        <button class="number-btn minus-btn" data-target="max-modes">-</button>
+                        <input type="number" id="max-modes" step="1" min="1" max="10" value="5">
+                        <button class="number-btn plus-btn" data-target="max-modes">+</button>
+                    </div>
                 </div>
             </div>
             <!-- Pulsante di calcolo rimosso - aggiornamento automatico -->
@@ -129,7 +133,11 @@
                 </div>
                 <div class="input-group dimension-input">
                     <label for="sw-max-modes">Numero di modi:</label>
-                    <input type="number" id="sw-max-modes" step="1" min="1" max="10" value="5">
+                    <div class="number-input-container">
+                        <button class="number-btn minus-btn" data-target="sw-max-modes">-</button>
+                        <input type="number" id="sw-max-modes" step="1" min="1" max="10" value="5">
+                        <button class="number-btn plus-btn" data-target="sw-max-modes">+</button>
+                    </div>
                 </div>
             </div>
             <!-- Pulsante di calcolo rimosso - aggiornamento automatico -->
