@@ -27,14 +27,13 @@
 
 .frequency-table th,
 .frequency-table td {
-    padding: 0.875rem;
+    padding: 0.825rem;
     text-align: left;
     border-bottom: 1px solid var(--neutral-200);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    font-size: 0.875rem;
-    transition: all var(--transition-fast);
+    font-size: 0.825rem;
 }
 
 /* Column-specific widths */
@@ -64,26 +63,26 @@
 
 /* Table header styling */
 .frequency-table th {
-    background: linear-gradient(135deg, var(--primary-50) 0%, var(--primary-100) 100%);
+    background: linear-gradient(135deg, var(--primary-50) 0%, var(--primary-100) 100%) !important;
     font-weight: 700;
-    font-size: 0.8rem;
+    font-size: 0.7rem;
     font-family: 'Montserrat', sans-serif;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    color: var(--primary-800);
+    color: var(--primary-800) !important;
     position: sticky;
     top: 0;
     z-index: 1;
 }
 
-/* Enhanced row styling */
-.frequency-table tbody tr {
-    transition: all var(--transition-fast);
+.frequency-table th:hover {
+    background: linear-gradient(135deg, var(--primary-50) 0%, var(--primary-100) 100%) !important;
+    color: var(--primary-800) !important;
 }
 
+/* Enhanced row styling */
 .frequency-table tbody tr:hover {
     background: var(--primary-50);
-    transform: scale(1.01);
 }
 
 .frequency-table tbody tr:nth-child(even) {
@@ -115,17 +114,16 @@
 
 /* Group header styling */
 .group-header {
-    background: linear-gradient(135deg, var(--acoustic-blue) 0%, var(--acoustic-purple) 100%);
-    color: white;
+    background: linear-gradient(135deg, var(--acoustic-blue) 0%, var(--acoustic-purple) 100%) !important;
+    color: white !important;
     cursor: pointer;
-    transition: all var(--transition-normal);
     border-radius: var(--radius-md);
     margin: 0.25rem 0;
 }
 
 .group-header:hover {
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-md);
+    background: linear-gradient(135deg, var(--acoustic-blue) 0%, var(--acoustic-purple) 100%) !important;
+    color: white !important;
 }
 
 .group-header td {
@@ -139,22 +137,17 @@
     font-size: 0.875rem;
     display: flex;
     align-items: center;
-    color: white;
+    color: white !important;
 }
 
 .toggle-icon {
     margin-right: 0.5rem;
     font-size: 0.75rem;
-    transition: transform var(--transition-normal);
-}
-
-.group-header:hover .toggle-icon {
-    transform: rotate(90deg);
 }
 
 .frequency-range {
     font-weight: 500;
-    color: rgba(255, 255, 255, 0.9);
+    color: rgba(255, 255, 255, 0.9) !important;
     margin-left: 0.625rem;
     font-size: 0.8rem;
 }
@@ -172,7 +165,6 @@
     font-size: 0.75rem;
     margin-right: 0.5rem;
     box-shadow: var(--shadow-sm);
-    background: linear-gradient(135deg, var(--acoustic-orange) 0%, var(--warning) 100%);
 }
 
 /* Table note styling */
@@ -205,12 +197,11 @@
     text-align: left;
     border-bottom: 1px solid var(--neutral-200);
     font-size: 0.875rem;
-    transition: all var(--transition-fast);
 }
 
 .waves-table th {
-    background: linear-gradient(135deg, var(--acoustic-teal) 0%, var(--primary-600) 100%);
-    color: white;
+    background: linear-gradient(135deg, var(--acoustic-teal) 0%, var(--primary-600) 100%) !important;
+    color: white !important;
     font-weight: 700;
     font-size: 0.8rem;
     text-transform: uppercase;
@@ -220,13 +211,17 @@
     z-index: 1;
 }
 
+.waves-table th:hover {
+    background: linear-gradient(135deg, var(--acoustic-teal) 0%, var(--primary-600) 100%) !important;
+    color: white !important;
+}
+
 .waves-table tr:nth-child(even) {
     background: var(--neutral-50);
 }
 
 .waves-table tr:hover {
     background: var(--primary-50);
-    transform: scale(1.01);
 }
 
 /* Enhanced table responsiveness */
