@@ -229,7 +229,7 @@ function createFrequencyTable(containerId, data) {
     container.append(table);
 
     // Aggiungi una nota sulla tabella
-    container.append('<p class="table-note">* I numeri nei cerchi colorati corrispondono ai marcatori nel grafico sotto</p>');
+    container.append('<p class="table-note">* I numeri nei cerchi colorati corrispondono ai marcatori nel grafico</p>');
 
     // Ensure table styles are loaded (already handled in createResonanceTable)
 }

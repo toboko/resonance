@@ -114,12 +114,7 @@ function calculateBothSections() {
     const height = parseFloat($('#room-height').val());
 
     // Get sound speed value
-    let soundSpeed;
-    if ($('#sound-speed').val() === 'custom') {
-        soundSpeed = parseFloat($('#custom-sound-speed').val());
-    } else {
-        soundSpeed = parseFloat($('#sound-speed').val());
-    }
+    const soundSpeed = parseFloat($('#sound-speed').val());
 
     // Get max modes value
     let maxModes = parseInt($('#max-modes').val());

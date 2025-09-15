@@ -12,7 +12,8 @@
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
-<div class="container">
+<a href="#main-content" class="skip-link">Skip to main content</a>
+<div class="container" id="main-content">
     <h1>Room Acoustics Calculator</h1>
 
     <div class="tabs">
@@ -23,52 +24,49 @@
     <div class="tab-content active" id="resonance">
         <h2>Calcolo Frequenze di Risonanza</h2>
         <div class="input-form">
-            <div class="input-group">
-                <label for="room-length">Lunghezza (m):</label>
-                <input type="number" id="room-length" step="0.01" min="0.1" value="5">
-            </div>
-            <div class="input-group">
-                <label for="room-width">Larghezza (m):</label>
-                <input type="number" id="room-width" step="0.01" min="0.1" value="4">
-            </div>
-            <div class="input-group">
-                <label for="room-height">Altezza (m):</label>
-                <input type="number" id="room-height" step="0.01" min="0.1" value="3">
-            </div>
-            <div class="input-group">
-                <label for="sound-speed">Velocità del suono:</label>
-                <select id="sound-speed" class="select-input">
-                    <option value="343">Aria a 20°C (343 m/s)</option>
-                    <option value="331">Aria a 0°C (331 m/s)</option>
-                    <option value="346">Aria a 25°C (346 m/s)</option>
-                    <option value="349">Aria a 30°C (349 m/s)</option>
-                    <option value="1500">Acqua (1500 m/s)</option>
-                    <option value="custom">Personalizzata...</option>
-                </select>
-                <div id="custom-sound-speed-container" style="display: none; margin-top: 10px;">
-                    <label for="custom-sound-speed">Velocità personalizzata (m/s):</label>
-                    <input type="number" id="custom-sound-speed" step="0.1" min="10" value="343">
+            <div class="dimensions-group">
+                <div class="input-group dimension-input">
+                    <label for="room-length">Lunghezza (m):</label>
+                    <input type="number" id="room-length" step="0.01" min="0.1" value="5">
+                </div>
+                <div class="input-group dimension-input">
+                    <label for="room-width">Larghezza (m):</label>
+                    <input type="number" id="room-width" step="0.01" min="0.1" value="4">
+                </div>
+                <div class="input-group dimension-input">
+                    <label for="room-height">Altezza (m):</label>
+                    <input type="number" id="room-height" step="0.01" min="0.1" value="3">
                 </div>
             </div>
-            <div class="input-group">
-                <label for="max-modes">Numero di modi:</label>
-                <input type="number" id="max-modes" step="1" min="1" max="10" value="5">
+            <div class="parameters-group">
+                <div class="input-group dimension-input">
+                    <label for="sound-speed">Velocità del suono:</label>
+                    <select id="sound-speed" class="select-input">
+                        <option value="343">Aria a 20°C (343 m/s)</option>
+                        <option value="331">Aria a 0°C (331 m/s)</option>
+                        <option value="349">Aria a 30°C (349 m/s)</option>
+                        <option value="1500">Acqua (1500 m/s)</option>
+                    </select>
+                </div>
+                <div class="input-group dimension-input">
+                    <label for="max-modes">Numero di modi:</label>
+                    <input type="number" id="max-modes" step="1" min="1" max="10" value="5">
+                </div>
             </div>
             <!-- Pulsante di calcolo rimosso - aggiornamento automatico -->
         </div>
 
         <div class="results">
             <div class="visualization">
-                <h4>Visualizzazione delle Frequenze</h4>
                 <div class="chart-container">
                     <div class="chart-controls">
-                        <label><input type="checkbox" id="show-axial" checked> Assiale</label>
-                        <label><input type="checkbox" id="show-tangential" checked> Tangenziale</label>
-                        <label><input type="checkbox" id="show-oblique" checked> Obliqua</label>
-                        <label><input type="checkbox" id="show-combined" checked> Risultante</label>
+                        <label><input type="checkbox" id="show-axial" checked> <span class="color-indicator" style="background-color: #ff6384;"></span> Assiale</label>
+                        <label><input type="checkbox" id="show-tangential" checked> <span class="color-indicator" style="background-color: #36a2eb;"></span> Tangenziale</label>
+                        <label><input type="checkbox" id="show-oblique" checked> <span class="color-indicator" style="background-color: #ffce56;"></span> Obliqua</label>
+                        <label><input type="checkbox" id="show-combined" checked> <span class="color-indicator" style="background-color: #9c88ff;"></span> Risultante</label>
                     </div>
                     <div class="chart-wrapper">
-                        <canvas id="frequency-chart" width="800" height="300"></canvas>
+                        <canvas id="frequency-chart" height="360"></canvas>
                     </div>
                 </div>
                 <div class="chart-description">
@@ -80,7 +78,7 @@
                         <li><strong style="color: #9c88ff;">Risultante (viola)</strong>: combinazione di tutti i modi</li>
                     </ul>
                     <p><em>L'altezza delle curve indica l'energia relativa di ogni frequenza. Usa i controlli per mostrare/nascondere i segnali individualmente.</em></p>
-                    <button id="math-info-btn" class="math-info-button">📐 Informazioni Matematiche</button>
+                    <button id="math-info-btn" class="math-info-button">Informazioni Matematiche</button>
                 </div>
             </div>
             <h3>Risultati</h3>
@@ -104,44 +102,60 @@
     <div class="tab-content" id="standing-waves">
         <h2>Calcolo Onde Stazionarie</h2>
         <div class="input-form">
-            <div class="input-group">
-                <label for="sw-length">Lunghezza (m):</label>
-                <input type="number" id="sw-length" step="0.01" min="0.1" value="5">
-            </div>
-            <div class="input-group">
-                <label for="sw-width">Larghezza (m):</label>
-                <input type="number" id="sw-width" step="0.01" min="0.1" value="4">
-            </div>
-            <div class="input-group">
-                <label for="sw-height">Altezza (m):</label>
-                <input type="number" id="sw-height" step="0.01" min="0.1" value="3">
-            </div>
-            <div class="input-group">
-                <label for="sw-sound-speed">Velocità del suono:</label>
-                <select id="sw-sound-speed" class="select-input">
-                    <option value="343">Aria a 20°C (343 m/s)</option>
-                    <option value="331">Aria a 0°C (331 m/s)</option>
-                    <option value="346">Aria a 25°C (346 m/s)</option>
-                    <option value="349">Aria a 30°C (349 m/s)</option>
-                    <option value="1500">Acqua (1500 m/s)</option>
-                    <option value="custom">Personalizzata...</option>
-                </select>
-                <div id="sw-custom-sound-speed-container" style="display: none; margin-top: 10px;">
-                    <label for="sw-custom-sound-speed">Velocità personalizzata (m/s):</label>
-                    <input type="number" id="sw-custom-sound-speed" step="0.1" min="10" value="343">
+            <div class="dimensions-group">
+                <div class="input-group dimension-input">
+                    <label for="sw-length">Lunghezza (m):</label>
+                    <input type="number" id="sw-length" step="0.01" min="0.1" value="5">
+                </div>
+                <div class="input-group dimension-input">
+                    <label for="sw-width">Larghezza (m):</label>
+                    <input type="number" id="sw-width" step="0.01" min="0.1" value="4">
+                </div>
+                <div class="input-group dimension-input">
+                    <label for="sw-height">Altezza (m):</label>
+                    <input type="number" id="sw-height" step="0.01" min="0.1" value="3">
                 </div>
             </div>
-            <div class="input-group">
-                <label for="sw-max-modes">Numero di modi:</label>
-                <input type="number" id="sw-max-modes" step="1" min="1" max="10" value="5">
+            <div class="parameters-group">
+                <div class="input-group dimension-input">
+                    <label for="sw-sound-speed">Velocità del suono:</label>
+                    <select id="sw-sound-speed" class="select-input">
+                        <option value="343">Aria a 20°C (343 m/s)</option>
+                        <option value="331">Aria a 0°C (331 m/s)</option>
+                        <option value="346">Aria a 25°C (346 m/s)</option>
+                        <option value="349">Aria a 30°C (349 m/s)</option>
+                        <option value="1500">Acqua (1500 m/s)</option>
+                    </select>
+                </div>
+                <div class="input-group dimension-input">
+                    <label for="sw-max-modes">Numero di modi:</label>
+                    <input type="number" id="sw-max-modes" step="1" min="1" max="10" value="5">
+                </div>
             </div>
             <!-- Pulsante di calcolo rimosso - aggiornamento automatico -->
         </div>
 
         <div class="results">
             <div class="visualization">
-                <h4>Visualizzazione delle Onde Stazionarie</h4>
-                <canvas id="standing-waves-chart" width="800" height="300"></canvas>
+                <div class="chart-container">
+                    <div class="chart-controls">
+                        <label><input type="checkbox" id="show-length" checked> <span class="color-indicator" style="background-color: #ff6384;"></span> Lunghezza</label>
+                        <label><input type="checkbox" id="show-width" checked> <span class="color-indicator" style="background-color: #36a2eb;"></span> Larghezza</label>
+                        <label><input type="checkbox" id="show-height" checked> <span class="color-indicator" style="background-color: #ffce56;"></span> Altezza</label>
+                    </div>
+                    <div class="chart-wrapper">
+                        <canvas id="standing-waves-chart" height="360"></canvas>
+                    </div>
+                </div>
+                <div class="chart-description">
+                    <p><strong>Questo grafico mostra le frequenze delle onde stazionarie nella stanza:</strong></p>
+                    <ul>
+                        <li><strong style="color: #ff6384;">Lunghezza (rosso)</strong>: onde stazionarie lungo la dimensione della lunghezza</li>
+                        <li><strong style="color: #36a2eb;">Larghezza (blu)</strong>: onde stazionarie lungo la dimensione della larghezza</li>
+                        <li><strong style="color: #ffce56;">Altezza (giallo)</strong>: onde stazionarie lungo la dimensione dell'altezza</li>
+                    </ul>
+                    <p><em>Ogni linea verticale rappresenta una frequenza di risonanza. L'opacità delle linee diminuisce per i modi superiori per una migliore leggibilità.</em></p>
+                </div>
             </div>
             <h3>Risultati</h3>
             <div class="result-container">

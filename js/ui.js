@@ -14,50 +14,24 @@ function setupTabSwitching() {
         // Show selected tab content
         $('.tab-content').removeClass('active');
         $('#' + tabId).addClass('active');
+
+        // Trigger canvas drawing for the newly activated tab
+        setTimeout(() => {
+            calculateBothSections();
+        }, 50); // Small delay to ensure DOM is updated
     });
 }
 
-// Handle custom sound speed selection
+// Handle sound speed selection
 function setupSoundSpeedSync() {
     $('#sound-speed').on('change', function () {
-        if ($(this).val() === 'custom') {
-            $('#custom-sound-speed-container').show();
-        } else {
-            $('#custom-sound-speed-container').hide();
-        }
         // Sync with standing waves
         $('#sw-sound-speed').val($(this).val());
-        if ($(this).val() === 'custom') {
-            $('#sw-custom-sound-speed-container').show();
-            $('#sw-custom-sound-speed').val($('#custom-sound-speed').val());
-        } else {
-            $('#sw-custom-sound-speed-container').hide();
-        }
     });
 
     $('#sw-sound-speed').on('change', function () {
-        if ($(this).val() === 'custom') {
-            $('#sw-custom-sound-speed-container').show();
-        } else {
-            $('#sw-custom-sound-speed-container').hide();
-        }
         // Sync with resonance
         $('#sound-speed').val($(this).val());
-        if ($(this).val() === 'custom') {
-            $('#custom-sound-speed-container').show();
-            $('#custom-sound-speed').val($('#sw-custom-sound-speed').val());
-        } else {
-            $('#custom-sound-speed-container').hide();
-        }
-    });
-
-    // Sync custom sound speed values
-    $('#custom-sound-speed').on('input', function() {
-        $('#sw-custom-sound-speed').val($(this).val());
-    });
-
-    $('#sw-custom-sound-speed').on('input', function() {
-        $('#custom-sound-speed').val($(this).val());
     });
 }
 
@@ -136,7 +110,6 @@ function setupAutoUpdateHandlers() {
         '#room-length', '#room-width', '#room-height',
         '#sw-length', '#sw-width', '#sw-height',
         '#sound-speed', '#sw-sound-speed',
-        '#custom-sound-speed', '#sw-custom-sound-speed',
         '#max-modes', '#sw-max-modes'
     ];
 
@@ -173,12 +146,6 @@ function syncFormValues() {
 
     // Sync sound speed
     $('#sw-sound-speed').val($('#sound-speed').val());
-    if ($('#sound-speed').val() === 'custom') {
-        $('#sw-custom-sound-speed-container').show();
-        $('#sw-custom-sound-speed').val($('#custom-sound-speed').val());
-    } else {
-        $('#sw-custom-sound-speed-container').hide();
-    }
 
     // Sync max modes with validation
     const maxModesValue = validateMaxModes('#max-modes');
@@ -197,38 +164,35 @@ function initializeFormSync() {
     $('#sw-height').val($('#room-height').val());
     $('#sw-sound-speed').val($('#sound-speed').val());
     $('#sw-max-modes').val($('#max-modes').val());
-
-    // If custom options are selected, sync those too
-    if ($('#sound-speed').val() === 'custom') {
-        $('#sw-custom-sound-speed-container').show();
-        $('#sw-custom-sound-speed').val($('#custom-sound-speed').val());
-    }
 }
 
 // Setup chart controls for showing/hiding signals
 function setupChartControls() {
     $('.chart-controls input[type="checkbox"]').on('change', function() {
-        // Re-draw the chart with current visibility settings
-        const length = parseFloat($('#room-length').val());
-        const width = parseFloat($('#room-width').val());
-        const height = parseFloat($('#room-height').val());
+        const chartContainer = $(this).closest('.chart-container');
+        const isResonanceTab = chartContainer.find('#frequency-chart').length > 0;
 
-        // Get sound speed value
-        let soundSpeed;
-        if ($('#sound-speed').val() === 'custom') {
-            soundSpeed = parseFloat($('#custom-sound-speed').val());
+        if (isResonanceTab) {
+            // Handle resonance chart controls
+            const length = parseFloat($('#room-length').val());
+            const width = parseFloat($('#room-width').val());
+            const height = parseFloat($('#room-height').val());
+            const soundSpeed = parseFloat($('#sound-speed').val());
+            let maxModes = validateMaxModes('#max-modes');
+
+            const resonanceResults = calculateResonanceFrequencies(length, width, height, soundSpeed, maxModes);
+            drawResonanceChart('frequency-chart', resonanceResults.axial, resonanceResults.tangential, resonanceResults.oblique);
         } else {
-            soundSpeed = parseFloat($('#sound-speed').val());
+            // Handle standing waves chart controls
+            const length = parseFloat($('#sw-length').val());
+            const width = parseFloat($('#sw-width').val());
+            const height = parseFloat($('#sw-height').val());
+            const soundSpeed = parseFloat($('#sw-sound-speed').val());
+            let maxModes = validateMaxModes('#sw-max-modes');
+
+            const standingWavesResults = calculateStandingWaves(length, width, height, soundSpeed, maxModes);
+            drawStandingWavesChart('standing-waves-chart', standingWavesResults);
         }
-
-        // Get max modes value with validation
-        let maxModes = validateMaxModes('#max-modes');
-
-        // Calculate resonance frequencies
-        const resonanceResults = calculateResonanceFrequencies(length, width, height, soundSpeed, maxModes);
-
-        // Re-draw chart with new visibility settings
-        drawResonanceChart('frequency-chart', resonanceResults.axial, resonanceResults.tangential, resonanceResults.oblique);
     });
 }
 

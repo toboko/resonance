@@ -2,10 +2,42 @@
  * Chart drawing module for rendering charts and graphs
  */
 
+// Function to resize canvas to match its container
+function resizeCanvasToContainer(canvas) {
+    const container = canvas.parentElement;
+    const containerWidth = container.clientWidth;
+    const containerHeight = canvas.height || 300;
+
+    // Check if we're on mobile (screen width <= 768px)
+    const isMobile = window.innerWidth <= 768;
+
+    let canvasWidth;
+    if (isMobile) {
+        // On mobile, use full container width (no padding reduction)
+        canvasWidth = containerWidth;
+    } else {
+        // On desktop, reduce canvas width by 4rem (2rem left + 2rem right padding)
+        canvasWidth = containerWidth - (2 * 32); // 32px = 2rem (assuming 16px base font size)
+    }
+
+    const canvasHeight = containerHeight;
+
+    // Set canvas size
+    canvas.width = canvasWidth;
+    canvas.height = canvasHeight;
+
+    // Set CSS size to match for proper scaling
+    canvas.style.width = canvasWidth + 'px';
+    canvas.style.height = canvasHeight + 'px';
+}
+
 // Function to draw resonance chart with continuous signals
 function drawResonanceChart(canvasId, axial, tangential, oblique) {
     const canvas = document.getElementById(canvasId);
     const ctx = canvas.getContext('2d');
+
+    // Resize canvas to match container
+    resizeCanvasToContainer(canvas);
 
     // Store data on canvas for interactive redrawing
     canvas.axialData = axial;
@@ -156,6 +188,7 @@ function drawResonanceChart(canvasId, axial, tangential, oblique) {
         // Draw label
         ctx.fillStyle = '#000';
         ctx.textAlign = 'center';
+        ctx.font = '0.75rem Inter, sans-serif';
         ctx.fillText(Math.round(freqValue) + ' Hz', x, canvas.height - padding + 20);
     }
 
@@ -175,6 +208,7 @@ function drawResonanceChart(canvasId, axial, tangential, oblique) {
         // Draw label
         ctx.fillStyle = '#000';
         ctx.textAlign = 'right';
+        ctx.font = '0.75rem Inter, sans-serif';
         ctx.fillText(amplitudeValue.toFixed(2), padding - 10, y + 4);
     }
 
@@ -258,7 +292,7 @@ function drawResonanceChart(canvasId, axial, tangential, oblique) {
             ctx.fillRect(legendX, legendY, 15, 15);
             ctx.fillStyle = '#000';
             ctx.textAlign = 'left';
-            ctx.font = '12px Arial';
+            ctx.font = '0.75rem Inter, sans-serif';
             ctx.fillText('Assiale', legendX + 20, legendY + 12);
             legendY += legendSpacing;
         }
@@ -268,6 +302,7 @@ function drawResonanceChart(canvasId, axial, tangential, oblique) {
             ctx.fillStyle = typeColors['tangential'];
             ctx.fillRect(legendX, legendY, 15, 15);
             ctx.fillStyle = '#000';
+            ctx.font = '0.75rem Inter, sans-serif';
             ctx.fillText('Tangenziale', legendX + 20, legendY + 12);
             legendY += legendSpacing;
         }
@@ -277,6 +312,7 @@ function drawResonanceChart(canvasId, axial, tangential, oblique) {
             ctx.fillStyle = typeColors['oblique'];
             ctx.fillRect(legendX, legendY, 15, 15);
             ctx.fillStyle = '#000';
+            ctx.font = '0.75rem Inter, sans-serif';
             ctx.fillText('Obliqua', legendX + 20, legendY + 12);
             legendY += legendSpacing;
         }
@@ -286,19 +322,21 @@ function drawResonanceChart(canvasId, axial, tangential, oblique) {
             ctx.fillStyle = typeColors['combined'];
             ctx.fillRect(legendX, legendY, 15, 15);
             ctx.fillStyle = '#000';
+            ctx.font = '0.75rem Inter, sans-serif';
             ctx.fillText('Risultante', legendX + 20, legendY + 12);
         }
     }
 
     // Add axis labels
     ctx.fillStyle = '#000';
-    ctx.font = '14px Arial';
+    ctx.font = '0.875rem Inter, sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText('Frequenza (Hz)', canvas.width / 2, canvas.height - 10);
 
     ctx.save();
     ctx.translate(15, canvas.height / 2);
     ctx.rotate(-Math.PI / 2);
+    ctx.font = '0.875rem Inter, sans-serif';
     ctx.fillText('Ampiezza', 0, 0);
     ctx.restore();
 
@@ -345,6 +383,9 @@ function drawResonanceChart(canvasId, axial, tangential, oblique) {
 function drawStandingWavesChart(canvasId, waves) {
     const canvas = document.getElementById(canvasId);
     const ctx = canvas.getContext('2d');
+
+    // Resize canvas to match container
+    resizeCanvasToContainer(canvas);
 
     // Initialize animation properties if not exists
     if (!canvas.animationState) {
@@ -442,6 +483,7 @@ function drawStandingWavesChart(canvasId, waves) {
         // Draw label
         ctx.fillStyle = '#000';
         ctx.textAlign = 'center';
+        ctx.font = '0.75rem Inter, sans-serif';
         ctx.fillText(Math.round(freqValue) + ' Hz', x, canvas.height - padding + 20);
     }
 
@@ -466,8 +508,21 @@ function drawStandingWavesChart(canvasId, waves) {
     // Prepare data for table
     const tableData = [];
 
+    // Get visibility settings from checkboxes
+    const showLength = $('#show-length').is(':checked');
+    const showWidth = $('#show-width').is(':checked');
+    const showHeight = $('#show-height').is(':checked');
+
     // Draw frequency lines with graduated opacity based on mode
     Object.entries(dimensionModeWaves).forEach(([dimension, dimensionWaves]) => {
+        // Check if this dimension should be shown
+        let shouldShow = false;
+        if (dimension === 'Lunghezza' && showLength) shouldShow = true;
+        if (dimension === 'Larghezza' && showWidth) shouldShow = true;
+        if (dimension === 'Altezza' && showHeight) shouldShow = true;
+
+        if (!shouldShow) return; // Skip this dimension if not selected
+
         // Sort by mode for each dimension
         dimensionWaves.sort((a, b) => a.mode - b.mode);
 
@@ -509,7 +564,7 @@ function drawStandingWavesChart(canvasId, waves) {
             ctx.fillStyle = '#fff';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            ctx.font = 'bold 9px Arial';
+            ctx.font = 'bold 0.75rem Inter, sans-serif';
             ctx.fillText(waveNumber, x, canvas.height - padding - 3);
         });
     });
@@ -517,34 +572,54 @@ function drawStandingWavesChart(canvasId, waves) {
     // Reset opacity for legend and other elements
     ctx.globalAlpha = 1.0;
 
-    // Draw legend
-    const legendX = padding + 10;
-    const legendY = padding + 20;
+    // Draw legend in top-right corner
+    const legendX = canvas.width - padding - 120;
+    let legendY = padding + 20;
+    const legendSpacing = 25;
 
-    // Length
-    ctx.fillStyle = colors['Lunghezza'];
-    ctx.fillRect(legendX, legendY, 15, 15);
-    ctx.fillStyle = '#000';
-    ctx.textAlign = 'left';
-    ctx.font = '12px Arial';
-    ctx.fillText('Lunghezza', legendX + 20, legendY + 12);
+    // Count visible dimensions for legend
+    const visibleDimensions = [
+        showLength && dimensionModeWaves['Lunghezza'] && dimensionModeWaves['Lunghezza'].length > 0,
+        showWidth && dimensionModeWaves['Larghezza'] && dimensionModeWaves['Larghezza'].length > 0,
+        showHeight && dimensionModeWaves['Altezza'] && dimensionModeWaves['Altezza'].length > 0
+    ].filter(Boolean).length;
 
-    // Width
-    ctx.fillStyle = colors['Larghezza'];
-    ctx.fillRect(legendX + 100, legendY, 15, 15);
-    ctx.fillStyle = '#000';
-    ctx.fillText('Larghezza', legendX + 120, legendY + 12);
+    if (visibleDimensions > 0) {
+        // Length
+        if (showLength && dimensionModeWaves['Lunghezza'] && dimensionModeWaves['Lunghezza'].length > 0) {
+            ctx.fillStyle = colors['Lunghezza'];
+            ctx.fillRect(legendX, legendY, 15, 15);
+            ctx.fillStyle = '#000';
+            ctx.textAlign = 'left';
+            ctx.font = '0.75rem Inter, sans-serif';
+            ctx.fillText('Lunghezza', legendX + 20, legendY + 12);
+            legendY += legendSpacing;
+        }
 
-    // Height
-    ctx.fillStyle = colors['Altezza'];
-    ctx.fillRect(legendX + 200, legendY, 15, 15);
-    ctx.fillStyle = '#000';
-    ctx.fillText('Altezza', legendX + 220, legendY + 12);
+        // Width
+        if (showWidth && dimensionModeWaves['Larghezza'] && dimensionModeWaves['Larghezza'].length > 0) {
+            ctx.fillStyle = colors['Larghezza'];
+            ctx.fillRect(legendX, legendY, 15, 15);
+            ctx.fillStyle = '#000';
+            ctx.font = '0.75rem Inter, sans-serif';
+            ctx.fillText('Larghezza', legendX + 20, legendY + 12);
+            legendY += legendSpacing;
+        }
+
+        // Height
+        if (showHeight && dimensionModeWaves['Altezza'] && dimensionModeWaves['Altezza'].length > 0) {
+            ctx.fillStyle = colors['Altezza'];
+            ctx.fillRect(legendX, legendY, 15, 15);
+            ctx.fillStyle = '#000';
+            ctx.font = '0.75rem Inter, sans-serif';
+            ctx.fillText('Altezza', legendX + 20, legendY + 12);
+        }
+    }
 
     // Add opacity legend
     ctx.textAlign = 'right';
     ctx.fillStyle = '#666';
-    ctx.font = '11px Arial';
+    ctx.font = '0.75rem Inter, sans-serif';
     ctx.fillText('* Opacità ridotta per i modi superiori', canvas.width - padding, canvas.height - 10);
 
     // Create and display frequency table only if data hasn't changed (animation will handle it otherwise)

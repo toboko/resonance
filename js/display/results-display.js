@@ -46,7 +46,7 @@ function displayStandingWavesResults(containerId, waves) {
 
     // Create a table for each dimension
     for (const [dimension, wavesList] of Object.entries(dimensionGroups)) {
-        const table = $('<table class="waves-table"></table>');
+        const table = $('<table class="frequency-table"></table>');
         table.append(`
             <thead>
                 <tr>
