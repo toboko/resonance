@@ -115,7 +115,7 @@ function drawResonanceChart(canvasId, axial, tangential, oblique) {
 
         // Generate old combined signal
         const allOldFrequencies = [...canvas.animationState.oldAxial, ...canvas.animationState.oldTangential, ...canvas.animationState.oldOblique];
-        const oldMaxFrequency = allOldFrequencies.length > 0 ? Math.max(...allOldFrequencies.map(f => parseFloat(f.frequency))) + 80 : 1000;
+        const oldMaxFrequency = allOldFrequencies.length > 0 ? Math.max(...allOldFrequencies.map(f => parseFloat(f.frequency))) + DEFAULTS.FREQUENCY_PADDING : 1000;
         const oldAxialSignal = generateContinuousSignal(canvas.animationState.oldAxial, oldMaxFrequency, 'axial');
         const oldTangentialSignal = generateContinuousSignal(canvas.animationState.oldTangential, oldMaxFrequency, 'tangential');
         const oldObliqueSignal = generateContinuousSignal(canvas.animationState.oldOblique, oldMaxFrequency, 'oblique');
@@ -138,7 +138,7 @@ function drawResonanceChart(canvasId, axial, tangential, oblique) {
 
     // Combine all frequencies for max frequency calculation
     const allFrequencies = [...axial, ...tangential, ...oblique];
-    const maxFrequency = Math.max(...allFrequencies.map(f => parseFloat(f.frequency))) + 80;
+    const maxFrequency = Math.max(...allFrequencies.map(f => parseFloat(f.frequency))) + DEFAULTS.FREQUENCY_PADDING;
 
     // Generate continuous signals for each type
     const axialSignal = generateContinuousSignal(axial, maxFrequency, 'axial');
@@ -173,8 +173,11 @@ function drawResonanceChart(canvasId, axial, tangential, oblique) {
     ctx.strokeStyle = '#000';
     ctx.stroke();
 
+    // Check if we're on mobile (screen width <= 768px)
+    const isMobile = window.innerWidth <= 768;
+
     // Draw frequency scale on x-axis
-    const numTicks = 10;
+    const numTicks = isMobile ? 5 : 10;
     for (let i = 0; i <= numTicks; i++) {
         const x = padding + (width * i) / numTicks;
         const freqValue = (maxFrequency * i) / numTicks;
@@ -276,6 +279,8 @@ function drawResonanceChart(canvasId, axial, tangential, oblique) {
 
     // Info icon removed - now using button in description
 
+    // Legend removed as requested
+    /*
     // Draw legend in top-right corner
     const legendX = canvas.width - padding - 120;
     let legendY = padding + 20;
@@ -334,6 +339,7 @@ function drawResonanceChart(canvasId, axial, tangential, oblique) {
             ctx.fillText('Risultante', legendX + 20, legendY + 7.5);
         }
     }
+    */
 
     // Add axis labels
     ctx.fillStyle = '#000';
@@ -464,8 +470,8 @@ function drawStandingWavesChart(canvasId, waves) {
     // Sort by frequency
     waves.sort((a, b) => parseFloat(a.frequency) - parseFloat(b.frequency));
 
-    // Find max frequency and add 80Hz padding
-    const maxFrequency = Math.max(...waves.map(f => parseFloat(f.frequency))) + 80;
+    // Find max frequency and add padding
+    const maxFrequency = Math.max(...waves.map(f => parseFloat(f.frequency))) + DEFAULTS.STANDING_WAVES_PADDING;
 
     // Draw axes
     ctx.lineWidth = 1;
@@ -476,8 +482,11 @@ function drawStandingWavesChart(canvasId, waves) {
     ctx.strokeStyle = '#000';
     ctx.stroke();
 
+    // Check if we're on mobile (screen width <= 768px)
+    const isMobile = window.innerWidth <= 768;
+
     // Draw frequency scale on x-axis
-    const numTicks = 10;
+    const numTicks = isMobile ? 5 : 10;
     for (let i = 0; i <= numTicks; i++) {
         const x = padding + (width * i) / numTicks;
         const freqValue = (maxFrequency * i) / numTicks;
@@ -574,6 +583,8 @@ function drawStandingWavesChart(canvasId, waves) {
     // Reset opacity for legend and other elements
     ctx.globalAlpha = 1.0;
 
+    // Legend removed as requested
+    /*
     // Draw legend in top-right corner
     const legendX = canvas.width - padding - 120;
     let legendY = padding + 20;
@@ -622,6 +633,7 @@ function drawStandingWavesChart(canvasId, waves) {
             ctx.fillText('Altezza', legendX + 20, legendY + 7.5);
         }
     }
+    */
 
     // Opacity legend removed - deprecated feature
 

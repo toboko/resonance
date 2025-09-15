@@ -24,7 +24,7 @@
 
     // Combine all frequencies for max frequency calculation
     const allFrequencies = [...state.newAxial, ...state.newTangential, ...state.newOblique];
-    const maxFrequency = Math.max(...allFrequencies.map(f => parseFloat(f.frequency))) + 80;
+    const maxFrequency = Math.max(...allFrequencies.map(f => parseFloat(f.frequency))) + DEFAULTS.FREQUENCY_PADDING;
 
     // Generate new signals
     const newAxialSignal = generateContinuousSignal(state.newAxial, maxFrequency, 'axial');
@@ -40,7 +40,7 @@
 
     if (state.oldAxial.length > 0) {
         const allOldFrequencies = [...state.oldAxial, ...state.oldTangential, ...state.oldOblique];
-        const oldMaxFrequency = allOldFrequencies.length > 0 ? Math.max(...allOldFrequencies.map(f => parseFloat(f.frequency))) + 80 : 1000;
+        const oldMaxFrequency = allOldFrequencies.length > 0 ? Math.max(...allOldFrequencies.map(f => parseFloat(f.frequency))) + DEFAULTS.FREQUENCY_PADDING : 1000;
         oldAxialSignal = generateContinuousSignal(state.oldAxial, oldMaxFrequency, 'axial');
         oldTangentialSignal = generateContinuousSignal(state.oldTangential, oldMaxFrequency, 'tangential');
         oldObliqueSignal = generateContinuousSignal(state.oldOblique, oldMaxFrequency, 'oblique');
@@ -78,9 +78,12 @@
     ctx.strokeStyle = '#000';
     ctx.stroke();
 
+    // Check if we're on mobile (screen width <= 768px)
+    const isMobile = window.innerWidth <= 768;
+
     // Draw frequency scale on x-axis
     ctx.font = CHART_CONFIG.FONT_SIZE.TICK_LABEL;
-    const numTicks = 10;
+    const numTicks = isMobile ? 5 : 10;
     for (let i = 0; i <= numTicks; i++) {
         const x = padding + (width * i) / numTicks;
         const freqValue = (maxFrequency * i) / numTicks;
@@ -191,6 +194,8 @@
         drawSignal(combinedSignal, typeColors.combined, 'Risultante', 1.0, isNew);
     }
 
+    // Legend removed as requested
+    /*
     // Draw legend with fade-in effect
     const legendX = canvas.width - padding - 120;
     let legendY = padding + 20;
@@ -255,6 +260,7 @@
 
         ctx.globalAlpha = 1.0;
     }
+    */
 
     // Add axis labels
     ctx.fillStyle = '#000';
@@ -344,8 +350,8 @@ function animateStandingWavesChart(canvas, ctx) {
     const currentWaves = [...state.newWaves].sort((a, b) => parseFloat(a.frequency) - parseFloat(b.frequency));
     const oldWaves = [...state.oldWaves].sort((a, b) => parseFloat(a.frequency) - parseFloat(b.frequency));
 
-    // Find max frequency and add 80Hz padding
-    const maxFrequency = Math.max(...currentWaves.map(f => parseFloat(f.frequency))) + 80;
+    // Find max frequency and add padding
+    const maxFrequency = Math.max(...currentWaves.map(f => parseFloat(f.frequency))) + DEFAULTS.STANDING_WAVES_PADDING;
 
     // Draw axes
     ctx.lineWidth = 1;
@@ -356,9 +362,12 @@ function animateStandingWavesChart(canvas, ctx) {
     ctx.strokeStyle = '#000';
     ctx.stroke();
 
+    // Check if we're on mobile (screen width <= 768px)
+    const isMobile = window.innerWidth <= 768;
+
     // Draw frequency scale on x-axis
     ctx.font = CHART_CONFIG.FONT_SIZE.TICK_LABEL;
-    const numTicks = 10;
+    const numTicks = isMobile ? 5 : 10;
     for (let i = 0; i <= numTicks; i++) {
         const x = padding + (width * i) / numTicks;
         const freqValue = (maxFrequency * i) / numTicks;
@@ -453,6 +462,8 @@ function animateStandingWavesChart(canvas, ctx) {
     // Reset opacity for legend and other elements
     ctx.globalAlpha = 1.0;
 
+    // Legend removed as requested
+    /*
     // Draw legend with fade-in effect
     const legendX = canvas.width - padding - 120;
     let legendY = padding + 20;
@@ -512,6 +523,7 @@ function animateStandingWavesChart(canvas, ctx) {
 
         ctx.globalAlpha = 1.0;
     }
+    */
 
     // Continue animation or finish
     if (progress < 1) {

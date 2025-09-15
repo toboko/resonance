@@ -4,8 +4,8 @@ const DEFAULTS = {
     SOUND_SPEED_AIR_20C: 343, // Default sound speed in air at 20°C (m/s)
     DEFAULT_MAX_MODES: 10, // Default maximum mode index
     CHART_PADDING: 60,
-    FREQUENCY_PADDING: 80, // Hz padding for chart scaling
-    STANDING_WAVES_PADDING: 80, // Hz padding for standing waves chart
+    FREQUENCY_PADDING: 15, // Hz padding for chart scaling
+    STANDING_WAVES_PADDING: 15, // Hz padding for standing waves chart
     RESULTS_GROUP_SIZE: 10, // Number of results per group in tables
     MARKER_RADIUS: 8,
     NUM_TICKS: 10

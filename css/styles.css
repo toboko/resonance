@@ -143,7 +143,7 @@ h3, h4 {
     border: none;
     cursor: pointer;
     font-size: 1rem;
-    font-weight: 500;
+    font-weight: 700;
     transition: all var(--transition-normal);
     border-radius: var(--radius-lg);
     margin: 0 0.25rem;
@@ -493,10 +493,7 @@ input[type="number"]::-webkit-inner-spin-button {
     display: inline-block;
     width: 12px;
     height: 12px;
-    border-radius: 50%;
     margin: 0 0.5rem;
-    border: 2px solid rgba(255, 255, 255, 0.8);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 .chart-description {
@@ -820,7 +817,7 @@ mjx-chtml {
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 899px) {
     .container {
         padding: 1rem;
     }
@@ -856,9 +853,32 @@ mjx-chtml {
     }
 
     .input-form {
-        grid-template-columns: 1fr;
-        gap: 1.25rem;
+        flex-direction: column;
+        gap: 0.25rem;
         padding: 1.25rem;
+        align-items: center;
+    }
+
+    .input-form .dimensions-group {
+        flex-direction: row;
+        justify-content: center;
+        width: 100%;
+        padding-right: 0;
+        border-right: none;
+        margin-right: 0;
+        margin-bottom: 1rem;
+    }
+
+    .input-form .parameters-group {
+        flex-direction: row;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .input-group.dimension-input {
+        flex: 1;
+        min-width: 90px;
+        max-width: none;
     }
 
     .result-container {
@@ -871,9 +891,9 @@ mjx-chtml {
     }
 
     .chart-controls {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.75rem;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        justify-content: flex-start;
     }
 
     .chart-controls label {
@@ -891,6 +911,41 @@ mjx-chtml {
 
     .math-modal-body {
         padding: 1.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 0.75rem;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    .tab-content {
+        padding: 1rem;
+    }
+
+    .input-form {
+        padding: 1rem;
+    }
+
+    .result-section {
+        padding: 1rem;
+    }
+
+    .chart-description {
+        padding: 1rem;
+        font-size: 0.8rem;
+    }
+
+    .math-modal-header h2 {
+        font-size: 1.25rem;
+    }
+
+    .math-modal-body {
+        padding: 1rem;
     }
 }
 
