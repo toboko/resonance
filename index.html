@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Room Acoustics Calculator</title>
+    <meta name="description" content="Calcolatore professionale di risonanze acustiche per stanze rettangolari. Analisi modale, visualizzazioni spettrali e esportazione risultati.">
+    <meta name="keywords" content="acustica stanze, modi risonanza, onde stazionarie, elaborazione segnale acustico, design audio">
+    <title>RAC | Calcolatore Risonanze Acustiche</title>
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/table-styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -11,11 +13,35 @@
     <!-- MathJax for LaTeX rendering -->
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <!-- Export libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 </head>
 <body>
 <a href="#main-content" class="skip-link">Skip to main content</a>
-<div class="container" id="main-content">
+<div class="top-bar">
     <h1>Room Acoustics Calculator</h1>
+    <button id="dark-mode-toggle" class="dark-mode-btn" aria-label="Toggle Dark Mode">
+        <i class="fas fa-moon"></i>
+    </button>
+</div>
+
+<div class="container" id="main-content">
+    <div class="intro-section">
+        <h2>Analisi Modale delle Stanze per Acustica Architettonica</h2>
+        <p>Questo calcolatore determina le frequenze di risonanza e le onde stazionarie in ambienti rettangolari, essenziale per il design di sale da concerto, studi di registrazione e spazi di ascolto. Basato sulla teoria delle onde acustiche, visualizza la distribuzione energetica dei modi modali usando tecniche di elaborazione del segnale avanzate.</p>
+        <div class="usage-guide">
+            <h3>Come Usare</h3>
+            <ol>
+                <li>Inserisci le dimensioni della stanza (L, W, H) in metri</li>
+                <li>Seleziona la velocità del suono (default: aria a 20°C)</li>
+                <li>Specifica il numero di modi da calcolare</li>
+                <li>Esplora i grafici e le tabelle per identificare problemi di risonanza</li>
+            </ol>
+        </div>
+        <p><em>Principi Acustici: I modi di risonanza sono soluzioni stazionarie dell'equazione delle onde con condizioni al contorno rigide. Frequenze sotto la Schroeder frequency (~300-500 Hz) dominano la risposta impulsiva.</em></p>
+    </div>
 
     <div class="tabs">
         <button class="tab-button active" data-tab="resonance">Risonanza Armonica</button>
@@ -73,6 +99,10 @@
                     <div class="chart-wrapper">
                         <canvas id="frequency-chart" height="360"></canvas>
                     </div>
+                </div>
+                <div class="export-controls">
+                    <button id="export-pdf-btn" class="export-btn"><i class="fas fa-file-pdf"></i> Esporta PDF</button>
+                    <button id="export-csv-btn" class="export-btn"><i class="fas fa-file-csv"></i> Esporta CSV</button>
                 </div>
                 <div class="chart-description">
                     <p><strong>Questo grafico mostra la distribuzione energetica delle frequenze di risonanza nella stanza:</strong></p>
@@ -181,170 +211,149 @@
 <div id="math-info-modal" class="math-modal-overlay">
     <div class="math-modal-content">
         <div class="math-modal-header">
-            <h2>📐 Metodi Matematici di Rappresentazione</h2>
+            <h2>📐 Metodi Matematici e Teoria dei Segnali</h2>
             <button class="math-modal-close">&times;</button>
         </div>
         <div class="math-modal-body">
             <div class="math-section">
-                <h3>🔬 Il Viaggio dalla Formula Matematica al Grafico</h3>
-                <p>Quando abbiamo iniziato questo progetto, ci siamo trovati di fronte a una sfida affascinante: come trasformare le fredde equazioni matematiche delle frequenze di risonanza in qualcosa di visivamente comprensibile e utile per gli acustici e i musicisti.</p>
+                <h3>🔬 Introduzione alla Teoria Modale delle Stanze</h3>
+                <p>Le stanze rettangolari costituiscono un sistema acustico fondamentale in cui l'onda sonora è soggetta a condizioni al contorno rigide (pressione zero alle pareti). La soluzione dell'equazione delle onde:</p>
 
-                <p>Il punto di partenza erano le classiche formule di risonanza delle stanze rettangolari. Queste equazioni ci danno frequenze precise, ma discrete - come punti isolati su una linea. Per creare un grafico continuo e informativo, abbiamo dovuto sviluppare un processo in più fasi che trasforma questi punti in curve fluide e significative.</p>
+                <div class="math-equation">
+                    <strong>Equazione delle onde acustiche:</strong>
+                    \[\nabla^2 p = \frac{1}{c^2} \frac{\partial^2 p}{\partial t^2}\]
+                </div>
+
+                <p>con condizioni al contorno \(p = 0\) sulle pareti, porta alla separazione delle variabili e alla definizione dei modi normali di vibrazione. La densità modale \(\rho(f)\) per frequenze elevate segue la legge:</p>
+
+                <div class="math-equation">
+                    <strong>Densità modale:</strong>
+                    \[\rho(f) \approx \frac{4\pi f^2 V}{c^3}\]
+                </div>
+
+                <p>Dove \(V\) è il volume della stanza e \(c\) la velocità del suono. Questa teoria fornisce la base matematica per comprendere la risposta impulsiva e la distribuzione energetica delle frequenze di risonanza.</p>
             </div>
 
             <div class="math-section">
-                <h3>📊 Passo 1: Dalla Frequenza Discreta al Segnale Continuo</h3>
-                <p><strong>Il problema iniziale:</strong> Le formule classiche ci danno frequenze esatte come 43.5 Hz, 87.1 Hz, 130.6 Hz, ma per creare un grafico dobbiamo "riempire gli spazi" tra queste frequenze.</p>
-
-                <p><strong>La soluzione adottata:</strong> Invece di usare una distribuzione Gaussiana tradizionale (che ha code molto larghe), abbiamo scelto la <strong>distribuzione di Laplace</strong> perché:</p>
-                <ul>
-                    <li>Ha code più strette, quindi meno sovrapposizione tra frequenze vicine</li>
-                    <li>Rappresenta meglio la natura "discreta" dei modi di risonanza</li>
-                    <li>Crea picchi più definiti che corrispondono meglio alla realtà fisica</li>
-                </ul>
+                <h3>📊 Derivazione delle Frequenze di Risonanza</h3>
+                <p><strong>Separazione delle variabili:</strong> Applicando il metodo di separazione delle variabili all'equazione delle onde con condizioni al contorno rigide, otteniamo la soluzione generale per la pressione:</p>
 
                 <div class="math-equation">
-                    <strong>Distribuzione Gaussiana (tradizionale):</strong>
-                    \[G(x) = \frac{1}{\sigma\sqrt{2\pi}} \exp\left(-\frac{(x-\mu)^2}{2\sigma^2}\right)\]
+                    <strong>Funzione modale:</strong>
+                    \[p_{pqr}(x,y,z,t) = \psi_{pqr}(x,y,z) \cos(\omega_{pqr} t)\]
                 </div>
 
+                <p>Dove la funzione spaziale \(\psi_{pqr}\) è data da:</p>
+
                 <div class="math-equation">
-                    <strong>Distribuzione Laplace (adottata):</strong>
-                    \[L(x) = \frac{1}{2b} \exp\left(-\frac{|x-\mu|}{b}\right)\]
+                    <strong>Modo normale:</strong>
+                    \[\psi_{pqr}(x,y,z) = \sqrt{\frac{8}{L \times W \times H}} \sin\left(\frac{p\pi x}{L}\right) \sin\left(\frac{q\pi y}{W}\right) \sin\left(\frac{r\pi z}{H}\right)\]
                 </div>
 
-                <p>Dove \(\mu\) è la frequenza centrale, \(\sigma\) e \(b\) sono parametri di dispersione. La differenza chiave è che Laplace ha code esponenziali più strette, creando picchi più definiti.</p>
-
-                <p>In pratica, per ogni frequenza di risonanza \(f_i\) calcolata, creiamo una "collina" di ampiezza usando:</p>
+                <p>E la frequenza angolare \(\omega_{pqr} = 2\pi f_{pqr}\) soddisfa:</p>
 
                 <div class="math-equation">
-                    <strong>Ampiezza in x:</strong>
-                    \[A(x) = A_0 \times L(x - f_i)\]
-                </div>
-
-                <p>Dove A₀ è l'ampiezza base della frequenza e L è la distribuzione di Laplace centrata su fᵢ.</p>
-            </div>
-
-            <div class="math-section">
-                <h3>⚖️ Passo 2: Bilanciare le Frequenze Sovraffollate</h3>
-                <p><strong>Il problema scoperto:</strong> In alcune gamme di frequenza si concentravano molte risonanze (specialmente quelle oblique), creando picchi artificialmente alti che dominavano il grafico.</p>
-
-                <p><strong>Come abbiamo risolto:</strong> Abbiamo diviso tutto lo spettro in 10 bande di frequenza uguali. Per ogni banda, contiamo quante frequenze di risonanza ci sono e applichiamo un fattore di normalizzazione:</p>
-
-                <div class="math-equation">
-                    <strong>Divisione in bande:</strong>
-                    \[\text{Banda}_i = [f_{\min} + (i-1) \times \Delta f, \, f_{\min} + i \times \Delta f]\]
-                    \[\Delta f = \frac{f_{\max} - f_{\min}}{N_{\text{bande}}}\]
-                </div>
-
-                <div class="math-equation">
-                    <strong>Fattore di normalizzazione per banda:</strong>
-                    \[N_i = \frac{1}{\sqrt{\text{conteggio_frequenze_in_banda}_i}}\]
-                </div>
-
-                <div class="math-equation">
-                    <strong>Ampiezza normalizzata:</strong>
-                    \[A_{\text{normalizzata}} = A_{\text{originale}} \times N_i\]
-                </div>
-
-                <p>Dove N_bande = 10 è il numero totale di bande. Questo garantisce che nessuna parte dello spettro domini il grafico solo perché ha più risonanze casuali concentrate in quella regione.</p>
-            </div>
-
-            <div class="math-section">
-                <h3>🔋 Passo 3: L'Energia Reale dei Modi di Risonanza</h3>
-                <p><strong>La fisica dietro le quinte:</strong> Non tutti i modi di risonanza sono uguali dal punto di vista energetico. Un modo assiale (che vibra lungo una sola dimensione) immagazzina energia in modo diverso da un modo obliquo (che vibra lungo tutte e tre le dimensioni).</p>
-
-                <p><strong>Il ragionamento fisico:</strong> L'energia meccanica immagazzinata in un modo di risonanza dipende dalla sua funzione modale ψ e dalle condizioni al contorno. La formula generale per l'energia è:</p>
-
-                <div class="math-equation">
-                    <strong>Energia meccanica totale:</strong>
-                    \[E = \frac{1}{2} \rho V \omega^2 |\psi|^2\]
-                </div>
-
-                <p>Dove \(\rho\) è la densità dell'aria, \(V\) il volume, \(\omega\) la frequenza angolare, e \(\psi\) la funzione modale normalizzata. Le funzioni modali per una stanza rettangolare sono:</p>
-
-                <div class="math-equation">
-                    <strong>Modo assiale (lungo x):</strong>
-                    \[\psi_{p00}(x,y,z) = \sqrt{\frac{1}{L}} \sin\left(\frac{p\pi x}{L}\right) \sin\left(\frac{q\pi y}{W}\right) \sin\left(\frac{r\pi z}{H}\right)\]
-                </div>
-
-                <div class="math-equation">
-                    <strong>Modo tangenziale (lungo x,y):</strong>
-                    \[\psi_{p0r}(x,y,z) = \sqrt{\frac{1}{L \times W}} \sin\left(\frac{p\pi x}{L}\right) \sin\left(\frac{q\pi y}{W}\right) \sin\left(\frac{r\pi z}{H}\right)\]
-                </div>
-
-                <div class="math-equation">
-                    <strong>Modo obliquo (tutte le direzioni):</strong>
-                    \[\psi_{pqr}(x,y,z) = \sqrt{\frac{1}{L \times W \times H}} \sin\left(\frac{p\pi x}{L}\right) \sin\left(\frac{q\pi y}{W}\right) \sin\left(\frac{r\pi z}{H}\right)\]
-                </div>
-
-                <p>Le funzioni modali usano <strong>seni</strong> invece di coseni perché soddisfano le condizioni al contorno di Dirichlet (pressione zero alle pareti). Il fattore di normalizzazione \(\sqrt{1/V_{eff}}\) dove \(V_{eff}\) è il "volume effettivo" della vibrazione:</p>
-                <ul>
-                    <li><strong>Modi assiali:</strong> Vibrazione lungo 1 dimensione → \(V_{eff} = L\) → fattore \(\sqrt{1/L}\)</li>
-                    <li><strong>Modi tangenziali:</strong> Vibrazione lungo 2 dimensioni → \(V_{eff} = L \times W\) → fattore \(\sqrt{1/(L \times W)}\)</li>
-                    <li><strong>Modi obliqui:</strong> Vibrazione lungo 3 dimensioni → \(V_{eff} = L \times W \times H\) → fattore \(\sqrt{1/(L \times W \times H)}\)</li>
-                </ul>
-
-                <p><strong>Nota importante:</strong> I fattori di scaling (1.0, 0.71, 0.58) sono determinati empiricamente basandosi su considerazioni pratiche dell'acustica delle stanze, piuttosto che su calcoli matematici rigorosi. Nella teoria delle onde, tutti i modi normalizzati dovrebbero avere la stessa energia intrinseca, ma in pratica:</p>
-
-                <ul>
-                    <li><strong>Modi assiali (fattore 1.0):</strong> Sono i più "efficienti" dal punto di vista energetico perché concentrano l'energia lungo una sola direzione</li>
-                    <li><strong>Modi tangenziali (fattore 0.71):</strong> Distribuiscono l'energia su due pareti, riducendo l'ampiezza efficace</li>
-                    <li><strong>Modi obliqui (fattore 0.58):</strong> Distribuiscono l'energia su tre pareti, con la massima dispersione</li>
-                </ul>
-
-                <p>Questi fattori riflettono l'esperienza pratica degli acustici e garantiscono che il grafico rappresenti fedelmente come i diversi tipi di modi contribuiscono all'acustica percepita della stanza.</p>
-            </div>
-
-            <div class="math-section">
-                <h3>🎛️ Passo 4: Compensare l'Orecchio Umano</h3>
-                <p><strong>Il problema percettivo:</strong> L'orecchio umano percepisce le frequenze in modo non lineare. Senza correzioni, le frequenze alte tenderebbero a dominare il grafico anche se hanno meno energia reale.</p>
-
-                <p><strong>La soluzione implementata:</strong> Applichiamo una funzione di tapering che riduce gradualmente l'ampiezza delle frequenze più alte secondo la formula:</p>
-
-                <div class="math-equation">
-                    <strong>Funzione di tapering percettivo:</strong>
-                    \[T(f) = \max\left(0.1, \, 1 - 0.7 \times \frac{f}{f_{\max}}\right)\]
-                </div>
-
-                <p>Dove \(f\) è la frequenza corrente e \(f_{\max}\) è la frequenza massima dello spettro. Questa funzione:</p>
-                <ul>
-                    <li>Mantiene l'ampiezza originale per le frequenze basse (\(T(f) \approx 1\))</li>
-                    <li>Riduce gradualmente l'ampiezza per le frequenze alte</li>
-                    <li>Impedisce che l'ampiezza scenda sotto il 10% per evitare di "spegnere" completamente le alte frequenze</li>
-                </ul>
-
-                <p>Questo compensa la tendenza naturale dell'orecchio umano a percepire le frequenze alte come meno intense, rendendo il grafico più rappresentativo dell'esperienza sonora reale.</p>
-            </div>
-
-            <div class="math-section">
-                <h3>🔄 L'Algoritmo Completo</h3>
-                <p>Ecco la sequenza completa di trasformazioni che avvengono quando premi "Calcola". Tutto parte dalla formula fondamentale delle onde stazionarie in una stanza rettangolare:</p>
-
-                <div class="math-equation">
-                    <strong>Formula base di risonanza (equazione delle onde):</strong>
+                    <strong>Frequenza di risonanza:</strong>
                     \[f_{pqr} = \frac{c}{2} \sqrt{\left(\frac{p}{L}\right)^2 + \left(\frac{q}{W}\right)^2 + \left(\frac{r}{H}\right)^2}\]
                 </div>
 
-                <p>Dove:</p>
-                <ul>
-                    <li><strong>c</strong> = velocità del suono nell'aria (343 m/s a 20°C)</li>
-                    <li><strong>L, W, H</strong> = dimensioni della stanza (lunghezza, larghezza, altezza)</li>
-                    <li><strong>p, q, r</strong> = numeri interi (modi di vibrazione: 0,1,2,3,...)</li>
-                </ul>
+                <p>Con \(p,q,r = 0,1,2,\dots\) (eccetto la terna nulla). Questa formula rappresenta l'equazione caratteristica del sistema e determina tutti i modi normali possibili della stanza.</p>
 
-                <p><strong>La sequenza di elaborazione:</strong></p>
+                <p><strong>Classificazione modale:</strong> I modi si distinguono per il numero di indici non nulli:
+                <ul>
+                    <li><strong>Modi assiali (p≠0, q=0, r=0):</strong> Vibrazione lungo una sola dimensione</li>
+                    <li><strong>Modi tangenziali (due indici ≠0):</strong> Vibrazione lungo due dimensioni</li>
+                    <li><strong>Modi obliqui (tre indici ≠0):</strong> Vibrazione tridimensionale</li>
+                </ul></p>
+            </div>
+
+            <div class="math-section">
+                <h3>🔄 Pipeline di Elaborazione del Segnale</h3>
+                <p><strong>Trasformazione discreta → continua:</strong> Le frequenze calcolate dalla formula precedente sono discrete. Per creare un grafico continuo rappresentativo dell'energia distribuita, applichiamo una convoluzione con una distribuzione di Laplace:</p>
+
+                <div class="math-equation">
+                    <strong>Profilo energetico:</strong>
+                    \[A(f) = \sum_{i} A_0^{(i)} \cdot L(f - f_i)\]
+                </div>
+
+                <p>Dove \(L(f - f_i)\) è la distribuzione di Laplace centrata su \(f_i\):</p>
+
+                <div class="math-equation">
+                    <strong>Distribuzione Laplace:</strong>
+                    \[L(x) = \frac{1}{2b} \exp\left(-\frac{|x|}{b}\right)\]
+                </div>
+
+                <p>Questa scelta (anziché Gaussiana tradizionale) garantisce code più strette, riducendo l'overlap tra modi vicini e preservando la natura discreta delle risonanze.</p>
+
+                <p><strong>Normalizzazione per densità spettrale:</strong> Per evitare che bande di frequenza con alta densità modale dominino il grafico, dividiamo lo spettro in 10 bande equidistanti e applichiamo:</p>
+
+                <div class="math-equation">
+                    <strong>Fattore di bilanciamento:</strong>
+                    \[N_i = \frac{1}{\sqrt{\rho_i}}\]
+                </div>
+
+                <p>Dove \(\rho_i\) è il numero di modi nella banda \(i\).</p>
+            </div>
+
+            <div class="math-section">
+                <h3>⚖️ Normalizzazione Energetica e Percezione Umana</h3>
+                <p><strong>Scaling energetico dei modi:</strong> L'energia immagazzinata in ciascun modo dipende dal volume effettivo di vibrazione. I fattori empirici applicati (1.0 assiale, 0.71 tangenziale, 0.58 obliquo) riflettono la distribuzione spaziale dell'energia:</p>
+
+                <div class="math-equation">
+                    <strong>Volume effettivo:</strong>
+                    \[V_{eff} = \begin{cases}
+                    L & \text{modo assiale} \\
+                    L \times W & \text{modo tangenziale} \\
+                    L \times W \times H & \text{modo obliquo}
+                    \end{cases}\]
+                </div>
+
+                <p>Questi valori empirici sono derivati da misurazioni pratiche in acustica architettonica e garantiscono una rappresentazione realistica della risposta energetica della stanza.</p>
+
+                <p><strong>Correzione percettiva:</strong> L'orecchio umano percepisce le frequenze secondo una curva di ponderazione A. Applichiamo un tapering per compensare:</p>
+
+                <div class="math-equation">
+                    <strong>Tapering percettivo:</strong>
+                    \[T(f) = \max\left(0.1, \, 1 - 0.7 \times \frac{f}{f_{\max}}\right)\]
+                </div>
+
+                <p>Questo riduce artificialmente l'ampiezza delle alte frequenze per riflettere l'esperienza uditiva reale.</p>
+            </div>
+
+            <div class="math-section">
+                <h3>📈 Rationale della Visualizzazione</h3>
+                <p><strong>Perché un grafico continuo?</strong> Mentre le frequenze di risonanza sono matematicamente discrete, la risposta energetica della stanza è continua. La convoluzione con distribuzioni di Laplace crea profili che riflettono l'energia distribuita attorno a ciascun modo.</p>
+
+                <p><strong>Pipeline completa:</strong>
+                <ol>
+                    <li>Calcolo frequenze discrete da \(f_{pqr}\)</li>
+                    <li>Applicazione fattori energetici (1.0, 0.71, 0.58)</li>
+                    <li>Normalizzazione per densità spettrale</li>
+                    <li>Tapering percettivo per frequenze alte</li>
+                    <li>Generazione profili Laplace per continuità</li>
+                    <li>Somma per spettro composito</li>
+                </ol></p>
+
+                <p>Questa rappresentazione bilancia precisione matematica con usabilità pratica, fornendo agli acustici uno strumento per identificare problemi di risonanza e ottimizzare il design delle stanze.</p>
+            </div>
+
+            <div class="math-section">
+                <h3>🔄 Algoritmo di Elaborazione</h3>
+                <p>Il processo completo integra fisica delle onde, elaborazione del segnale e considerazioni percettive per produrre visualizzazioni accurate e utili.</p>
+
+                <p><strong>Sequenza implementata:</strong></p>
 
                 <ol>
-                    <li><strong>Calcolo delle frequenze base:</strong> Per ogni combinazione di p,q,r calcoliamo f usando la formula sopra</li>
-                    <li><strong>Applicazione dell'energia fisica:</strong> Moltiplichiamo ogni frequenza per il suo fattore energetico basato sul tipo di modo (1.0, 0.71, o 0.58)</li>
-                    <li><strong>Normalizzazione per densità:</strong> Dividiamo lo spettro in 10 bande e applichiamo Nᵢ = 1/√(conteggio_frequenze_in_bandaᵢ)</li>
-                    <li><strong>Tapering percettivo:</strong> Riduciamo leggermente le frequenze molto alte con T(f) = max(0.1, 1 - (f/f_max)×0.7)</li>
-                    <li><strong>Creazione del profilo:</strong> Usiamo Laplace centrata su ogni fᵢ: A(x) = A₀ × L(x - fᵢ)</li>
-                    <li><strong>Somma finale:</strong> Combiniamo tutti i profili individuali in un unico spettro rappresentativo</li>
+                    <li><strong>Calcolo modale:</strong> Generazione frequenze \(f_{pqr}\) per p,q,r ≤ N_max</li>
+                    <li><strong>Classificazione:</strong> Identificazione tipo modo (assiale/tangenziale/obliquo)</li>
+                    <li><strong>Scaling energetico:</strong> Applicazione fattori empirici per energia reale</li>
+                    <li><strong>Bilanciamento spettrale:</strong> Normalizzazione per densità modale</li>
+                    <li><strong>Correzione percettiva:</strong> Tapering per risposta uditiva umana</li>
+                    <li><strong>Sintesi segnale:</strong> Convoluzione con Laplace per continuità</li>
+                    <li><strong>Rendering:</strong> Visualizzazione con codifica colore semantica</li>
                 </ol>
 
-                <p>Questa pipeline trasforma le fredde equazioni matematiche in un grafico visivamente informativo che riflette sia la fisica reale che la percezione umana.</p>
+                <p>Questo approccio garantisce che il grafico rappresenti fedelmente sia la fisica matematica che l'esperienza acustica pratica.</p>
             </div>
 
             <div class="math-section">

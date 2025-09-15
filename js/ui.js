@@ -196,6 +196,137 @@ function setupNumberButtons() {
     });
 }
 
+// Dark mode toggle functionality
+function setupDarkModeToggle() {
+    const darkModeToggle = $('#dark-mode-toggle');
+    const body = $('body');
+
+    // Check for saved theme preference or default to system preference
+    const savedTheme = localStorage.getItem('theme');
+    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+    if (savedTheme === 'dark' || (!savedTheme && systemPrefersDark)) {
+        body.addClass('dark-mode');
+        darkModeToggle.html('<i class="fas fa-sun"></i>');
+    } else {
+        body.removeClass('dark-mode');
+        darkModeToggle.html('<i class="fas fa-moon"></i>');
+    }
+
+    darkModeToggle.on('click', function() {
+        if (body.hasClass('dark-mode')) {
+            body.removeClass('dark-mode');
+            localStorage.setItem('theme', 'light');
+            darkModeToggle.html('<i class="fas fa-moon"></i>');
+        } else {
+            body.addClass('dark-mode');
+            localStorage.setItem('theme', 'dark');
+            darkModeToggle.html('<i class="fas fa-sun"></i>');
+        }
+    });
+}
+
+// Modal enhancements: ESC close and smooth scroll
+function setupModalEnhancements() {
+    // ESC key to close modal
+    $(document).on('keydown', function(e) {
+        if (e.key === 'Escape') {
+            hideMathInfoModal();
+        }
+    });
+
+    // Smooth scroll for modal sections
+    $('.math-modal-body').on('click', 'h3', function() {
+        $(this).nextUntil('h3').slideToggle('fast');
+    });
+
+    // Add scroll-to-top button for long modal
+    if ($('.math-modal-body').height() > 600) {
+        $('.math-modal-body').prepend('<button class="scroll-top-btn">↑ Torna su</button>');
+        $('.scroll-top-btn').on('click', function() {
+            $('.math-modal-content').animate({scrollTop: 0}, 'smooth');
+        });
+    }
+}
+
+// Export functions
+function setupExportHandlers() {
+    // PDF Export
+    $('#export-pdf-btn').on('click', function() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        // Add title
+        doc.setFontSize(20);
+        doc.text('Room Acoustics Analysis Report', 20, 30);
+
+        // Add parameters
+        doc.setFontSize(12);
+        doc.text(`Room Dimensions: ${$('#room-length').val()}m × ${$('#room-width').val()}m × ${$('#room-height').val()}m`, 20, 50);
+        doc.text(`Sound Speed: ${$('#sound-speed').val()} m/s`, 20, 60);
+        doc.text(`Max Modes: ${$('#max-modes').val()}`, 20, 70);
+
+        // Capture chart as image
+        html2canvas(document.getElementById('frequency-chart')).then(canvas => {
+            const imgData = canvas.toDataURL('image/png');
+            doc.addImage(imgData, 'PNG', 20, 80, 170, 100);
+            doc.save('room-acoustics-report.pdf');
+        });
+    });
+
+    // CSV Export
+    $('#export-csv-btn').on('click', function() {
+        // Always trigger calculation to ensure fresh data
+        calculateBothSections();
+        // Give more time for calculation and DOM update
+        setTimeout(() => {
+            performCSVExport();
+        }, 500);
+    });
+
+    function performCSVExport() {
+        // Get current input values
+        const length = parseFloat($('#room-length').val());
+        const width = parseFloat($('#room-width').val());
+        const height = parseFloat($('#room-height').val());
+        const soundSpeed = parseFloat($('#sound-speed').val());
+        const maxModes = parseInt($('#max-modes').val());
+
+        // Calculate resonance frequencies directly
+        const resonanceResults = calculateResonanceFrequencies(length, width, height, soundSpeed, maxModes);
+
+        // Get sound speed text
+        const soundSpeedText = $('#sound-speed option:selected').text();
+
+        // Create CSV data with room settings and results
+        const csvData = [
+            ['Room Acoustics Analysis Export'],
+            ['Generated on', new Date().toLocaleString('it-IT')],
+            [''],
+            ['Room Settings'],
+            ['Length (m)', length.toString()],
+            ['Width (m)', width.toString()],
+            ['Height (m)', height.toString()],
+            ['Sound Speed', soundSpeedText],
+            ['Max Modes', maxModes.toString()],
+            [''],
+            ['Resonance Frequencies'],
+            ['Type', 'Mode', 'Frequency (Hz)'],
+            ...resonanceResults.axial.map(item => ['Axial', item.mode, item.frequency]),
+            ...resonanceResults.tangential.map(item => ['Tangential', item.mode, item.frequency]),
+            ...resonanceResults.oblique.map(item => ['Oblique', item.mode, item.frequency])
+        ];
+
+        // Export the data with semicolon separator
+        const csv = Papa.unparse(csvData, { delimiter: ';' });
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'room-acoustics-data.csv';
+        link.click();
+    }
+}
+
 // Initialize all UI components
 function initializeUI() {
     setupTabSwitching();
@@ -205,6 +336,9 @@ function initializeUI() {
     setupAutoUpdateHandlers();
     setupChartControls();
     setupNumberButtons();
+    setupDarkModeToggle();
+    setupModalEnhancements();
+    setupExportHandlers();
     initializeFormSync();
 }
 
