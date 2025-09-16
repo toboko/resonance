@@ -48,6 +48,7 @@
 .group-toggle {
     display: flex;
     align-items: center;
+    font-size: var(--font-size-sm);
     padding: var(--space-3) var(--space-4);
     color: var(--primary-700);
 }
@@ -60,7 +61,6 @@
 
 .frequency-range {
     margin-left: var(--space-2);
-    font-size: var(--font-size-sm);
     color: var(--neutral-600);
     font-weight: normal;
 }
@@ -120,7 +120,6 @@
 
 /* Results summary */
 .results-summary {
-    margin-bottom: var(--space-3);
     padding: var(--space-2) var(--space-3);
     background: var(--primary-50);
     border: 1px solid var(--primary-200);

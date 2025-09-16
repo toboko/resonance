@@ -197,7 +197,6 @@
 
 .input-form .parameters-group .input-group {
     max-width: 200px;
-    align-items: left;
 }
 
 .input-form .parameters-group input,
@@ -208,6 +207,7 @@
 
 .input-form .parameters-group select {
     padding-right: var(--space-8);
+    max-width: 130px;
 }
 
 .input-form .parameters-group label {
@@ -1074,7 +1074,7 @@ mjx-chtml {
 
     .input-form .parameters-group .input-group {
         max-width: none;
-        align-items: flex-start;
+        align-items: center;
     }
 
     .result-container {
@@ -1231,7 +1231,6 @@ mjx-chtml {
 
     #max-modes, #sw-max-modes {
         max-width: 40px;
-        font-size: 0.875rem;
     }
 
     .results {
@@ -1430,7 +1429,6 @@ mjx-chtml {
 
     #max-modes, #sw-max-modes {
         max-width: 35px;
-        font-size: 0.75rem;
     }
 
     .chart-wrapper {
