@@ -254,24 +254,118 @@ function setupExportHandlers() {
     // PDF Export
     $('#export-pdf-btn').on('click', function() {
         const { jsPDF } = window.jspdf;
-        const doc = new jsPDF();
+        const doc = new jsPDF('p', 'mm', 'a4'); // A4 format
+
+        // Get current input values
+        const length = parseFloat($('#room-length').val());
+        const width = parseFloat($('#room-width').val());
+        const height = parseFloat($('#room-height').val());
+        const soundSpeed = parseFloat($('#sound-speed').val());
+        const maxModes = parseInt($('#max-modes').val());
+
+        // Calculate resonance frequencies
+        const resonanceResults = calculateResonanceFrequencies(length, width, height, soundSpeed, maxModes);
 
         // Add title
-        doc.setFontSize(20);
-        doc.text('Room Acoustics Analysis Report', 20, 30);
+        doc.setFontSize(18);
+        doc.text('Room Acoustics Analysis Report', 20, 25);
 
-        // Add parameters
+        // Add parameters section
         doc.setFontSize(12);
-        doc.text(`Room Dimensions: ${$('#room-length').val()}m × ${$('#room-width').val()}m × ${$('#room-height').val()}m`, 20, 50);
-        doc.text(`Sound Speed: ${$('#sound-speed').val()} m/s`, 20, 60);
-        doc.text(`Max Modes: ${$('#max-modes').val()}`, 20, 70);
+        doc.text('Parametri Impostati (Settings):', 20, 40);
+        doc.setFontSize(10);
+        doc.text(`Dimensioni Stanza: ${length}m × ${width}m × ${height}m`, 20, 50);
+        doc.text(`Velocità del Suono: ${soundSpeed} m/s`, 20, 57);
+        doc.text(`Modi Massimi: ${maxModes}`, 20, 64);
 
-        // Capture chart as image
-        html2canvas(document.getElementById('frequency-chart')).then(canvas => {
-            const imgData = canvas.toDataURL('image/png');
-            doc.addImage(imgData, 'PNG', 20, 80, 170, 100);
-            doc.save('room-acoustics-report.pdf');
-        });
+        // Add chart section
+        doc.setFontSize(12);
+        doc.text('Grafico delle Frequenze (Frequency Chart):', 20, 80);
+
+        // Generate chart on hidden canvas for PDF export
+        drawResonanceChartForPDF(resonanceResults.axial, resonanceResults.tangential, resonanceResults.oblique);
+
+        // Temporarily make canvas visible for html2canvas capture
+        const pdfCanvas = document.getElementById('pdf-chart-canvas');
+        const originalVisibility = pdfCanvas.style.visibility;
+        pdfCanvas.style.visibility = 'visible';
+
+        // Small delay to ensure canvas is fully rendered
+        setTimeout(() => {
+            // Capture the canvas as image
+            html2canvas(pdfCanvas, {
+                scale: 1,
+                useCORS: true,
+                allowTaint: false,
+                width: 1016,
+                height: 350
+            }).then(canvas => {
+                // Hide canvas again after capture
+                pdfCanvas.style.visibility = originalVisibility;
+
+                const imgData = canvas.toDataURL('image/png');
+                // Scale to fit PDF (A4 width is ~210mm, leaving margins)
+                const pdfWidth = 170; // mm
+                const aspectRatio = 1016 / 350;
+                const pdfHeight = pdfWidth / aspectRatio;
+                doc.addImage(imgData, 'PNG', 20, 85, pdfWidth, pdfHeight);
+
+                // Add mode data section in 3 columns
+                let yPosition = 160;
+
+                // Column positions for 3-column layout
+                const col1X = 20;
+                const col2X = 75;
+                const col3X = 130;
+
+                // Headers for each column
+                doc.setFontSize(10);
+                doc.text('Modi Assiali', col1X, yPosition);
+                doc.text('Modi Tangenziali', col2X, yPosition);
+                doc.text('Modi Obliqui', col3X, yPosition);
+                yPosition += 6;
+
+                doc.setFontSize(8);
+                doc.text('Mode    Freq', col1X, yPosition);
+                doc.text('Mode    Freq', col2X, yPosition);
+                doc.text('Mode    Freq', col3X, yPosition);
+                yPosition += 5;
+
+                // Determine the maximum number of modes to show (limited by available space)
+                const maxModesPerColumn = 25;
+                const axialModes = resonanceResults.axial.slice(0, maxModesPerColumn);
+                const tangentialModes = resonanceResults.tangential.slice(0, maxModesPerColumn);
+                const obliqueModes = resonanceResults.oblique.slice(0, maxModesPerColumn);
+
+                // Fill columns with mode data
+                for (let i = 0; i < maxModesPerColumn; i++) {
+                    // Axial column
+                    if (i < axialModes.length) {
+                        const axialMode = axialModes[i];
+                        doc.text(axialMode.mode, col1X, yPosition);
+                        doc.text(axialMode.frequency, col1X + 25, yPosition);
+                    }
+
+                    // Tangential column
+                    if (i < tangentialModes.length) {
+                        const tangentialMode = tangentialModes[i];
+                        doc.text(tangentialMode.mode, col2X, yPosition);
+                        doc.text(tangentialMode.frequency, col2X + 25, yPosition);
+                    }
+
+                    // Oblique column
+                    if (i < obliqueModes.length) {
+                        const obliqueMode = obliqueModes[i];
+                        doc.text(obliqueMode.mode, col3X, yPosition);
+                        doc.text(obliqueMode.frequency, col3X + 25, yPosition);
+                    }
+
+                    yPosition += 4;
+                }
+
+                doc.save('room-acoustics-report.pdf');
+            });
+        }, 100); // 100ms delay
     });
 
     // CSV Export

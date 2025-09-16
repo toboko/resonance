@@ -81,7 +81,6 @@
                     </div>
                 </div>
             </div>
-            <!-- Pulsante di calcolo rimosso - aggiornamento automatico -->
         </div>
 
         <div class="results">
@@ -106,12 +105,14 @@
                     <ul>
                         <li><strong style="color: #ff6384;">Assiale (rosso)</strong>: modi che vibrano lungo una sola dimensione</li>
                         <li><strong style="color: #36a2eb;">Tangenziale (blu)</strong>: modi che vibrano lungo due dimensioni</li>
-                        <li><strong style="color: #ffce56;">Obliquo (giallo)</strong>: modi che vibrano lungo tutte e tre le dimensioni</li>
+                        <li><strong style="color: #ffce56;">Obliqua (giallo)</strong>: modi che vibrano lungo tutte e tre le dimensioni</li>
                         <li><strong style="color: #9c88ff;">Risultante (viola)</strong>: combinazione di tutti i modi</li>
                     </ul>
                     <p><em>L'altezza delle curve indica l'energia relativa di ogni frequenza. Usa i controlli per mostrare/nascondere i segnali individualmente.</em></p>
                     <button id="math-info-btn" class="math-info-button">Informazioni Matematiche</button>
                 </div>
+                <!-- Hidden canvas for PDF export with fixed dimensions -->
+                <canvas id="pdf-chart-canvas" width="1016" height="350" style="position: absolute; left: -9999px; top: -9999px; visibility: hidden;"></canvas>
             </div>
             <h3>Risultati</h3>
             <div class="result-container">

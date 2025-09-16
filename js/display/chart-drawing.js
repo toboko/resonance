@@ -356,70 +356,6 @@ function drawResonanceChart(canvasId, axial, tangential, oblique) {
         drawSignal(combinedSignal, typeColors.combined, 'Risultante', 1.0);
     }
 
-    // Info icon removed - now using button in description
-
-    // Legend removed as requested
-    /*
-    // Draw legend in top-right corner
-    const legendX = canvas.width - padding - 120;
-    let legendY = padding + 20;
-    const legendSpacing = 25;
-
-    // Count visible signals for legend
-    const visibleCount = [showAxial && axial.length > 0, showTangential && tangential.length > 0,
-                         showOblique && oblique.length > 0, showCombined && combinedSignal.length > 0]
-                         .filter(Boolean).length;
-
-    if (visibleCount > 0) {
-        // Axial
-        if (showAxial && axial.length > 0) {
-            ctx.fillStyle = typeColors['axial'];
-            ctx.fillRect(legendX, legendY, 15, 15);
-            ctx.fillStyle = '#000';
-            ctx.textAlign = 'left';
-            ctx.textBaseline = 'middle';
-            ctx.font = CHART_CONFIG.FONT_SIZE.LEGEND;
-            ctx.fillText('Assiale', legendX + 20, legendY + 7.5);
-        }
-        legendY += legendSpacing;
-
-        // Tangential
-        if (showTangential && tangential.length > 0) {
-            ctx.fillStyle = typeColors['tangential'];
-            ctx.fillRect(legendX, legendY, 15, 15);
-            ctx.fillStyle = '#000';
-            ctx.textAlign = 'left';
-            ctx.textBaseline = 'middle';
-            ctx.font = CHART_CONFIG.FONT_SIZE.LEGEND;
-            ctx.fillText('Tangenziale', legendX + 20, legendY + 7.5);
-        }
-        legendY += legendSpacing;
-
-        // Oblique
-        if (showOblique && oblique.length > 0) {
-            ctx.fillStyle = typeColors['oblique'];
-            ctx.fillRect(legendX, legendY, 15, 15);
-            ctx.fillStyle = '#000';
-            ctx.textAlign = 'left';
-            ctx.textBaseline = 'middle';
-            ctx.font = CHART_CONFIG.FONT_SIZE.LEGEND;
-            ctx.fillText('Obliqua', legendX + 20, legendY + 7.5);
-        }
-        legendY += legendSpacing;
-
-        // Combined
-        if (showCombined && combinedSignal.length > 0) {
-            ctx.fillStyle = typeColors['combined'];
-            ctx.fillRect(legendX, legendY, 15, 15);
-            ctx.fillStyle = '#000';
-            ctx.textAlign = 'left';
-            ctx.textBaseline = 'middle';
-            ctx.font = CHART_CONFIG.FONT_SIZE.LEGEND;
-            ctx.fillText('Risultante', legendX + 20, legendY + 7.5);
-        }
-    }
-    */
-
     // Add axis labels using shared function
     drawAxisLabels(ctx, canvas, leftPadding, bottomPadding, 'resonance');
 
@@ -639,58 +575,6 @@ function drawStandingWavesChart(canvasId, waves) {
     // Reset opacity for legend and other elements
     ctx.globalAlpha = 1.0;
 
-    // Legend removed as requested
-    /*
-    // Draw legend in top-right corner
-    const legendX = canvas.width - padding - 120;
-    let legendY = padding + 20;
-    const legendSpacing = 25;
-
-    // Count visible dimensions for legend
-    const visibleDimensions = [
-        showLength && dimensionModeWaves['Lunghezza'] && dimensionModeWaves['Lunghezza'].length > 0,
-        showWidth && dimensionModeWaves['Larghezza'] && dimensionModeWaves['Larghezza'].length > 0,
-        showHeight && dimensionModeWaves['Altezza'] && dimensionModeWaves['Altezza'].length > 0
-    ].filter(Boolean).length;
-
-    if (visibleDimensions > 0) {
-        // Length
-        if (showLength && dimensionModeWaves['Lunghezza'] && dimensionModeWaves['Lunghezza'].length > 0) {
-            ctx.fillStyle = colors['Lunghezza'];
-            ctx.fillRect(legendX, legendY, 15, 15);
-            ctx.fillStyle = '#000';
-            ctx.textAlign = 'left';
-            ctx.textBaseline = 'middle';
-            ctx.font = CHART_CONFIG.FONT_SIZE.LEGEND;
-            ctx.fillText('Lunghezza', legendX + 20, legendY + 7.5);
-        }
-        legendY += legendSpacing;
-
-        // Width
-        if (showWidth && dimensionModeWaves['Larghezza'] && dimensionModeWaves['Larghezza'].length > 0) {
-            ctx.fillStyle = colors['Larghezza'];
-            ctx.fillRect(legendX, legendY, 15, 15);
-            ctx.fillStyle = '#000';
-            ctx.textAlign = 'left';
-            ctx.textBaseline = 'middle';
-            ctx.font = CHART_CONFIG.FONT_SIZE.LEGEND;
-            ctx.fillText('Larghezza', legendX + 20, legendY + 7.5);
-        }
-        legendY += legendSpacing;
-
-        // Height
-        if (showHeight && dimensionModeWaves['Altezza'] && dimensionModeWaves['Altezza'].length > 0) {
-            ctx.fillStyle = colors['Altezza'];
-            ctx.fillRect(legendX, legendY, 15, 15);
-            ctx.fillStyle = '#000';
-            ctx.textAlign = 'left';
-            ctx.textBaseline = 'middle';
-            ctx.font = CHART_CONFIG.FONT_SIZE.LEGEND;
-            ctx.fillText('Altezza', legendX + 20, legendY + 7.5);
-        }
-    }
-    */
-
     // Opacity legend removed - deprecated feature
 
     // Add axis labels using shared function
@@ -702,6 +586,187 @@ function drawStandingWavesChart(canvasId, waves) {
     }
 }
 
+// Function to draw resonance chart for PDF export with fixed dimensions
+function drawResonanceChartForPDF(axial, tangential, oblique) {
+    const canvas = document.getElementById('pdf-chart-canvas');
+    const ctx = canvas.getContext('2d');
+
+    // Clear canvas
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Set fixed dimensions for PDF export
+    const leftPadding = CHART_STYLE.PADDING_LEFT;
+    const bottomPadding = CHART_STYLE.PADDING_BOTTOM;
+    const rightPadding = CHART_STYLE.PADDING_RIGHT;
+    const topPadding = CHART_STYLE.PADDING_TOP;
+    const width = canvas.width - leftPadding - rightPadding;
+    const height = canvas.height - topPadding - bottomPadding;
+
+    // Combine all frequencies for max frequency calculation
+    const allFrequencies = [...axial, ...tangential, ...oblique];
+    const maxFrequency = Math.max(...allFrequencies.map(f => parseFloat(f.frequency))) + DEFAULTS.FREQUENCY_PADDING;
+
+    // Generate continuous signals for each type
+    const axialSignal = generateContinuousSignal(axial, maxFrequency, 'axial');
+    const tangentialSignal = generateContinuousSignal(tangential, maxFrequency, 'tangential');
+    const obliqueSignal = generateContinuousSignal(oblique, maxFrequency, 'oblique');
+
+    // Generate combined signal
+    const combinedSignal = combineSignals([axialSignal, tangentialSignal, obliqueSignal]);
+
+    // Get visibility settings from checkboxes (same as main chart)
+    const showAxial = $('#show-axial').is(':checked');
+    const showTangential = $('#show-tangential').is(':checked');
+    const showOblique = $('#show-oblique').is(':checked');
+    const showCombined = $('#show-combined').is(':checked');
+
+    // Collect visible signals for amplitude scaling
+    const visibleSignals = [];
+    if (showAxial && axial.length > 0) visibleSignals.push(...axialSignal);
+    if (showTangential && tangential.length > 0) visibleSignals.push(...tangentialSignal);
+    if (showOblique && oblique.length > 0) visibleSignals.push(...obliqueSignal);
+    if (showCombined && combinedSignal.length > 0) visibleSignals.push(...combinedSignal);
+
+    // Find max amplitude for scaling (only from visible signals)
+    const maxAmplitude = visibleSignals.length > 0 ? Math.max(...visibleSignals) : 1;
+
+    // Draw axes
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(leftPadding, topPadding);
+    ctx.lineTo(leftPadding, canvas.height - bottomPadding);
+    ctx.lineTo(canvas.width - rightPadding, canvas.height - bottomPadding);
+    ctx.strokeStyle = '#000';
+    ctx.stroke();
+
+    // Draw axis ticks and labels using shared function
+    const numTicksX = 10; // Fixed number for PDF
+    const numTicksY = 4;
+    drawAxisTicks(ctx, canvas, leftPadding, bottomPadding, rightPadding, topPadding, maxFrequency, maxAmplitude, numTicksX, numTicksY);
+
+    // Define colors for mode types using global constants
+    const typeColors = {
+        'axial': COLORS.AXIAL,
+        'tangential': COLORS.TANGENTIAL,
+        'oblique': COLORS.OBLIQUE,
+        'combined': COLORS.COMBINED
+    };
+
+    // Function to draw signal curve
+    function drawSignal(signal, color, label, alpha = 0.8) {
+        ctx.beginPath();
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 2;
+        ctx.globalAlpha = alpha;
+
+        const step = width / signal.length;
+        let hasStarted = false;
+
+        for (let i = 0; i < signal.length; i++) {
+            const x = leftPadding + (i / signal.length) * width;
+            const y = canvas.height - bottomPadding - (signal[i] / maxAmplitude) * height;
+
+            if (!hasStarted) {
+                ctx.moveTo(x, y);
+                hasStarted = true;
+            } else {
+                ctx.lineTo(x, y);
+            }
+        }
+
+        ctx.stroke();
+
+        // Fill area under curve
+        ctx.lineTo(leftPadding + width, canvas.height - bottomPadding);
+        ctx.lineTo(leftPadding, canvas.height - bottomPadding);
+        ctx.closePath();
+        ctx.globalAlpha = alpha * 0.3;
+        ctx.fillStyle = color;
+        ctx.fill();
+
+        ctx.globalAlpha = 1.0;
+    }
+
+    // Draw individual signals based on visibility settings
+    if (showAxial && axial.length > 0) {
+        drawSignal(axialSignal, typeColors.axial, 'Assiale');
+    }
+
+    if (showTangential && tangential.length > 0) {
+        drawSignal(tangentialSignal, typeColors.tangential, 'Tangenziale');
+    }
+
+    if (showOblique && oblique.length > 0) {
+        drawSignal(obliqueSignal, typeColors.oblique, 'Obliqua');
+    }
+
+    // Draw combined signal
+    if (showCombined && combinedSignal.length > 0) {
+        drawSignal(combinedSignal, typeColors.combined, 'Risultante', 1.0);
+    }
+
+    // Add axis labels using shared function
+    drawAxisLabels(ctx, canvas, leftPadding, bottomPadding, 'resonance');
+
+    // Add legend
+    const legendX = canvas.width - 120;
+    let legendY = 20;
+    const legendSpacing = 25;
+
+    // Count visible signals for legend
+    const visibleCount = [showAxial && axial.length > 0, showTangential && tangential.length > 0,
+                         showOblique && oblique.length > 0, showCombined && combinedSignal.length > 0]
+                         .filter(Boolean).length;
+
+    if (visibleCount > 0) {
+        ctx.font = CHART_CONFIG.FONT_SIZE.LEGEND;
+
+        // Axial
+        if (showAxial && axial.length > 0) {
+            ctx.fillStyle = typeColors.axial;
+            ctx.fillRect(legendX, legendY, 15, 15);
+            ctx.fillStyle = '#000';
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('Assiale', legendX + 20, legendY + 7.5);
+            legendY += legendSpacing;
+        }
+
+        // Tangential
+        if (showTangential && tangential.length > 0) {
+            ctx.fillStyle = typeColors.tangential;
+            ctx.fillRect(legendX, legendY, 15, 15);
+            ctx.fillStyle = '#000';
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('Tangenziale', legendX + 20, legendY + 7.5);
+            legendY += legendSpacing;
+        }
+
+        // Oblique
+        if (showOblique && oblique.length > 0) {
+            ctx.fillStyle = typeColors.oblique;
+            ctx.fillRect(legendX, legendY, 15, 15);
+            ctx.fillStyle = '#000';
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('Obliqua', legendX + 20, legendY + 7.5);
+            legendY += legendSpacing;
+        }
+
+        // Combined
+        if (showCombined && combinedSignal.length > 0) {
+            ctx.fillStyle = typeColors.combined;
+            ctx.fillRect(legendX, legendY, 15, 15);
+            ctx.fillStyle = '#000';
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('Risultante', legendX + 20, legendY + 7.5);
+        }
+    }
+}
+
 // Export functions
 window.drawResonanceChart = drawResonanceChart;
 window.drawStandingWavesChart = drawStandingWavesChart;
+window.drawResonanceChartForPDF = drawResonanceChartForPDF;
