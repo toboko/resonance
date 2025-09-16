@@ -1,0 +1,203 @@
+/* Table Styles for Resonance Calculator */
+
+/* Main table styles */
+.frequency-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: var(--space-4);
+    background: var(--neutral-50);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+}
+
+.frequency-table th,
+.frequency-table td {
+    padding: var(--space-3) var(--space-4);
+    text-align: left;
+    border-bottom: 1px solid var(--neutral-200);
+}
+
+.frequency-table th {
+    background: var(--primary-50);
+    font-weight: 600;
+    color: var(--primary-700);
+    border-bottom: 2px solid var(--primary-200);
+}
+
+.frequency-table tbody tr:hover {
+    background: var(--neutral-100);
+}
+
+/* Group header styles */
+.group-header {
+    cursor: pointer;
+    background: var(--primary-100);
+    transition: background-color var(--transition-fast);
+}
+
+.group-header:hover {
+    background: var(--primary-200);
+}
+
+.group-header td {
+    padding: 0;
+    border-bottom: none;
+}
+
+.group-toggle {
+    display: flex;
+    align-items: center;
+    padding: var(--space-3) var(--space-4);
+    font-weight: 500;
+    color: var(--primary-700);
+}
+
+.toggle-icon {
+    margin-right: var(--space-2);
+    color: var(--primary-600);
+    transition: transform var(--transition-fast);
+}
+
+.frequency-range {
+    margin-left: var(--space-2);
+    font-size: 0.875rem;
+    color: var(--neutral-600);
+    font-weight: normal;
+}
+
+/* Group content styles */
+.group-content {
+    background: var(--neutral-50);
+    border-bottom: 1px solid var(--neutral-200);
+}
+
+.group-content table {
+    margin: 0;
+    border: none;
+    box-shadow: none;
+}
+
+.group-content table th,
+.group-content table td {
+    border-bottom: 1px solid var(--neutral-150);
+}
+
+.group-content table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Number marker styles */
+.number-marker {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-right: var(--space-2);
+}
+
+/* Column specific styles */
+.col-number {
+    width: 60px;
+    text-align: center;
+}
+
+.col-mode {
+    font-family: var(--font-family-mono);
+    font-weight: 500;
+}
+
+.col-freq {
+    font-family: var(--font-family-mono);
+    font-weight: 500;
+    color: var(--primary-600);
+}
+
+/* Results summary */
+.results-summary {
+    margin-bottom: var(--space-3);
+    padding: var(--space-2) var(--space-3);
+    background: var(--primary-50);
+    border: 1px solid var(--primary-200);
+    border-radius: var(--radius-sm);
+    color: var(--primary-700);
+    font-weight: 500;
+    text-align: center;
+}
+
+/* Table note */
+.table-note {
+    margin-top: var(--space-3);
+    font-size: 0.875rem;
+    color: var(--neutral-600);
+    font-style: italic;
+}
+
+/* Utility classes used in tables */
+.p-0 {
+    padding: 0 !important;
+}
+
+.w-100 {
+    width: 100% !important;
+}
+
+/* Dark mode overrides */
+body.dark-mode .frequency-table {
+    background: var(--neutral-800);
+}
+
+body.dark-mode .frequency-table th {
+    background: var(--neutral-700);
+    color: var(--neutral-100);
+    border-bottom-color: var(--neutral-600);
+}
+
+body.dark-mode .frequency-table tbody tr:hover {
+    background: var(--neutral-700);
+}
+
+body.dark-mode .group-header {
+    background: var(--neutral-700);
+}
+
+body.dark-mode .group-header:hover {
+    background: var(--neutral-600);
+}
+
+body.dark-mode .group-toggle {
+    color: var(--neutral-100);
+}
+
+body.dark-mode .toggle-icon {
+    color: var(--primary-400);
+}
+
+body.dark-mode .frequency-range {
+    color: var(--neutral-400);
+}
+
+body.dark-mode .group-content {
+    background: var(--neutral-800);
+    border-bottom-color: var(--neutral-600);
+}
+
+body.dark-mode .group-content table th,
+body.dark-mode .group-content table td {
+    border-bottom-color: var(--neutral-600);
+}
+
+body.dark-mode .results-summary {
+    background: var(--neutral-700);
+    border-color: var(--neutral-600);
+    color: var(--neutral-100);
+}
+
+body.dark-mode .table-note {
+    color: var(--neutral-400);
+}
