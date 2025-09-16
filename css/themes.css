@@ -264,9 +264,7 @@ body.dark-mode .dark-mode-btn:hover {
     .input-form .dimensions-group {
         flex-direction: column;
         border-right: none;
-        border-bottom: 2px solid var(--neutral-300);
         padding-bottom: var(--space-4);
-        margin-bottom: var(--space-4);
         margin-right: 0;
     }
 }
@@ -283,6 +281,11 @@ body.dark-mode .dark-mode-btn:hover {
     .result-container {
         grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
         gap: var(--space-5);
+    }
+
+    .input-form {
+        flex-direction: row;
+
     }
 }
 
@@ -312,13 +315,6 @@ body.dark-mode .dark-mode-btn:hover {
         padding: var(--space-6);
     }
 
-    .input-form {
-        flex-direction: column;
-        gap: var(--space-1);
-        padding: var(--space-5);
-        align-items: center;
-    }
-
     .input-form .dimensions-group {
         flex-direction: row;
         justify-content: center;
@@ -326,7 +322,6 @@ body.dark-mode .dark-mode-btn:hover {
         padding-right: 0;
         border-right: none;
         margin-right: 0;
-        margin-bottom: var(--space-4);
     }
 
     .input-form .parameters-group {
@@ -371,6 +366,13 @@ body.dark-mode .dark-mode-btn:hover {
 
     .math-modal-body {
         padding: var(--space-6);
+    }
+
+    .input-form {
+        flex-direction: column;
+        gap: var(--space-1);
+        padding: var(--space-5);
+        align-items: center;
     }
 }
 
@@ -431,11 +433,12 @@ body.dark-mode .dark-mode-btn:hover {
 @media (min-width: 1200px) {
     .container {
         padding: var(--space-12) var(--space-16);
+        padding-top: var(--space-4);
     }
 
     .result-container {
-        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-        gap: var(--space-8);
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: var(--space-4);
     }
 }
 

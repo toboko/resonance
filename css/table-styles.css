@@ -4,7 +4,6 @@
 .frequency-table {
     width: 100%;
     border-collapse: collapse;
-    margin-bottom: var(--space-4);
     background: var(--neutral-50);
     border-radius: var(--radius-md);
     overflow: hidden;
@@ -20,6 +19,7 @@
 
 .frequency-table th {
     background: var(--primary-50);
+    font-size: var(--font-size-sm);
     font-weight: var(--font-weight-semibold);
     color: var(--primary-700);
     border-bottom: 2px solid var(--primary-200);
@@ -49,7 +49,6 @@
     display: flex;
     align-items: center;
     padding: var(--space-3) var(--space-4);
-    font-weight: var(--font-weight-medium);
     color: var(--primary-700);
 }
 
@@ -80,6 +79,7 @@
 
 .group-content table th,
 .group-content table td {
+    font-size: var(--font-size-sm);
     border-bottom: 1px solid var(--neutral-150);
 }
 
@@ -128,6 +128,10 @@
     color: var(--primary-700);
     font-weight: var(--font-weight-medium);
     text-align: center;
+}
+
+.header-results {
+    padding: var(--space-4);
 }
 
 /* Table note */
