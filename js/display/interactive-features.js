@@ -124,8 +124,16 @@ function addInteractiveFrequencyDisplay(canvas, maxFrequency, padding, width) {
 
     // Function to draw a vertical line at specified x position
     function drawVerticalLine(ctx, x) {
-        const topPadding = 15; // CHART_STYLE.PADDING_TOP
-        const bottomPadding = 45; // CHART_STYLE.PADDING_BOTTOM
+        // Determine padding based on canvas type
+        let topPadding, bottomPadding;
+        if (canvas.id === 'standing-waves-chart') {
+            topPadding = STANDING_WAVES_CHART_PADDING.PADDING_TOP;
+            bottomPadding = STANDING_WAVES_CHART_PADDING.PADDING_BOTTOM;
+        } else {
+            // Default to resonance chart padding
+            topPadding = RESONANCE_CHART_PADDING.PADDING_TOP;
+            bottomPadding = RESONANCE_CHART_PADDING.PADDING_BOTTOM;
+        }
         ctx.beginPath();
         ctx.moveTo(x, topPadding);
         ctx.lineTo(x, canvas.height - bottomPadding);

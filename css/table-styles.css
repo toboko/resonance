@@ -156,7 +156,7 @@
 
 /* Dark mode overrides */
 body.dark-mode .frequency-table {
-    background: var(--neutral-800);
+    background: var(--neutral-200);
 }
 
 body.dark-mode .frequency-table th {

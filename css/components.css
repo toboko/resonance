@@ -237,7 +237,6 @@
 
 .input-form .parameters-group select {
     padding-right: var(--space-8);
-    max-width: 130px;
 }
 
 .input-form .parameters-group label {
@@ -1362,7 +1361,7 @@ mjx-chtml {
     }
 
     .top-bar h1 {
-        font-size: 1.5rem;
+        font-size: var(--font-size-2xl);
     }
 
     .intro-section {
@@ -1439,6 +1438,7 @@ mjx-chtml {
         .site-footer {
         padding: var(--space-6) 0;
     }
+    
 
     .footer-content {
         padding: 0 var(--space-4);
@@ -1506,8 +1506,8 @@ mjx-chtml {
     }
 
     .tab-button {
-        padding: var(--space-2) var(--space-4);
-        font-size: 0.875rem;
+        padding: var(--space-3);
+        font-size: var(--font-size-lg);
     }
 
     .intro-section {
@@ -1671,8 +1671,8 @@ mjx-chtml {
     }
 
     .export-btn {
-        padding: var(--space-2) var(--space-3);
-        font-size: 0.75rem;
+        padding: var(--space-3);
+        font-size: var(--font-size-lg);
     }
 
     .range-control {
@@ -1811,6 +1811,10 @@ mjx-chtml {
         font-size: var(--font-size-md);
     }
 
+    .input-form .parameters-group select {
+        max-width: 130px;
+    }
+
     .select-input {
         font-size: 0.75rem;
     }
@@ -1841,10 +1845,6 @@ mjx-chtml {
     .chart-description {
         padding: var(--space-2);
         font-size: var(--font-size-md);
-    }
-
-    .result-section {
-        padding: var(--space-3);
     }
 
     .result-item {

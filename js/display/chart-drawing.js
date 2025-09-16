@@ -4,10 +4,6 @@
 
 // Chart styling configuration constants
 const CHART_STYLE = {
-    PADDING_LEFT: 55,
-    PADDING_BOTTOM: 45,
-    PADDING_TOP: 15,
-    PADDING_RIGHT: 25,
     TICK_LENGTH: 6,
     TICK_LABEL_OFFSET_X: 18,
     TICK_LABEL_OFFSET_Y: 8,
@@ -22,6 +18,21 @@ const CHART_STYLE = {
         AXIS_LABEL: CHART_CONFIG.FONT_SIZE.AXIS_LABEL,
         BOLD: CHART_CONFIG.FONT_SIZE.BOLD
     }
+};
+
+// Independent padding configurations for each chart type
+const RESONANCE_CHART_PADDING = {
+    PADDING_LEFT: 55,
+    PADDING_BOTTOM: 45,
+    PADDING_TOP: 15,
+    PADDING_RIGHT: 25
+};
+
+const STANDING_WAVES_CHART_PADDING = {
+    PADDING_LEFT: 15,
+    PADDING_BOTTOM: 45,
+    PADDING_TOP: 15,
+    PADDING_RIGHT: 25
 };
 
 // Function to draw axis ticks and labels (shared between main drawing and animation)
@@ -99,6 +110,7 @@ function resizeCanvasToContainer(canvas) {
 
     // Calculate 1rem in pixels for compensation
     const remInPixels = parseFloat(getComputedStyle(document.documentElement).fontSize);
+    console.log(remInPixels)
     const isMobile = window.innerWidth <= 768;
     const isFullscreen = !!document.fullscreenElement && document.fullscreenElement.contains(container);
 
@@ -243,10 +255,10 @@ function drawResonanceChart(canvasId, axial, tangential, oblique) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // Set dimensions with asymmetric padding for labels and ticks
-    const leftPadding = CHART_STYLE.PADDING_LEFT;
-    const bottomPadding = CHART_STYLE.PADDING_BOTTOM;
-    const rightPadding = CHART_STYLE.PADDING_RIGHT;
-    const topPadding = CHART_STYLE.PADDING_TOP;
+    const leftPadding = RESONANCE_CHART_PADDING.PADDING_LEFT;
+    const bottomPadding = RESONANCE_CHART_PADDING.PADDING_BOTTOM;
+    const rightPadding = RESONANCE_CHART_PADDING.PADDING_RIGHT;
+    const topPadding = RESONANCE_CHART_PADDING.PADDING_TOP;
     const width = canvas.width - leftPadding - rightPadding;
     const height = canvas.height - topPadding - bottomPadding;
 
@@ -469,10 +481,10 @@ function drawStandingWavesChart(canvasId, waves) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // Set dimensions with asymmetric padding for labels and ticks
-    const leftPadding = CHART_STYLE.PADDING_LEFT;
-    const bottomPadding = CHART_STYLE.PADDING_BOTTOM;
-    const rightPadding = CHART_STYLE.PADDING_RIGHT;
-    const topPadding = CHART_STYLE.PADDING_TOP;
+    const leftPadding = STANDING_WAVES_CHART_PADDING.PADDING_LEFT;
+    const bottomPadding = STANDING_WAVES_CHART_PADDING.PADDING_BOTTOM;
+    const rightPadding = STANDING_WAVES_CHART_PADDING.PADDING_RIGHT;
+    const topPadding = STANDING_WAVES_CHART_PADDING.PADDING_TOP;
     const width = canvas.width - leftPadding - rightPadding;
     const height = canvas.height - topPadding - bottomPadding;
 
@@ -597,10 +609,10 @@ function drawResonanceChartForPDF(axial, tangential, oblique) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // Set fixed dimensions for PDF export
-    const leftPadding = CHART_STYLE.PADDING_LEFT;
-    const bottomPadding = CHART_STYLE.PADDING_BOTTOM;
-    const rightPadding = CHART_STYLE.PADDING_RIGHT;
-    const topPadding = CHART_STYLE.PADDING_TOP;
+    const leftPadding = RESONANCE_CHART_PADDING.PADDING_LEFT;
+    const bottomPadding = RESONANCE_CHART_PADDING.PADDING_BOTTOM;
+    const rightPadding = RESONANCE_CHART_PADDING.PADDING_RIGHT;
+    const topPadding = RESONANCE_CHART_PADDING.PADDING_TOP;
     const width = canvas.width - leftPadding - rightPadding;
     const height = canvas.height - topPadding - bottomPadding;
 

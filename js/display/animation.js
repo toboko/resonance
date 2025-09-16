@@ -15,10 +15,10 @@
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // Set dimensions with asymmetric padding for labels and ticks
-    const leftPadding = CHART_STYLE.PADDING_LEFT;
-    const bottomPadding = CHART_STYLE.PADDING_BOTTOM;
-    const rightPadding = CHART_STYLE.PADDING_RIGHT;
-    const topPadding = CHART_STYLE.PADDING_TOP;
+    const leftPadding = RESONANCE_CHART_PADDING.PADDING_LEFT;
+    const bottomPadding = RESONANCE_CHART_PADDING.PADDING_BOTTOM;
+    const rightPadding = RESONANCE_CHART_PADDING.PADDING_RIGHT;
+    const topPadding = RESONANCE_CHART_PADDING.PADDING_TOP;
     const width = canvas.width - leftPadding - rightPadding;
     const height = canvas.height - topPadding - bottomPadding;
 
@@ -298,10 +298,10 @@ function animateStandingWavesChart(canvas, ctx) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // Set dimensions with asymmetric padding for labels and ticks
-    const leftPadding = CHART_STYLE.PADDING_LEFT;
-    const bottomPadding = CHART_STYLE.PADDING_BOTTOM;
-    const rightPadding = CHART_STYLE.PADDING_RIGHT;
-    const topPadding = CHART_STYLE.PADDING_TOP;
+    const leftPadding = STANDING_WAVES_CHART_PADDING.PADDING_LEFT;
+    const bottomPadding = STANDING_WAVES_CHART_PADDING.PADDING_BOTTOM;
+    const rightPadding = STANDING_WAVES_CHART_PADDING.PADDING_RIGHT;
+    const topPadding = STANDING_WAVES_CHART_PADDING.PADDING_TOP;
     const width = canvas.width - leftPadding - rightPadding;
     const height = canvas.height - topPadding - bottomPadding;
 

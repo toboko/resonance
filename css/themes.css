@@ -252,7 +252,7 @@ body.dark-mode .dark-mode-btn:hover {
 
     /* Improve readability */
     .chart-description {
-        font-size: 0.8rem;
+        font-size: var(--font-size-md);
     }
 
     /* Stack elements vertically on small screens */
@@ -387,10 +387,6 @@ body.dark-mode .dark-mode-btn:hover {
 
     .input-form {
         padding: var(--space-3);
-    }
-
-    .result-section {
-        padding: var(--space-4);
     }
 
     .chart-description {
