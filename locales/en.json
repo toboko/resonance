@@ -1,0 +1,216 @@
+{
+  "meta": {
+    "title": "RAC | Room Acoustics Calculator",
+    "description": "Professional room acoustics calculator for rectangular rooms. Modal analysis, spectral visualizations and results export."
+  },
+  "header": {
+    "title": "Room Acoustics Calculator",
+    "domainLink": "nilslewin.com"
+  },
+  "tabs": {
+    "resonance": "Harmonic Resonance",
+    "standingWaves": "Standing Waves"
+  },
+  "sections": {
+    "resonanceTitle": "Resonance Frequency Calculation",
+    "standingWavesTitle": "Standing Waves Calculation",
+    "results": "Results"
+  },
+  "chartControls": {
+    "axial": "Axial",
+    "tangential": "Tangential",
+    "oblique": "Oblique",
+    "combined": "Combined",
+    "length": "Length",
+    "width": "Width",
+    "height": "Height"
+  },
+  "chartDescriptions": {
+    "resonance": {
+      "main": "This chart shows the energy distribution of resonance frequencies in the room:",
+      "axial": "Axial (red)",
+      "axialDesc": "modes that vibrate along a single dimension",
+      "tangential": "Tangential (blue)",
+      "tangentialDesc": "modes that vibrate along two dimensions",
+      "oblique": "Oblique (yellow)",
+      "obliqueDesc": "modes that vibrate along all three dimensions",
+      "combined": "Combined (purple)",
+      "combinedDesc": "combination of all modes",
+      "explanation": "The height of the curves indicates the relative energy of each frequency."
+    },
+    "standingWaves": {
+      "main": "This chart shows the frequencies of standing waves in the room:",
+      "length": "Length (red)",
+      "lengthDesc": "standing waves along the length dimension",
+      "width": "Width (blue)",
+      "widthDesc": "standing waves along the width dimension",
+      "height": "Height (green)",
+      "heightDesc": "standing waves along the height dimension",
+      "explanation": "Each vertical line represents a resonance frequency."
+    }
+  },
+  "intro": {
+    "title": "How this resonance frequency calculator works",
+    "description": "This calculator determines resonance frequencies and standing waves in rectangular environments, essential for the design of concert halls, recording studios and listening spaces. Based on acoustic wave theory, it displays the energy distribution of modal modes using advanced signal processing techniques.",
+    "usageTitle": "How to Use",
+    "usageSteps": [
+      "Enter room dimensions (L, W, H) in meters",
+      "Select sound speed (default: air at 20°C)",
+      "Specify number of modes to calculate",
+      "Explore charts and tables to identify resonance issues"
+    ]
+  },
+  "forms": {
+    "dimensions": {
+      "length": "Length (m):",
+      "width": "Width (m):",
+      "height": "Height (m):"
+    },
+    "parameters": {
+      "soundSpeed": "Sound speed:",
+      "maxModes": "Number of modes:"
+    },
+    "soundSpeedOptions": {
+      "air20": "Air at 20°C (343 m/s)",
+      "air0": "Air at 0°C (331 m/s)",
+      "air30": "Air at 30°C (349 m/s)",
+      "water": "Water (1500 m/s)"
+    }
+  },
+  "results": {
+    "title": "Results",
+    "axial": "Axial Frequencies",
+    "tangential": "Tangential Frequencies",
+    "oblique": "Oblique Frequencies",
+    "standingWaves": "Standing Waves",
+    "mode": "Mode",
+    "frequency": "Frequency (Hz)"
+  },
+  "chart": {
+    "description": "This chart shows the energy distribution of resonance frequencies in the room:",
+    "legend": {
+      "axial": "Axial (red)",
+      "tangential": "Tangential (blue)",
+      "oblique": "Oblique (yellow)",
+      "combined": "Combined (purple)"
+    },
+    "explanation": "The height of the curves indicates the relative energy of each frequency.",
+    "mathInfoBtn": "Mathematical Information",
+    "standingWavesDescription": "This chart shows the frequencies of standing waves in the room:",
+    "standingWavesLegend": {
+      "length": "Length (red)",
+      "width": "Width (blue)",
+      "height": "Height (green)"
+    },
+    "standingWavesExplanation": "Each vertical line represents a resonance frequency."
+  },
+  "export": {
+    "pdfBtn": "Export PDF",
+    "csvBtn": "Export CSV",
+    "modalTitle": "File Export",
+    "progress": "Preparing file...",
+    "pdfProgress": "Creating PDF...",
+    "csvProgress": "Creating CSV...",
+    "success": "File ready for download",
+    "downloadBtn": "Download File"
+  },
+  "mathModal": {
+    "title": "Mathematical Methods and Signal Theory",
+    "close": "×",
+    "sections": {
+      "intro": {
+        "title": "🔬 Introduction to Room Modal Theory",
+        "content": "Rectangular rooms constitute a fundamental acoustic system where the sound wave is subject to rigid boundary conditions (zero pressure at walls). The solution of the wave equation:",
+        "waveEquation": "Acoustic wave equation:",
+        "modalDensity": "Modal density:",
+        "modalDensityFormula": "Where V is the room volume and c is the speed of sound. This theory provides the mathematical basis for understanding the impulse response and energy distribution of resonance frequencies."
+      },
+      "derivations": {
+        "title": "📊 Derivation of Resonance Frequencies",
+        "separation": "Variable separation: Applying the variable separation method to the wave equation with rigid boundary conditions, we obtain the general solution for pressure:",
+        "function": "Modal function:",
+        "mode": "Normal mode:",
+        "resonance": "Resonance frequency:",
+        "classification": "Modal classification: Modes are distinguished by the number of non-zero indices:",
+        "axialModes": "Axial modes (p≠0, q=0, r=0): Vibration along a single dimension",
+        "tangentialModes": "Tangential modes (two indices ≠0): Vibration along two dimensions",
+        "obliqueModes": "Oblique modes (three indices ≠0): Three-dimensional vibration"
+      },
+      "pipeline": {
+        "title": "🔄 Signal Processing Pipeline",
+        "transformation": "Discrete → continuous transformation: The frequencies calculated from the previous formula are discrete. To create a continuous chart representative of the distributed energy, we apply a convolution with a Laplace distribution:",
+        "profile": "Energy profile:",
+        "distribution": "Laplace distribution:",
+        "laplaceExplanation": "This choice (rather than traditional Gaussian) ensures tighter tails, reducing overlap between nearby modes and preserving the discrete nature of resonances.",
+        "normalization": "Spectral density normalization: To prevent frequency bands with high modal density from dominating the chart, we divide the spectrum into 10 equidistant bands and apply:",
+        "balancing": "Balancing factor:"
+      },
+      "normalization": {
+        "title": "⚖️ Energy Normalization and Human Perception",
+        "scaling": "Mode energy scaling: The energy stored in each mode depends on the effective vibration volume. The empirical factors applied (1.0 axial, 0.71 tangential, 0.58 oblique) reflect the spatial energy distribution:",
+        "volume": "Effective volume:",
+        "empiricalFactors": "These empirical values are derived from practical measurements in architectural acoustics and ensure a realistic representation of the room's energy response.",
+        "correction": "Perceptual correction: The human ear perceives frequencies according to an A-weighting curve. We apply tapering to compensate:",
+        "tapering": "Perceptual tapering:"
+      },
+      "algorithm": {
+        "title": "🔄 Processing Algorithm",
+        "sequence": "Implemented sequence:",
+        "steps": [
+          "Modal calculation: Generation of f_{pqr} frequencies for p,q,r ≤ N_max",
+          "Classification: Identification of mode type (axial/tangential/oblique)",
+          "Energy scaling: Application of empirical factors for real energy",
+          "Spectral balancing: Normalization for modal density",
+          "Perceptual correction: Tapering for human auditory response",
+          "Signal synthesis: Convolution with Laplace for continuity",
+          "Rendering: Visualization with semantic color coding"
+        ],
+        "conclusion": "This approach ensures that the chart faithfully represents both mathematical physics and practical acoustic experience.",
+        "whyContinuous": "Why a continuous chart? While resonance frequencies are mathematically discrete, the room's energy response is continuous. Convolution with Laplace distributions creates profiles that reflect the energy distributed around each mode."
+      },
+      "conclusions": {
+        "title": "Final Considerations",
+        "why": "Why all this work? Because room acoustics is not just about mathematical frequencies, but how they interact with the human ear and influence the musical experience.",
+        "compromise": "The compromise between precision and usability: We could have created a chart showing only the discrete points of calculated frequencies, but it would have been uninformative. Instead, we chose to create continuous curves that represent the relative energy of each frequency, making the chart much more useful for making practical decisions.",
+        "physics": "Physics first: Every step in the process is guided by real physical considerations. We're not \"beautifying\" the data, we're simply representing it in the most meaningful way possible for those working with acoustics."
+      }
+    }
+  },
+  "footer": {
+    "brand": {
+      "title": "Room Acoustics Calculator",
+      "description": "Professional tool for acoustic resonance analysis"
+    },
+    "links": {
+      "domain": "nilslewin.com",
+      "github": "GitHub Repository"
+    },
+    "tech": {
+      "title": "Technologies Used",
+      "items": {
+        "chart": "Chart.js",
+        "math": "MathJax",
+        "pdf": "jsPDF",
+        "csv": "PapaParse"
+      }
+    },
+    "copyright": "© 2025 Nils Lewin. All rights reserved.",
+    "version": "v1.0.0"
+  },
+  "ui": {
+    "noResults": "No results available.",
+    "unlockPointer": "Click to unlock pointer",
+    "scrollTop": "↑ Back to top",
+    "darkMode": "Toggle Dark Mode",
+    "fullscreen": "Toggle fullscreen",
+    "mode": "Mode",
+    "totalResults": "Total: {count} results",
+    "totalResult": "Total: {count} result",
+    "tableNote": "The numbers in the colored circles correspond to the markers in the chart"
+  },
+  "language": {
+    "selector": "Language:",
+    "italian": "Italiano",
+    "english": "English"
+  }
+}

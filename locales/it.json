@@ -1,0 +1,216 @@
+{
+  "meta": {
+    "title": "RAC | Calcolatore Risonanze Acustiche",
+    "description": "Calcolatore professionale di risonanze acustiche per stanze rettangolari. Analisi modale, visualizzazioni spettrali e esportazione risultati."
+  },
+  "header": {
+    "title": "Room Acoustics Calculator",
+    "domainLink": "nilslewin.com"
+  },
+  "tabs": {
+    "resonance": "Risonanza Armonica",
+    "standingWaves": "Onde Stazionarie"
+  },
+  "sections": {
+    "resonanceTitle": "Calcolo Frequenze di Risonanza",
+    "standingWavesTitle": "Calcolo Onde Stazionarie",
+    "results": "Risultati"
+  },
+  "chartControls": {
+    "axial": "Assiale",
+    "tangential": "Tangenziale",
+    "oblique": "Obliqua",
+    "combined": "Risultante",
+    "length": "Lunghezza",
+    "width": "Larghezza",
+    "height": "Altezza"
+  },
+  "chartDescriptions": {
+    "resonance": {
+      "main": "Questo grafico mostra la distribuzione energetica delle frequenze di risonanza nella stanza:",
+      "axial": "Assiale (rosso)",
+      "axialDesc": "modi che vibrano lungo una sola dimensione",
+      "tangential": "Tangenziale (blu)",
+      "tangentialDesc": "modi che vibrano lungo due dimensioni",
+      "oblique": "Obliqua (giallo)",
+      "obliqueDesc": "modi che vibrano lungo tutte e tre le dimensioni",
+      "combined": "Risultante (viola)",
+      "combinedDesc": "combinazione di tutti i modi",
+      "explanation": "L'altezza delle curve indica l'energia relativa di ogni frequenza."
+    },
+    "standingWaves": {
+      "main": "Questo grafico mostra le frequenze delle onde stazionarie nella stanza:",
+      "length": "Lunghezza (rosso)",
+      "lengthDesc": "onde stazionarie lungo la dimensione della lunghezza",
+      "width": "Larghezza (blu)",
+      "widthDesc": "onde stazionarie lungo la dimensione della larghezza",
+      "height": "Altezza (verde)",
+      "heightDesc": "onde stazionarie lungo la dimensione dell'altezza",
+      "explanation": "Ogni linea verticale rappresenta una frequenza di risonanza."
+    }
+  },
+  "intro": {
+    "title": "Come funziona questo calcolatore di frequenze di risonanza",
+    "description": "Questo calcolatore determina le frequenze di risonanza e le onde stazionarie in ambienti rettangolari, essenziale per il design di sale da concerto, studi di registrazione e spazi di ascolto. Basato sulla teoria delle onde acustiche, visualizza la distribuzione energetica dei modi modali usando tecniche di elaborazione del segnale avanzate.",
+    "usageTitle": "Come Usare",
+    "usageSteps": [
+      "Inserisci le dimensioni della stanza (L, W, H) in metri",
+      "Seleziona la velocità del suono (default: aria a 20°C)",
+      "Specifica il numero di modi da calcolare",
+      "Esplora i grafici e le tabelle per identificare problemi di risonanza"
+    ]
+  },
+  "forms": {
+    "dimensions": {
+      "length": "Lunghezza (m):",
+      "width": "Larghezza (m):",
+      "height": "Altezza (m):"
+    },
+    "parameters": {
+      "soundSpeed": "Velocità del suono:",
+      "maxModes": "Numero di modi:"
+    },
+    "soundSpeedOptions": {
+      "air20": "Aria a 20°C (343 m/s)",
+      "air0": "Aria a 0°C (331 m/s)",
+      "air30": "Aria a 30°C (349 m/s)",
+      "water": "Acqua (1500 m/s)"
+    }
+  },
+  "results": {
+    "title": "Risultati",
+    "axial": "Frequenze Assiali",
+    "tangential": "Frequenze Tangenziali",
+    "oblique": "Frequenze Oblique",
+    "standingWaves": "Onde Stazionarie",
+    "mode": "Modo",
+    "frequency": "Frequenza (Hz)"
+  },
+  "chart": {
+    "description": "Questo grafico mostra la distribuzione energetica delle frequenze di risonanza nella stanza:",
+    "legend": {
+      "axial": "Assiale (rosso)",
+      "tangential": "Tangenziale (blu)",
+      "oblique": "Obliqua (giallo)",
+      "combined": "Risultante (viola)"
+    },
+    "explanation": "L'altezza delle curve indica l'energia relativa di ogni frequenza.",
+    "mathInfoBtn": "Informazioni Matematiche",
+    "standingWavesDescription": "Questo grafico mostra le frequenze delle onde stazionarie nella stanza:",
+    "standingWavesLegend": {
+      "length": "Lunghezza (rosso)",
+      "width": "Larghezza (blu)",
+      "height": "Altezza (verde)"
+    },
+    "standingWavesExplanation": "Ogni linea verticale rappresenta una frequenza di risonanza."
+  },
+  "export": {
+    "pdfBtn": "Esporta PDF",
+    "csvBtn": "Esporta CSV",
+    "modalTitle": "Esportazione File",
+    "progress": "Preparazione file...",
+    "pdfProgress": "PDF in creazione...",
+    "csvProgress": "CSV in creazione...",
+    "success": "File pronto per il download",
+    "downloadBtn": "Scarica File"
+  },
+  "mathModal": {
+    "title": "Metodi Matematici e Teoria dei Segnali",
+    "close": "×",
+    "sections": {
+      "intro": {
+        "title": "🔬 Introduzione alla Teoria Modale delle Stanze",
+        "content": "Le stanze rettangolari costituiscono un sistema acustico fondamentale in cui l'onda sonora è soggetta a condizioni al contorno rigide (pressione zero alle pareti). La soluzione dell'equazione delle onde:",
+        "waveEquation": "Equazione delle onde acustiche:",
+        "modalDensity": "Densità modale:",
+        "modalDensityFormula": "Dove V è il volume della stanza e c la velocità del suono. Questa teoria fornisce la base matematica per comprendere la risposta impulsiva e la distribuzione energetica delle frequenze di risonanza."
+      },
+      "derivations": {
+        "title": "📊 Derivazione delle Frequenze di Risonanza",
+        "separation": "Separazione delle variabili: Applicando il metodo di separazione delle variabili all'equazione delle onde con condizioni al contorno rigide, otteniamo la soluzione generale per la pressione:",
+        "function": "Funzione modale:",
+        "mode": "Modo normale:",
+        "resonance": "Frequenza di risonanza:",
+        "classification": "Classificazione modale: I modi si distinguono per il numero di indici non nulli:",
+        "axialModes": "Modi assiali (p≠0, q=0, r=0): Vibrazione lungo una sola dimensione",
+        "tangentialModes": "Modi tangenziali (due indici ≠0): Vibrazione lungo due dimensioni",
+        "obliqueModes": "Modi obliqui (tre indici ≠0): Vibrazione tridimensionale"
+      },
+      "pipeline": {
+        "title": "🔄 Pipeline di Elaborazione del Segnale",
+        "transformation": "Trasformazione discreta → continua: Le frequenze calcolate dalla formula precedente sono discrete. Per creare un grafico continuo rappresentativo dell'energia distribuita, applichiamo una convoluzione con una distribuzione di Laplace:",
+        "profile": "Profilo energetico:",
+        "distribution": "Distribuzione Laplace:",
+        "laplaceExplanation": "Questa scelta (anziché Gaussiana tradizionale) garantisce code più strette, riducendo l'overlap tra modi vicini e preservando la natura discreta delle risonanze.",
+        "normalization": "Normalizzazione per densità spettrale: Per evitare che bande di frequenza con alta densità modale dominino il grafico, dividiamo lo spettro in 10 bande equidistanti e applichiamo:",
+        "balancing": "Fattore di bilanciamento:"
+      },
+      "normalization": {
+        "title": "⚖️ Normalizzazione Energetica e Percezione Umana",
+        "scaling": "Scaling energetico dei modi: L'energia immagazzinata in ciascun modo dipende dal volume effettivo di vibrazione. I fattori empirici applicati (1.0 assiale, 0.71 tangenziale, 0.58 obliquo) riflettono la distribuzione spaziale dell'energia:",
+        "volume": "Volume effettivo:",
+        "empiricalFactors": "Questi valori empirici sono derivati da misurazioni pratiche in acustica architettonica e garantiscono una rappresentazione realistica della risposta energetica della stanza.",
+        "correction": "Correzione percettiva: L'orecchio umano percepisce le frequenze secondo una curva di ponderazione A. Applichiamo un tapering per compensare:",
+        "tapering": "Tapering percettivo:"
+      },
+      "algorithm": {
+        "title": "🔄 Algoritmo di Elaborazione",
+        "sequence": "Sequenza implementata:",
+        "steps": [
+          "Calcolo modale: Generazione frequenze f_{pqr} per p,q,r ≤ N_max",
+          "Classificazione: Identificazione tipo modo (assiale/tangenziale/obliquo)",
+          "Scaling energetico: Applicazione fattori empirici per energia reale",
+          "Bilanciamento spettrale: Normalizzazione per densità modale",
+          "Correzione percettiva: Tapering per risposta uditiva umana",
+          "Sintesi segnale: Convoluzione con Laplace per continuità",
+          "Rendering: Visualizzazione con codifica colore semantica"
+        ],
+        "conclusion": "Questo approccio garantisce che il grafico rappresenti fedelmente sia la fisica matematica che l'esperienza acustica pratica.",
+        "whyContinuous": "Perché un grafico continuo? Mentre le frequenze di risonanza sono matematicamente discrete, la risposta energetica della stanza è continua. La convoluzione con distribuzioni di Laplace crea profili che riflettono l'energia distribuita attorno a ciascun modo."
+      },
+      "conclusions": {
+        "title": "Considerazioni Finali",
+        "why": "Perché tutto questo lavoro? Perché l'acustica delle stanze non riguarda solo le frequenze matematiche, ma come queste interagiscono con l'orecchio umano e influenzano l'esperienza musicale.",
+        "compromise": "Il compromesso tra precisione e usabilità: Avremmo potuto creare un grafico che mostrasse solo i punti discreti delle frequenze calcolate, ma sarebbe stato poco informativo. Invece, abbiamo scelto di creare curve continue che rappresentano l'energia relativa di ogni frequenza, rendendo il grafico molto più utile per prendere decisioni pratiche.",
+        "physics": "La fisica prima di tutto: Ogni passaggio del processo è guidato da considerazioni fisiche reali. Non stiamo \"abbellendo\" i dati, stiamo semplicemente rappresentandoli nel modo più significativo possibile per chi lavora con l'acustica."
+      }
+    }
+  },
+  "footer": {
+    "brand": {
+      "title": "Room Acoustics Calculator",
+      "description": "Strumento professionale per l'analisi delle risonanze acustiche"
+    },
+    "links": {
+      "domain": "nilslewin.com",
+      "github": "Repository GitHub"
+    },
+    "tech": {
+      "title": "Tecnologie Utilizzate",
+      "items": {
+        "chart": "Chart.js",
+        "math": "MathJax",
+        "pdf": "jsPDF",
+        "csv": "PapaParse"
+      }
+    },
+    "copyright": "© 2025 Nils Lewin. Tutti i diritti riservati.",
+    "version": "v1.0.0"
+  },
+  "ui": {
+    "noResults": "Nessun risultato disponibile.",
+    "unlockPointer": "Fai click per sbloccare il puntatore",
+    "scrollTop": "↑ Torna su",
+    "darkMode": "Toggle Dark Mode",
+    "fullscreen": "Toggle fullscreen",
+    "mode": "Modo",
+    "totalResults": "Totale: {count} risultati",
+    "totalResult": "Totale: {count} risultato",
+    "tableNote": "I numeri nei cerchi colorati corrispondono ai marcatori nel grafico"
+  },
+  "language": {
+    "selector": "Lingua:",
+    "italian": "Italiano",
+    "english": "English"
+  }
+}
