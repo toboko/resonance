@@ -138,6 +138,18 @@ function drawResonanceChart(canvasId, axial, tangential, oblique) {
     // Resize canvas to match container
     resizeCanvasToContainer(canvas);
 
+    // Also resize the lines canvas if it exists
+    const linesCanvas = canvas.parentElement.querySelector('canvas[style*="position: absolute"]');
+    if (linesCanvas) {
+        linesCanvas.width = canvas.width;
+        linesCanvas.height = canvas.height;
+        linesCanvas.style.width = canvas.width + 'px';
+        linesCanvas.style.height = canvas.height + 'px';
+        // Clear the lines canvas on resize to remove any drawn lines
+        const linesCtx = linesCanvas.getContext('2d');
+        linesCtx.clearRect(0, 0, linesCanvas.width, linesCanvas.height);
+    }
+
     // Store data on canvas for interactive redrawing
     canvas.axialData = axial;
     canvas.tangentialData = tangential;

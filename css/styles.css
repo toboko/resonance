@@ -115,70 +115,6 @@ h1 {
     color: var(--primary-700);
 }
 
-@media (max-width: 768px) {
-    /* Layout */
-    .container {
-        padding: 0.75rem;
-        padding-top: 5rem;
-    }
-
-    .top-bar {
-        padding: 1rem 1.5rem;
-        top: 0;
-        left: 0;
-        right: 0;
-        z-index: 1000;
-    }
-
-    /* Typography */
-    h1 {
-        font-size: 1.5rem;
-    }
-
-    .top-bar h1 {
-        font-size: 1.25rem;
-    }
-
-    /* Navigation */
-    .tab-content {
-        padding: 1rem;
-    }
-
-    /* Forms */
-    .input-form {
-        padding: 1rem;
-    }
-
-    /* Content */
-    .intro-section {
-        padding: 1rem;
-    }
-
-    .result-section {
-        padding: 1rem;
-    }
-
-    .chart-description {
-        padding: 1rem;
-        font-size: 0.8rem;
-    }
-
-    .chart-wrapper {
-        padding: 0;
-    }
-
-    /* Modals */
-    .math-modal-header h2 {
-        font-size: 1.25rem;
-    }
-
-    .math-modal-body {
-        padding: 1rem;
-    }
-
-
-}
-
 /* Dark Mode Toggle Button */
 .dark-mode-btn {
     background: var(--neutral-600);
@@ -732,9 +668,8 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 canvas {
-    width: 100%;
     height: auto;
-    background-color: #fff;
+    background-color: transparent;
     border-radius: 8px;
 }
 
@@ -1133,155 +1068,6 @@ mjx-chtml {
     margin: 10px auto;
 }
 
-/* Enhanced Responsive Design */
-@media (max-width: 1024px) {
-    .container {
-        padding: 1.5rem;
-    }
-
-    h1 {
-        font-size: 2rem;
-    }
-
-    .result-container {
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 1.25rem;
-    }
-}
-
-@media (max-width: 899px) {
-    .container {
-        padding: 1rem;
-    }
-
-    h1 {
-        font-size: 1.75rem;
-        margin-bottom: 1.5rem;
-    }
-
-    h1::before {
-        font-size: 1.25rem;
-        top: -8px;
-    }
-
-    h2 {
-        font-size: 1.5rem;
-    }
-
-    .tabs {
-        flex-direction: column;
-        gap: 0.5rem;
-        padding: 0.75rem;
-    }
-
-    .tab-button {
-        margin: 0;
-        width: 100%;
-        justify-content: center;
-    }
-
-    .tab-content {
-        padding: 1.5rem;
-    }
-
-    .input-form {
-        flex-direction: column;
-        gap: 0.25rem;
-        padding: 1.25rem;
-        align-items: center;
-    }
-
-    .input-form .dimensions-group {
-        flex-direction: row;
-        justify-content: center;
-        width: 100%;
-        padding-right: 0;
-        border-right: none;
-        margin-right: 0;
-        margin-bottom: 1rem;
-    }
-
-    .input-form .parameters-group {
-        flex-direction: row;
-        justify-content: center;
-        width: 100%;
-    }
-
-    .input-group.dimension-input {
-        flex: 1;
-        min-width: 90px;
-        max-width: none;
-    }
-
-    .result-container {
-        grid-template-columns: 1fr;
-        gap: 1rem;
-    }
-
-    .result-section {
-        padding: 1.25rem;
-    }
-
-    .chart-controls {
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        justify-content: flex-start;
-    }
-
-    .chart-controls label {
-        padding: 0.5rem;
-    }
-
-    .math-modal-content {
-        width: 95%;
-        max-height: 90vh;
-    }
-
-    .math-modal-header {
-        padding: 1.25rem;
-    }
-
-    .math-modal-body {
-        padding: 1.5rem;
-    }
-}
-
-
-@media (max-width: 480px) {
-    .container {
-        padding: 0.25rem;
-    }
-
-    h1 {
-        font-size: 1.5rem;
-    }
-
-    .tab-content {
-        padding: 1rem;
-    }
-
-    .input-form {
-        padding: .75rem;
-    }
-
-    .result-section {
-        padding: 1rem;
-    }
-
-    .chart-description {
-        padding: 1rem;
-        font-size: 0.8rem;
-    }
-
-    .math-modal-header h2 {
-        font-size: 1.25rem;
-    }
-
-    .math-modal-body {
-        padding: 1rem;
-    }
-}
-
 /* Enhanced Accessibility Features */
 @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {
@@ -1573,23 +1359,6 @@ body.dark-mode .dark-mode-btn:hover {
     border: 1px solid var(--primary-200);
 }
 
-@media (max-width: 600px) {
-    .range-control {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 1rem;
-    }
-
-    .range-control input[type="range"] {
-        width: 100%;
-        min-width: unset;
-    }
-
-    #frequency-display-value {
-        text-align: center;
-        min-width: unset;
-    }
-}
 
 /* Loading states and animations */
 @keyframes pulse {
@@ -1715,4 +1484,242 @@ body.dark-mode .dark-mode-btn:hover {
 /* Specific styling for max-modes input */
 #max-modes, #sw-max-modes {
     max-width: 42px;
+}
+
+/* Line chart canvas for interactive frequency lines */
+#line-chart {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    pointer-events: none;
+    margin: auto;
+}
+
+/* Enhanced Responsive Design */
+@media (max-width: 768px) {
+    /* Layout */
+    .container {
+        padding: 0.75rem;
+        padding-top: 5rem;
+    }
+
+    .top-bar {
+        padding: 1rem 1.5rem;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+    }
+
+    /* Typography */
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    .top-bar h1 {
+        font-size: 1.25rem;
+    }
+
+    /* Navigation */
+    .tab-content {
+        padding: 1rem;
+    }
+
+    /* Forms */
+    .input-form {
+        padding: 1rem;
+    }
+
+    /* Content */
+    .intro-section {
+        padding: 1rem;
+    }
+
+    .result-section {
+        padding: 1rem;
+    }
+
+    .chart-description {
+        padding: 1rem;
+        font-size: 0.8rem;
+    }
+
+    .chart-wrapper {
+        padding: 0;
+    }
+
+    /* Modals */
+    .math-modal-header h2 {
+        font-size: 1.25rem;
+    }
+
+    .math-modal-body {
+        padding: 1rem;
+    }
+}
+
+@media (max-width: 1024px) {
+    .container {
+        padding: 1.5rem;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    .result-container {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.25rem;
+    }
+}
+
+@media (max-width: 899px) {
+    .container {
+        padding: 1rem;
+    }
+
+    h1 {
+        font-size: 1.75rem;
+        margin-bottom: 1.5rem;
+    }
+
+    h1::before {
+        font-size: 1.25rem;
+        top: -8px;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+
+    .tabs {
+        flex-direction: column;
+        gap: 0.5rem;
+        padding: 0.75rem;
+    }
+
+    .tab-button {
+        margin: 0;
+        width: 100%;
+        justify-content: center;
+    }
+
+    .tab-content {
+        padding: 1.5rem;
+    }
+
+    .input-form {
+        flex-direction: column;
+        gap: 0.25rem;
+        padding: 1.25rem;
+        align-items: center;
+    }
+
+    .input-form .dimensions-group {
+        flex-direction: row;
+        justify-content: center;
+        width: 100%;
+        padding-right: 0;
+        border-right: none;
+        margin-right: 0;
+        margin-bottom: 1rem;
+    }
+
+    .input-form .parameters-group {
+        flex-direction: row;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .input-group.dimension-input {
+        flex: 1;
+        min-width: 90px;
+        max-width: none;
+    }
+
+    .result-container {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .result-section {
+        padding: 1.25rem;
+    }
+
+    .chart-controls {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        justify-content: flex-start;
+    }
+
+    .chart-controls label {
+        padding: 0.5rem;
+    }
+
+    .math-modal-content {
+        width: 95%;
+        max-height: 90vh;
+    }
+
+    .math-modal-header {
+        padding: 1.25rem;
+    }
+
+    .math-modal-body {
+        padding: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0.25rem;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    .tab-content {
+        padding: 1rem;
+    }
+
+    .input-form {
+        padding: .75rem;
+    }
+
+    .result-section {
+        padding: 1rem;
+    }
+
+    .chart-description {
+        padding: 1rem;
+        font-size: 0.8rem;
+    }
+
+    .math-modal-header h2 {
+        font-size: 1.25rem;
+    }
+
+    .math-modal-body {
+        padding: 1rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .range-control {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+    }
+
+    .range-control input[type="range"] {
+        width: 100%;
+        min-width: unset;
+    }
+
+    #frequency-display-value {
+        text-align: center;
+        min-width: unset;
+    }
 }

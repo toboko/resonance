@@ -84,6 +84,23 @@ function addInteractiveFrequencyDisplay(canvas, maxFrequency, padding, width) {
     canvas.maxFrequency = maxFrequency;
     canvas.padding = padding;
     canvas.plotWidth = width;
+    canvas.drawnLines = canvas.drawnLines || [];
+
+    // Get or create the lines canvas (reuse existing one to avoid duplicates)
+    let linesCanvas = canvas.parentElement.querySelector('#line-chart');
+    if (!linesCanvas) {
+        // Create a separate canvas for lines to avoid redrawing the chart
+        linesCanvas = document.createElement('canvas');
+        linesCanvas.id = 'line-chart';
+        $(canvas).parent().append(linesCanvas);
+    }
+
+    // Update canvas dimensions
+    linesCanvas.width = canvas.width;
+    linesCanvas.height = canvas.height;
+    linesCanvas.style.width = canvas.width + 'px';
+    linesCanvas.style.height = canvas.height + 'px';
+    const linesCtx = linesCanvas.getContext('2d');
 
     // Store frequency data for precise lookup
     const allFrequencies = [
@@ -98,6 +115,19 @@ function addInteractiveFrequencyDisplay(canvas, maxFrequency, padding, width) {
     let lastMouseX = null;
     let lastMouseY = null;
     let lastDisplayedFrequency = null;
+    let currentTargetX = null;
+
+    // Function to draw a vertical line at specified x position
+    function drawVerticalLine(ctx, x) {
+        const topPadding = 15; // CHART_STYLE.PADDING_TOP
+        const bottomPadding = 45; // CHART_STYLE.PADDING_BOTTOM
+        ctx.beginPath();
+        ctx.moveTo(x, topPadding);
+        ctx.lineTo(x, canvas.height - bottomPadding);
+        ctx.strokeStyle = '#000';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+    }
 
     // Function to update frequency display with data-driven precision
     function updateFrequencyDisplay(x, y) {
@@ -128,6 +158,9 @@ function addInteractiveFrequencyDisplay(canvas, maxFrequency, padding, width) {
             if (lastDisplayedFrequency !== frequency) {
                 lastDisplayedFrequency = frequency;
 
+                // Calculate target x position for the closest frequency
+                currentTargetX = padding + (parseFloat(closestData.frequency) / maxFrequency) * width;
+
                 // Create detailed tooltip with mode information
                 const modeText = closestData.mode ? ` (${closestData.mode})` : '';
                 const typeText = closestData.type ? ` - ${closestData.type}` : '';
@@ -141,6 +174,7 @@ function addInteractiveFrequencyDisplay(canvas, maxFrequency, padding, width) {
             // Mouse outside plot area
             frequencyDisplay.text('--- Hz');
             lastDisplayedFrequency = null;
+            currentTargetX = null;
         }
     }
 
@@ -154,6 +188,9 @@ function addInteractiveFrequencyDisplay(canvas, maxFrequency, padding, width) {
 
     // Start the update loop
     requestAnimationFrame(processPendingUpdate);
+
+    // Remove existing event listeners to prevent duplicates
+    $(canvas).off('click.interactive mousemove.interactive mouseleave.interactive touchstart.interactive');
 
     // Add mousemove event listener with minimal processing
     $(canvas).on('mousemove.interactive', function(e) {
@@ -172,7 +209,37 @@ function addInteractiveFrequencyDisplay(canvas, maxFrequency, padding, width) {
     $(canvas).on('mouseleave.interactive', function() {
         frequencyDisplay.text('--- Hz');
         lastDisplayedFrequency = null;
+        currentTargetX = null;
         pendingUpdate = false;
+    });
+
+    // Add click event for desktop to draw vertical line at current target x
+    $(canvas).on('click.interactive', function(e) {
+        if (currentTargetX !== null) {
+            linesCtx.clearRect(0, 0, linesCanvas.width, linesCanvas.height);
+            drawVerticalLine(linesCtx, currentTargetX);
+        }
+    });
+
+    // Add touchstart event for mobile to draw vertical line at closest frequency
+    $(canvas).on('touchstart.interactive', function(e) {
+        e.preventDefault();
+        const rect = canvas.getBoundingClientRect();
+        const touch = e.touches[0] || e.changedTouches[0];
+        const scaleX = canvas.width / rect.width;
+        const x = (touch.clientX - rect.left) * scaleX;
+
+        // Update frequency display for mobile
+        updateFrequencyDisplay(x, canvas.height / 2);
+
+        // Check if touch is within plot area
+        const inXRange = x >= padding && x <= padding + width;
+        if (inXRange) {
+            const closestData = findClosestFrequency(x, allFrequencies, padding, width, maxFrequency);
+            const targetX = padding + (parseFloat(closestData.frequency) / maxFrequency) * width;
+            linesCtx.clearRect(0, 0, linesCanvas.width, linesCanvas.height);
+            drawVerticalLine(linesCtx, targetX);
+        }
     });
 
     // Fullscreen functionality - use a persistent variable to avoid reset on redraws
