@@ -110,7 +110,6 @@ function resizeCanvasToContainer(canvas) {
 
     // Calculate 1rem in pixels for compensation
     const remInPixels = parseFloat(getComputedStyle(document.documentElement).fontSize);
-    console.log(remInPixels)
     const isMobile = window.innerWidth <= 768;
     const isFullscreen = !!document.fullscreenElement && document.fullscreenElement.contains(container);
 
