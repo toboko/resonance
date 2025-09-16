@@ -19,7 +19,10 @@
 </head>
 <body>
 <div class="top-bar">
-    <span></span>
+    <a href="https://nilslewin.com" class="domain-link" title="Visit nilslewin.com">
+        <i class="fas fa-home"></i>
+        <span>nilslewin.com</span>
+    </a>
     <h1>Room Acoustics Calculator</h1>
     <button id="dark-mode-toggle" class="dark-mode-btn" aria-label="Toggle Dark Mode">
         <i class="fas fa-moon"></i>
@@ -107,7 +110,7 @@
                         <li><strong style="color: var(--chart-oblique);">Obliqua (giallo)</strong>: modi che vibrano lungo tutte e tre le dimensioni</li>
                         <li><strong style="color: var(--chart-combined);">Risultante (viola)</strong>: combinazione di tutti i modi</li>
                     </ul>
-                    <p><em>L'altezza delle curve indica l'energia relativa di ogni frequenza. Usa i controlli per mostrare/nascondere i segnali individualmente.</em></p>
+                    <p><em>L'altezza delle curve indica l'energia relativa di ogni frequenza.</em></p>
                     <button id="math-info-btn" class="math-info-button">Informazioni Matematiche</button>
                 </div>
                 <!-- Hidden canvas for PDF export with fixed dimensions -->
@@ -190,13 +193,13 @@
                         <li><strong style="color: var(--chart-width);">Larghezza (blu)</strong>: onde stazionarie lungo la dimensione della larghezza</li>
                         <li><strong style="color: var(--chart-height);">Altezza (verde)</strong>: onde stazionarie lungo la dimensione dell'altezza</li>
                     </ul>
-                    <p><em>Ogni linea verticale rappresenta una frequenza di risonanza. L'opacità delle linee diminuisce per i modi superiori per una migliore leggibilità.</em></p>
+                    <p><em>Ogni linea verticale rappresenta una frequenza di risonanza.</em></p>
                 </div>
             </div>
             <h3>Risultati</h3>
             <div class="result-container">
                 <div class="result-section full-width">
-                    <h4>Onde Stazionarie</h4>
+                    <h4 class="header-results">Onde Stazionarie</h4>
                     <div id="standing-waves-results" class="result-data"></div>
                 </div>
             </div>
@@ -363,5 +366,54 @@
 <script src="js/display.js"></script>
 <script src="js/ui.js"></script>
 <script src="js/app.js"></script>
+
+<!-- Footer -->
+<footer class="site-footer">
+    <div class="footer-content">
+        <div class="footer-main">
+            <div class="footer-brand">
+                <h3>Room Acoustics Calculator</h3>
+                <p>Strumento professionale per l'analisi delle risonanze acustiche</p>
+            </div>
+            <div class="footer-links">
+                <a href="https://nilslewin.com" target="_blank" rel="noopener">
+                    <i class="fas fa-external-link-alt"></i> nilslewin.com
+                </a>
+                <a href="https://github.com/toboko/resonance" target="_blank" rel="noopener">
+                    <i class="fab fa-github"></i> Repository GitHub
+                </a>
+            </div>
+        </div>
+
+        <div class="footer-tech">
+            <div class="tech-credits">
+                <h4>Tecnologie Utilizzate</h4>
+                <div class="tech-list">
+                    <span class="tech-item">
+                        <i class="fas fa-chart-line"></i> Chart.js
+                    </span>
+                    <span class="tech-item">
+                        <i class="fas fa-square-root-alt"></i> MathJax
+                    </span>
+                    <span class="tech-item">
+                        <i class="fas fa-file-pdf"></i> jsPDF
+                    </span>
+                    <span class="tech-item">
+                        <i class="fas fa-file-csv"></i> PapaParse
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="copyright">
+                <p>&copy; 2025 Nils Lewin. Tutti i diritti riservati.</p>
+            </div>
+            <div class="footer-version">
+                <span>v1.0.0</span>
+            </div>
+        </div>
+    </div>
+</footer>
 </body>
 </html>

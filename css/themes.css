@@ -341,10 +341,6 @@ body.dark-mode .dark-mode-btn:hover {
         gap: var(--space-4);
     }
 
-    .result-section {
-        padding: var(--space-5);
-    }
-
     .chart-controls {
         flex-wrap: nowrap;
         overflow-x: auto;
