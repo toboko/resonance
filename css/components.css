@@ -13,8 +13,8 @@
 
 .top-bar h1 {
     margin: 0;
-    font-size: 1.875rem;
-    font-weight: 700;
+    font-size: var(--font-size-h2);
+    font-weight: var(--font-weight-bold);
     color: var(--primary-700);
 }
 
@@ -30,7 +30,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1rem;
+    font-size: var(--font-size-base);
     transition: all var(--transition-fast);
     box-shadow: var(--shadow-sm);
 }
@@ -56,8 +56,8 @@
 
 .intro-section summary {
     color: var(--neutral-700);
-    font-size: 1rem;
-    font-weight: 600;
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
     cursor: pointer;
     padding: var(--space-2);
     border-radius: var(--radius-md);
@@ -84,9 +84,9 @@
 
 .usage-guide h3 {
     color: var(--primary-600);
-    font-size: 1rem;
+    font-size: var(--font-size-base);
     margin-bottom: var(--space-2);
-    font-weight: 600;
+    font-weight: var(--font-weight-semibold);
 }
 
 .usage-guide ol {
@@ -102,7 +102,7 @@
 .intro-section em {
     color: var(--neutral-600);
     font-style: italic;
-    font-weight: 500;
+    font-weight: var(--font-weight-medium);
 }
 
 /* Tabs */
@@ -121,8 +121,8 @@
     background: transparent;
     border: none;
     cursor: pointer;
-    font-size: 1rem;
-    font-weight: 500;
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-medium);
     transition: all var(--transition-fast);
     border-radius: var(--radius-md);
     margin: 0 0.125rem;
@@ -139,7 +139,7 @@
 
 .tab-button.active {
     color: white;
-    font-weight: 600;
+    font-weight: var(--font-weight-semibold);
     background: var(--primary-600);
     box-shadow: var(--shadow-sm);
 }
@@ -237,8 +237,8 @@
 }
 
 label {
-    font-weight: 600;
-    font-size: 0.875rem;
+    font-weight: var(--font-weight-semibold);
+    font-size: var(--font-size-sm);
     color: var(--neutral-700);
     display: flex;
     align-items: center;
@@ -249,7 +249,7 @@ input, select {
     padding: var(--space-3) var(--space-4);
     border: 2px solid var(--neutral-300);
     border-radius: var(--radius-md);
-    font-size: 1rem;
+    font-size: var(--font-size-base);
     background: white;
     transition: all var(--transition-normal);
     outline: none;
@@ -295,8 +295,8 @@ input[type="number"]::-webkit-inner-spin-button {
     border: none;
     border-radius: var(--radius-lg);
     cursor: pointer;
-    font-size: 1rem;
-    font-weight: 600;
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
     transition: all var(--transition-normal);
     grid-column: 1 / -1;
     max-width: 250px;
@@ -392,8 +392,8 @@ input[type="number"]::-webkit-inner-spin-button {
     display: flex;
     align-items: center;
     gap: var(--space-2);
-    font-size: 0.875rem;
-    font-weight: 500;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
     cursor: pointer;
     padding: var(--space-2) var(--space-3);
     border-radius: var(--radius-md);
@@ -426,7 +426,7 @@ input[type="number"]::-webkit-inner-spin-button {
     border-radius: var(--radius-lg);
     padding: var(--space-6);
     margin-bottom: var(--space-6);
-    font-size: 0.875rem;
+    font-size: var(--font-size-sm);
     line-height: 1.6;
 }
 
@@ -442,7 +442,7 @@ input[type="number"]::-webkit-inner-spin-button {
 .chart-description em {
     color: var(--neutral-600);
     font-style: italic;
-    font-weight: 500;
+    font-weight: var(--font-weight-medium);
 }
 
 /* Math Info Button */
@@ -453,8 +453,8 @@ input[type="number"]::-webkit-inner-spin-button {
     padding: var(--space-3) var(--space-6);
     border-radius: var(--radius-lg);
     cursor: pointer;
-    font-size: 0.875rem;
-    font-weight: 600;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
     transition: all var(--transition-normal);
     box-shadow: var(--shadow-md);
     display: inline-flex;
@@ -474,7 +474,7 @@ input[type="number"]::-webkit-inner-spin-button {
 
 .math-info-button::before {
     content: "📚";
-    font-size: 1rem;
+    font-size: var(--font-size-base);
 }
 
 /* Canvas */
@@ -494,8 +494,8 @@ canvas {
     border-radius: 4px;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
-    font-size: 0.875rem;
-    font-weight: bold;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-bold);
     z-index: 100;
     pointer-events: none;
     white-space: nowrap;
@@ -512,8 +512,8 @@ canvas {
     border: none;
     padding: 5px 8px;
     border-radius: 4px;
-    font-size: 1rem;
-    font-weight: bold;
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-bold);
     z-index: 100;
     cursor: pointer;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -598,8 +598,8 @@ canvas {
     padding: 10px 15px;
     border: 2px solid white;
     border-radius: 8px;
-    font-size: 1rem;
-    font-weight: bold;
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-bold);
     z-index: 10000;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
@@ -614,8 +614,8 @@ canvas {
     border: 2px solid white;
     border-radius: 8px;
     padding: 10px 15px;
-    font-size: 1.125rem;
-    font-weight: bold;
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
     cursor: pointer;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     pointer-events: auto;
@@ -685,8 +685,8 @@ canvas {
 .math-modal-header h2 {
     margin: 0;
     color: var(--primary-800);
-    font-size: 1.5rem;
-    font-weight: 700;
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
     display: flex;
     align-items: center;
     gap: var(--space-2);
@@ -695,7 +695,7 @@ canvas {
 .math-modal-close {
     background: none;
     border: none;
-    font-size: 1.5rem;
+    font-size: var(--font-size-xl);
     cursor: pointer;
     color: var(--neutral-500);
     padding: var(--space-2);
@@ -728,7 +728,7 @@ canvas {
 .math-section h3 {
     margin-top: 0;
     color: var(--primary-600);
-    font-size: 1.125rem;
+    font-size: var(--font-size-lg);
 }
 
 .math-formula {
@@ -778,16 +778,16 @@ canvas {
 
 .math-equation strong {
     color: var(--primary-600);
-    font-size: 0.875rem;
+    font-size: var(--font-size-sm);
     text-transform: uppercase;
     letter-spacing: 0.5px;
     margin-bottom: 15px;
     display: block;
-    font-weight: 600;
+    font-weight: var(--font-weight-semibold);
 }
 
 mjx-container {
-    font-size: 1.2em;
+    font-size: var(--font-size-lg);
     color: var(--neutral-800);
 }
 
@@ -815,8 +815,8 @@ mjx-chtml {
     padding: var(--space-3) var(--space-5);
     border-radius: var(--radius-md);
     cursor: pointer;
-    font-size: 0.875rem;
-    font-weight: 600;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
     transition: all var(--transition-fast);
     box-shadow: var(--shadow-sm);
 }
@@ -845,8 +845,8 @@ mjx-chtml {
 }
 
 .range-control label {
-    font-weight: 600;
-    font-size: 0.875rem;
+    font-weight: var(--font-weight-semibold);
+    font-size: var(--font-size-sm);
     color: var(--neutral-700);
     white-space: nowrap;
 }
@@ -896,8 +896,8 @@ mjx-chtml {
 }
 
 #frequency-display-value {
-    font-weight: 700;
-    font-size: 0.875rem;
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-sm);
     color: var(--primary-700);
     min-width: 70px;
     text-align: center;
@@ -922,8 +922,8 @@ mjx-chtml {
     color: white;
     border-radius: var(--radius-md);
     cursor: pointer;
-    font-size: 1rem;
-    font-weight: bold;
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-bold);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -965,8 +965,8 @@ mjx-chtml {
     padding: var(--space-2) var(--space-4);
     border-radius: var(--radius-md);
     cursor: pointer;
-    font-size: 0.875rem;
-    font-weight: 600;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
     box-shadow: var(--shadow-md);
     z-index: var(--z-tooltip);
     transition: all var(--transition-fast);
@@ -1018,8 +1018,8 @@ mjx-chtml {
 
 .error-message {
     color: var(--error);
-    font-size: 0.875rem;
-    font-weight: 500;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
     margin-top: var(--space-1);
     display: flex;
     align-items: center;
@@ -1028,7 +1028,7 @@ mjx-chtml {
 
 .error-message::before {
     content: "⚠️";
-    font-size: 0.75rem;
+    font-size: var(--font-size-xs);
 }
 
 /* ========================================
@@ -1293,8 +1293,8 @@ mjx-chtml {
     .math-info-button {
         width: 100%;
         justify-content: center;
-        padding: var(--space-2) var(--space-4);
-        font-size: 0.75rem;
+        padding: var(--space-3);
+        font-size: var(--font-size-lg);
     }
 
     .math-modal-content {
@@ -1403,7 +1403,7 @@ mjx-chtml {
 
     .tab-button {
         padding: var(--space-3);
-        font-size: 1.25rem;
+        font-size: var(--font-size-lg);
     }
 
     .intro-section {
@@ -1420,7 +1420,7 @@ mjx-chtml {
 
     .input-group.dimension-input input,
     .input-group.dimension-input label {
-        font-size: 0.75rem;
+        font-size: var(--font-size-md);
     }
 
     .select-input {
@@ -1447,13 +1447,13 @@ mjx-chtml {
     }
 
     .chart-controls label {
-        font-size: 0.7rem;
+        font-size: var(--font-size-md);
         padding: 0.125rem var(--space-1);
     }
 
     .chart-description {
         padding: var(--space-2);
-        font-size: 0.7rem;
+        font-size: var(--font-size-md);
     }
 
     .result-section {
@@ -1488,8 +1488,8 @@ mjx-chtml {
     }
 
     .export-btn {
-        padding: var(--space-1) var(--space-2);
-        font-size: 0.7rem;
+        padding: var(--space-3);
+        font-size: var(--font-size-lg);
     }
 
     .range-control {
@@ -1508,11 +1508,11 @@ mjx-chtml {
         top: 60px;
         right: 10px;
         padding: 3px 5px;
-        font-size: 0.7rem;
+        font-size: var(--font-size-lg);
     }
 
     .frequency-display {
-        font-size: 0.7rem;
+        font-size: var(--font-size-md);
         padding: 2px 4px;
     }
 

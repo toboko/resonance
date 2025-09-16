@@ -12,7 +12,7 @@
 /* Base HTML elements */
 html {
     font-size: 16px;
-    line-height: 1.5;
+    line-height: var(--line-height-normal);
     -webkit-text-size-adjust: 100%;
     -moz-tab-size: 4;
     tab-size: 4;
@@ -20,9 +20,10 @@ html {
 
 body {
     font-family: var(--font-family-sans);
+    font-size: var(--font-size-base);
     background: var(--neutral-50);
     color: var(--neutral-800);
-    line-height: 1.6;
+    line-height: var(--line-height-normal);
     min-height: 100vh;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -31,46 +32,47 @@ body {
 /* Typography */
 h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-family-heading);
-    font-weight: 600;
-    line-height: 1.2;
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-tight);
     color: var(--neutral-800);
     margin-bottom: var(--space-4);
 }
 
 h1 {
-    font-size: 2.25rem;
-    font-weight: 700;
+    font-size: var(--font-size-h1);
+    font-weight: var(--font-weight-bold);
     letter-spacing: -0.025em;
 }
 
 h2 {
-    font-size: 1.875rem;
-    font-weight: 600;
+    font-size: var(--font-size-h2);
+    font-weight: var(--font-weight-semibold);
 }
 
 h3 {
-    font-size: 1.5rem;
-    font-weight: 600;
+    font-size: var(--font-size-h3);
+    font-weight: var(--font-weight-semibold);
 }
 
 h4 {
-    font-size: 1.25rem;
-    font-weight: 600;
+    font-size: var(--font-size-h4);
+    font-weight: var(--font-weight-semibold);
 }
 
 h5 {
-    font-size: 1.125rem;
-    font-weight: 600;
+    font-size: var(--font-size-h5);
+    font-weight: var(--font-weight-semibold);
 }
 
 h6 {
-    font-size: 1rem;
-    font-weight: 600;
+    font-size: var(--font-size-h6);
+    font-weight: var(--font-weight-semibold);
 }
 
 p {
+    font-size: var(--font-size-base);
     margin-bottom: var(--space-4);
-    line-height: 1.6;
+    line-height: var(--line-height-normal);
 }
 
 /* Links */
@@ -121,7 +123,7 @@ table {
 /* Code */
 code, pre {
     font-family: var(--font-family-mono);
-    font-size: 0.875em;
+    font-size: var(--font-size-sm);
 }
 
 code {

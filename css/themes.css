@@ -253,7 +253,6 @@ body.dark-mode .dark-mode-btn:hover {
     /* Improve readability */
     .chart-description {
         font-size: 0.8rem;
-        line-height: 1.4;
     }
 
     /* Stack elements vertically on small screens */
@@ -398,7 +397,7 @@ body.dark-mode .dark-mode-btn:hover {
 
     .chart-description {
         padding: var(--space-4);
-        font-size: 0.8rem;
+        font-size: var(--font-size-md)
     }
 
     .math-modal-header h2 {

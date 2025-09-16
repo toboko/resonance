@@ -13,14 +13,14 @@
 
 .frequency-table th,
 .frequency-table td {
-    padding: var(--space-3) var(--space-4);
+    padding: var(--space-2) var(--space-3);
     text-align: left;
     border-bottom: 1px solid var(--neutral-200);
 }
 
 .frequency-table th {
     background: var(--primary-50);
-    font-weight: 600;
+    font-weight: var(--font-weight-semibold);
     color: var(--primary-700);
     border-bottom: 2px solid var(--primary-200);
 }
@@ -49,7 +49,7 @@
     display: flex;
     align-items: center;
     padding: var(--space-3) var(--space-4);
-    font-weight: 500;
+    font-weight: var(--font-weight-medium);
     color: var(--primary-700);
 }
 
@@ -61,7 +61,7 @@
 
 .frequency-range {
     margin-left: var(--space-2);
-    font-size: 0.875rem;
+    font-size: var(--font-size-sm);
     color: var(--neutral-600);
     font-weight: normal;
 }
@@ -96,8 +96,8 @@
     height: 24px;
     border-radius: 50%;
     color: white;
-    font-size: 0.75rem;
-    font-weight: 600;
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
     margin-right: var(--space-2);
 }
 
@@ -109,12 +109,12 @@
 
 .col-mode {
     font-family: var(--font-family-mono);
-    font-weight: 500;
+    font-weight: var(--font-weight-medium);
 }
 
 .col-freq {
     font-family: var(--font-family-mono);
-    font-weight: 500;
+    font-weight: var(--font-weight-medium);
     color: var(--primary-600);
 }
 
@@ -126,14 +126,14 @@
     border: 1px solid var(--primary-200);
     border-radius: var(--radius-sm);
     color: var(--primary-700);
-    font-weight: 500;
+    font-weight: var(--font-weight-medium);
     text-align: center;
 }
 
 /* Table note */
 .table-note {
     margin-top: var(--space-3);
-    font-size: 0.875rem;
+    font-size: var(--font-size-sm);
     color: var(--neutral-600);
     font-style: italic;
 }
