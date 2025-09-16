@@ -176,10 +176,7 @@ h1 {
         padding: 1rem;
     }
 
-    /* Interactive elements */
-    .fullscreen-btn {
-        display: block;
-    }
+
 }
 
 /* Dark Mode Toggle Button */
@@ -759,9 +756,9 @@ canvas {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-/* Fullscreen button - visible only on mobile */
+/* Fullscreen button */
 .fullscreen-btn {
-    display: none;
+    display: block;
     position: absolute;
     top: 85px;
     right: 20px; /* Position to the left of frequency-display */
