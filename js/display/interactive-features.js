@@ -117,6 +117,11 @@ function addInteractiveFrequencyDisplay(canvas, maxFrequency, padding, width) {
     let lastDisplayedFrequency = null;
     let currentTargetX = null;
 
+    // Desktop interaction mode variables
+    let isDesktopLocked = false;
+    let lockedTargetX = null;
+    let lockedFrequencyData = null;
+
     // Function to draw a vertical line at specified x position
     function drawVerticalLine(ctx, x) {
         const topPadding = 15; // CHART_STYLE.PADDING_TOP
@@ -162,7 +167,7 @@ function addInteractiveFrequencyDisplay(canvas, maxFrequency, padding, width) {
                 currentTargetX = padding + (parseFloat(closestData.frequency) / maxFrequency) * width;
 
                 // Create detailed tooltip with mode information
-                const modeText = closestData.mode ? ` (${closestData.mode})` : '';
+                const modeText = closestData.mode ? ` ${closestData.mode}` : '';
                 const typeText = closestData.type ? ` - ${closestData.type}` : '';
                 const displayText = `${frequency} Hz${modeText}${typeText}`;
 
@@ -202,22 +207,58 @@ function addInteractiveFrequencyDisplay(canvas, maxFrequency, padding, width) {
         let x = (e.clientX - rect.left) * scaleX;
         let y = (e.clientY - rect.top) * scaleY;
 
-        updateFrequencyDisplay(x, y);
+        // For desktop: always update frequency display and draw line (unless locked)
+        if (!isDesktopLocked) {
+            updateFrequencyDisplay(x, y);
+
+            // Draw line following mouse with frequency snapping
+            if (currentTargetX !== null) {
+                linesCtx.clearRect(0, 0, linesCanvas.width, linesCanvas.height);
+                drawVerticalLine(linesCtx, currentTargetX);
+            }
+        }
     });
 
     // Add mouseleave event
     $(canvas).on('mouseleave.interactive', function() {
-        frequencyDisplay.text('--- Hz');
-        lastDisplayedFrequency = null;
-        currentTargetX = null;
-        pendingUpdate = false;
+        if (!isDesktopLocked) {
+            frequencyDisplay.text('--- Hz');
+            lastDisplayedFrequency = null;
+            currentTargetX = null;
+            pendingUpdate = false;
+            // Clear the line when mouse leaves
+            linesCtx.clearRect(0, 0, linesCanvas.width, linesCanvas.height);
+        }
     });
 
-    // Add click event for desktop to draw vertical line at current target x
+    // Add click event for desktop to toggle lock/unlock mode
     $(canvas).on('click.interactive', function(e) {
-        if (currentTargetX !== null) {
+        if (isDesktopLocked) {
+            // Unlock: clear everything and restart
+            isDesktopLocked = false;
+            lockedTargetX = null;
+            lockedFrequencyData = null;
             linesCtx.clearRect(0, 0, linesCanvas.width, linesCanvas.height);
-            drawVerticalLine(linesCtx, currentTargetX);
+            frequencyDisplay.text('--- Hz');
+            lastDisplayedFrequency = null;
+            currentTargetX = null;
+        } else {
+            // Lock: fix the current line and stop updating frequency display
+            if (currentTargetX !== null && lastDisplayedFrequency !== null) {
+                isDesktopLocked = true;
+                lockedTargetX = currentTargetX;
+
+                // Find the frequency data for the locked frequency
+                const lockedData = allFrequencies.find(f => Math.round(parseFloat(f.frequency)) === lastDisplayedFrequency);
+                lockedFrequencyData = lockedData || { frequency: lastDisplayedFrequency, mode: null, type: null };
+
+                // Update display with unlock message
+                const modeText = lockedFrequencyData.mode ? ` ${lockedFrequencyData.mode}   ` : '';
+                const typeText = lockedFrequencyData.type ? ` - ${lockedFrequencyData.type}` : '';
+                const displayText = `${lastDisplayedFrequency} Hz${modeText}${typeText} - Fai click per sbloccare il puntatore`;
+                frequencyDisplay.text(displayText);
+                // Keep the line drawn
+            }
         }
     });
 
