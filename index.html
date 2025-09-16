@@ -7,7 +7,6 @@
     <meta name="keywords" content="acustica stanze, modi risonanza, onde stazionarie, elaborazione segnale acustico, design audio">
     <title>RAC | Calcolatore Risonanze Acustiche</title>
     <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/table-styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- MathJax for LaTeX rendering -->
@@ -19,8 +18,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 </head>
 <body>
-<a href="#main-content" class="skip-link">Skip to main content</a>
 <div class="top-bar">
+    <span></span>
     <h1>Room Acoustics Calculator</h1>
     <button id="dark-mode-toggle" class="dark-mode-btn" aria-label="Toggle Dark Mode">
         <i class="fas fa-moon"></i>
@@ -87,10 +86,10 @@
             <div class="visualization">
                 <div class="chart-container">
                     <div class="chart-controls">
-                        <label><input type="checkbox" id="show-axial" checked> <span class="color-indicator" style="background-color: #ff6384;"></span> Assiale</label>
-                        <label><input type="checkbox" id="show-tangential" checked> <span class="color-indicator" style="background-color: #36a2eb;"></span> Tangenziale</label>
-                        <label><input type="checkbox" id="show-oblique" checked> <span class="color-indicator" style="background-color: #ffce56;"></span> Obliqua</label>
-                        <label><input type="checkbox" id="show-combined" checked> <span class="color-indicator" style="background-color: #9c88ff;"></span> Risultante</label>
+                        <label><input type="checkbox" id="show-axial" checked> <span class="color-indicator" style="background-color: var(--chart-axial);"></span> Assiale</label>
+                        <label><input type="checkbox" id="show-tangential" checked> <span class="color-indicator" style="background-color: var(--chart-tangential);"></span> Tangenziale</label>
+                        <label><input type="checkbox" id="show-oblique" checked> <span class="color-indicator" style="background-color: var(--chart-oblique);"></span> Obliqua</label>
+                        <label><input type="checkbox" id="show-combined" checked> <span class="color-indicator" style="background-color: var(--chart-combined);"></span> Risultante</label>
                     </div>
                     <div class="chart-wrapper">
                         <canvas id="frequency-chart" height="360"></canvas>
@@ -103,10 +102,10 @@
                 <div class="chart-description">
                     <p><strong>Questo grafico mostra la distribuzione energetica delle frequenze di risonanza nella stanza:</strong></p>
                     <ul>
-                        <li><strong style="color: #ff6384;">Assiale (rosso)</strong>: modi che vibrano lungo una sola dimensione</li>
-                        <li><strong style="color: #36a2eb;">Tangenziale (blu)</strong>: modi che vibrano lungo due dimensioni</li>
-                        <li><strong style="color: #ffce56;">Obliqua (giallo)</strong>: modi che vibrano lungo tutte e tre le dimensioni</li>
-                        <li><strong style="color: #9c88ff;">Risultante (viola)</strong>: combinazione di tutti i modi</li>
+                        <li><strong style="color: var(--chart-axial);">Assiale (rosso)</strong>: modi che vibrano lungo una sola dimensione</li>
+                        <li><strong style="color: var(--chart-tangential);">Tangenziale (blu)</strong>: modi che vibrano lungo due dimensioni</li>
+                        <li><strong style="color: var(--chart-oblique);">Obliqua (giallo)</strong>: modi che vibrano lungo tutte e tre le dimensioni</li>
+                        <li><strong style="color: var(--chart-combined);">Risultante (viola)</strong>: combinazione di tutti i modi</li>
                     </ul>
                     <p><em>L'altezza delle curve indica l'energia relativa di ogni frequenza. Usa i controlli per mostrare/nascondere i segnali individualmente.</em></p>
                     <button id="math-info-btn" class="math-info-button">Informazioni Matematiche</button>
@@ -176,9 +175,9 @@
             <div class="visualization">
                 <div class="chart-container">
                     <div class="chart-controls">
-                        <label><input type="checkbox" id="show-length" checked> <span class="color-indicator" style="background-color: #ff6384;"></span> Lunghezza</label>
-                        <label><input type="checkbox" id="show-width" checked> <span class="color-indicator" style="background-color: #36a2eb;"></span> Larghezza</label>
-                        <label><input type="checkbox" id="show-height" checked> <span class="color-indicator" style="background-color: #ffce56;"></span> Altezza</label>
+                        <label><input type="checkbox" id="show-length" checked> <span class="color-indicator" style="background-color: var(--chart-length);"></span> Lunghezza</label>
+                        <label><input type="checkbox" id="show-width" checked> <span class="color-indicator" style="background-color: var(--chart-width);"></span> Larghezza</label>
+                        <label><input type="checkbox" id="show-height" checked> <span class="color-indicator" style="background-color: var(--chart-height);"></span> Altezza</label>
                     </div>
                     <div class="chart-wrapper">
                         <canvas id="standing-waves-chart" height="360"></canvas>
@@ -187,9 +186,9 @@
                 <div class="chart-description">
                     <p><strong>Questo grafico mostra le frequenze delle onde stazionarie nella stanza:</strong></p>
                     <ul>
-                        <li><strong style="color: #ff6384;">Lunghezza (rosso)</strong>: onde stazionarie lungo la dimensione della lunghezza</li>
-                        <li><strong style="color: #36a2eb;">Larghezza (blu)</strong>: onde stazionarie lungo la dimensione della larghezza</li>
-                        <li><strong style="color: #ffce56;">Altezza (giallo)</strong>: onde stazionarie lungo la dimensione dell'altezza</li>
+                        <li><strong style="color: var(--chart-length);">Lunghezza (rosso)</strong>: onde stazionarie lungo la dimensione della lunghezza</li>
+                        <li><strong style="color: var(--chart-width);">Larghezza (blu)</strong>: onde stazionarie lungo la dimensione della larghezza</li>
+                        <li><strong style="color: var(--chart-height);">Altezza (verde)</strong>: onde stazionarie lungo la dimensione dell'altezza</li>
                     </ul>
                     <p><em>Ogni linea verticale rappresenta una frequenza di risonanza. L'opacità delle linee diminuisce per i modi superiori per una migliore leggibilità.</em></p>
                 </div>
@@ -319,23 +318,6 @@
             </div>
 
             <div class="math-section">
-                <h3>📈 Rationale della Visualizzazione</h3>
-                <p><strong>Perché un grafico continuo?</strong> Mentre le frequenze di risonanza sono matematicamente discrete, la risposta energetica della stanza è continua. La convoluzione con distribuzioni di Laplace crea profili che riflettono l'energia distribuita attorno a ciascun modo.</p>
-
-                <p><strong>Pipeline completa:</strong>
-                <ol>
-                    <li>Calcolo frequenze discrete da \(f_{pqr}\)</li>
-                    <li>Applicazione fattori energetici (1.0, 0.71, 0.58)</li>
-                    <li>Normalizzazione per densità spettrale</li>
-                    <li>Tapering percettivo per frequenze alte</li>
-                    <li>Generazione profili Laplace per continuità</li>
-                    <li>Somma per spettro composito</li>
-                </ol></p>
-
-                <p>Questa rappresentazione bilancia precisione matematica con usabilità pratica, fornendo agli acustici uno strumento per identificare problemi di risonanza e ottimizzare il design delle stanze.</p>
-            </div>
-
-            <div class="math-section">
                 <h3>🔄 Algoritmo di Elaborazione</h3>
                 <p>Il processo completo integra fisica delle onde, elaborazione del segnale e considerazioni percettive per produrre visualizzazioni accurate e utili.</p>
 
@@ -352,33 +334,11 @@
                 </ol>
 
                 <p>Questo approccio garantisce che il grafico rappresenti fedelmente sia la fisica matematica che l'esperienza acustica pratica.</p>
+                <p><strong>Perché un grafico continuo?</strong> Mentre le frequenze di risonanza sono matematicamente discrete, la risposta energetica della stanza è continua. La convoluzione con distribuzioni di Laplace crea profili che riflettono l'energia distribuita attorno a ciascun modo.</p>
             </div>
 
             <div class="math-section">
-                <h3>🎯 Come Funziona il Tooltip</h3>
-                <p>Il tooltip mostra la frequenza esatta sotto il mouse. Ecco come funziona:</p>
-                <ol>
-                    <li><strong>Coordinate corrette:</strong> Il sistema compensa il ridimensionamento del browser per ottenere coordinate precise del mouse</li>
-                    <li><strong>Calcolo posizione:</strong> Converte la posizione orizzontale del mouse in una frequenza teorica</li>
-                    <li><strong>Ricerca nel dataset:</strong> Trova la frequenza di risonanza reale più vicina tra quelle calcolate</li>
-                    <li><strong>Display informativo:</strong> Mostra la frequenza esatta con il modo di vibrazione e il tipo</li>
-                </ol>
-                <p><strong>Perché è preciso:</strong> Non approssima, ma usa i dati reali calcolati dalla fisica della stanza.</p>
-            </div>
-
-            <div class="math-section">
-                <h3>🎨 I Colori e la Legenda</h3>
-                <p><strong>Il significato dei colori:</strong> Ogni tipo di modo ha il suo colore per aiutarti a capire immediatamente la natura della risonanza:</p>
-                <ul>
-                    <li><strong style="color: #ff6384;">Rosso (Assiale):</strong> Modi più semplici, più energetici, spesso i più importanti per l'acustica</li>
-                    <li><strong style="color: #36a2eb;">Blu (Tangenziale):</strong> Modi intermedi, buona energia, contribuiscono al carattere della stanza</li>
-                    <li><strong style="color: #ffce56;">Giallo (Obliquo):</strong> Modi complessi, meno energia, riempiono lo spettro ad alta frequenza</li>
-                    <li><strong style="color: #9c88ff;">Viola (Risultante):</strong> La somma di tutto, quello che realmente senti nella stanza</li>
-                </ul>
-            </div>
-
-            <div class="math-section">
-                <h3>🎵 Considerazioni Finali sull'Acustica</h3>
+                <h3>Considerazioni Finali</h3>
                 <p><strong>Perché tutto questo lavoro?</strong> Perché l'acustica delle stanze non riguarda solo le frequenze matematiche, ma come queste interagiscono con l'orecchio umano e influenzano l'esperienza musicale.</p>
 
                 <p><strong>Il compromesso tra precisione e usabilità:</strong> Avremmo potuto creare un grafico che mostrasse solo i punti discreti delle frequenze calcolate, ma sarebbe stato poco informativo. Invece, abbiamo scelto di creare curve continue che rappresentano l'energia relativa di ogni frequenza, rendendo il grafico molto più utile per prendere decisioni pratiche.</p>

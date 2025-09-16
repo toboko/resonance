@@ -95,8 +95,10 @@
     };
 
     // Function to draw signal curve with animation
-    function drawSignal(signal, color, label, alpha = 0.8, fadeIn = false) {
+    function drawSignal(signal, colorVar, label, alpha = 0.8, fadeIn = false) {
         if (!signal || signal.length === 0) return;
+
+        const color = getComputedStyle(document.documentElement).getPropertyValue(colorVar).trim();
 
         ctx.beginPath();
         ctx.strokeStyle = color;
@@ -354,7 +356,8 @@ function animateStandingWavesChart(canvas, ctx) {
 
         dimensionWaves.forEach((wave, index) => {
             const x = leftPadding + (parseFloat(wave.frequency) / maxFrequency) * width;
-            const color = colors[dimension];
+            const colorVar = colors[dimension];
+            const color = getComputedStyle(document.documentElement).getPropertyValue(colorVar).trim();
             const waveNumber = currentWaves.findIndex(w => w.frequency === wave.frequency && w.dimension === wave.dimension) + 1;
 
             // Add to table data

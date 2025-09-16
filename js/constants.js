@@ -14,17 +14,17 @@ const DEFAULTS = {
 // Color schemes for different types of modes and dimensions
 const COLORS = {
     // Mode types
-    AXIAL: '#ff6384',      // Red
-    TANGENTIAL: '#36a2eb', // Blue
-    OBLIQUE: '#ffce56',    // Yellow
+    AXIAL: '--chart-axial',      // Red
+    TANGENTIAL: '--chart-tangential', // Blue
+    OBLIQUE: '--chart-oblique',    // Yellow
 
     // Combined signal
-    COMBINED: '#9c88ff',   // Purple
+    COMBINED: '--chart-combined',   // Purple
 
     // Dimensions
-    LENGTH: '#ff6384',     // Red
-    WIDTH: '#36a2eb',      // Blue
-    HEIGHT: '#4bc0c0',     // Teal
+    LENGTH: '--chart-length',     // Red
+    WIDTH: '--chart-width',      // Blue
+    HEIGHT: '--chart-height',     // Teal
 
     // Chart elements
     AXIS: '#000',

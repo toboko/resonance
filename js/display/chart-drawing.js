@@ -304,7 +304,8 @@ function drawResonanceChart(canvasId, axial, tangential, oblique) {
     };
 
     // Function to draw signal curve
-    function drawSignal(signal, color, label, alpha = 0.8) {
+    function drawSignal(signal, colorVar, label, alpha = 0.8) {
+        const color = getComputedStyle(document.documentElement).getPropertyValue(colorVar).trim();
         ctx.beginPath();
         ctx.strokeStyle = color;
         ctx.lineWidth = 2;
@@ -538,7 +539,8 @@ function drawStandingWavesChart(canvasId, waves) {
 
         dimensionWaves.forEach((wave, index) => {
             const x = leftPadding + (parseFloat(wave.frequency) / maxFrequency) * width;
-            const color = colors[dimension];
+            const colorVar = colors[dimension];
+            const color = getComputedStyle(document.documentElement).getPropertyValue(colorVar).trim();
             const waveNumber = waves.findIndex(w => w.frequency === wave.frequency && w.dimension === wave.dimension) + 1;
 
             // Add to table data
@@ -653,7 +655,8 @@ function drawResonanceChartForPDF(axial, tangential, oblique) {
     };
 
     // Function to draw signal curve
-    function drawSignal(signal, color, label, alpha = 0.8) {
+    function drawSignal(signal, colorVar, label, alpha = 0.8) {
+        const color = getComputedStyle(document.documentElement).getPropertyValue(colorVar).trim();
         ctx.beginPath();
         ctx.strokeStyle = color;
         ctx.lineWidth = 2;
@@ -723,7 +726,7 @@ function drawResonanceChartForPDF(axial, tangential, oblique) {
 
         // Axial
         if (showAxial && axial.length > 0) {
-            ctx.fillStyle = typeColors.axial;
+            ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue(typeColors.axial).trim();
             ctx.fillRect(legendX, legendY, 15, 15);
             ctx.fillStyle = '#000';
             ctx.textAlign = 'left';
@@ -734,7 +737,7 @@ function drawResonanceChartForPDF(axial, tangential, oblique) {
 
         // Tangential
         if (showTangential && tangential.length > 0) {
-            ctx.fillStyle = typeColors.tangential;
+            ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue(typeColors.tangential).trim();
             ctx.fillRect(legendX, legendY, 15, 15);
             ctx.fillStyle = '#000';
             ctx.textAlign = 'left';
@@ -745,7 +748,7 @@ function drawResonanceChartForPDF(axial, tangential, oblique) {
 
         // Oblique
         if (showOblique && oblique.length > 0) {
-            ctx.fillStyle = typeColors.oblique;
+            ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue(typeColors.oblique).trim();
             ctx.fillRect(legendX, legendY, 15, 15);
             ctx.fillStyle = '#000';
             ctx.textAlign = 'left';
@@ -756,7 +759,7 @@ function drawResonanceChartForPDF(axial, tangential, oblique) {
 
         // Combined
         if (showCombined && combinedSignal.length > 0) {
-            ctx.fillStyle = typeColors.combined;
+            ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue(typeColors.combined).trim();
             ctx.fillRect(legendX, legendY, 15, 15);
             ctx.fillStyle = '#000';
             ctx.textAlign = 'left';

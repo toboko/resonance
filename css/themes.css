@@ -1,0 +1,507 @@
+/* Theme variations - Dark mode, High contrast, Print styles */
+
+/* Dark Mode Theme */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --primary-50: #1e293b;
+        --primary-100: #334155;
+        --primary-200: #475569;
+        --primary-300: #64748b;
+        --primary-400: #94a3b8;
+        --primary-500: #cbd5e1;
+        --primary-600: #60a5fa;
+        --primary-700: #475569;
+        --primary-800: #3b82f6;
+        --primary-900: #1e293b;
+        --neutral-50: #0f172a;
+        --neutral-100: #1e293b;
+        --neutral-200: #334155;
+        --neutral-300: #475569;
+        --neutral-400: #64748b;
+        --neutral-500: #94a3b8;
+        --neutral-600: #cbd5e1;
+        --neutral-700: #f1f5f9;
+        --neutral-800: #f8fafc;
+        --neutral-900: #ffffff;
+        --success: #34d399;
+        --warning: #fbbf24;
+        --error: #f87171;
+        --acoustic-blue: #60a5fa;
+        --acoustic-purple: #a78bfa;
+        --acoustic-teal: #2dd4bf;
+        --acoustic-orange: #fb923c;
+    }
+
+    body {
+        background: var(--neutral-50);
+        color: var(--neutral-700);
+    }
+
+    .intro-section {
+        background: var(--neutral-50);
+        border-color: var(--neutral-200);
+    }
+
+    .math-equation {
+        background: var(--neutral-100);
+        border-color: var(--primary-600);
+        color: var(--neutral-700);
+    }
+
+    .dark-mode-btn {
+        background: var(--primary-800);
+        color: var(--neutral-900);
+    }
+
+    .dark-mode-btn:hover {
+        background: var(--primary-700);
+    }
+}
+
+/* Manual Dark Mode Toggle */
+body.dark-mode {
+    --primary-50: #1e293b;
+    --primary-100: #334155;
+    --primary-200: #475569;
+    --primary-300: #64748b;
+    --primary-400: #94a3b8;
+    --primary-500: #cbd5e1;
+    --primary-600: #60a5fa;
+    --primary-700: #475569;
+    --primary-800: #3b82f6;
+    --primary-900: #1e293b;
+    --neutral-50: #0f172a;
+    --neutral-100: #1e293b;
+    --neutral-200: #334155;
+    --neutral-300: #475569;
+    --neutral-400: #64748b;
+    --neutral-500: #94a3b8;
+    --neutral-600: #cbd5e1;
+    --neutral-700: #f1f5f9;
+    --neutral-800: #f8fafc;
+    --neutral-900: #ffffff;
+    --success: #34d399;
+    --warning: #fbbf24;
+    --error: #f87171;
+    --acoustic-blue: #60a5fa;
+    --acoustic-purple: #a78bfa;
+    --acoustic-teal: #2dd4bf;
+    --acoustic-orange: #fb923c;
+
+    background: var(--neutral-50);
+    color: var(--neutral-700);
+}
+
+body.dark-mode .intro-section {
+    background: var(--neutral-50);
+    border-color: var(--neutral-200);
+}
+
+body.dark-mode .math-equation {
+    background: var(--neutral-100);
+    border-color: var(--primary-600);
+    color: var(--neutral-700);
+}
+
+body.dark-mode .dark-mode-btn {
+    background: var(--neutral-800);
+    color: var(--primary-900);
+}
+
+body.dark-mode .dark-mode-btn:hover {
+    background: var(--primary-700);
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+    :root {
+        --primary-500: #0066cc;
+        --neutral-800: #000000;
+        --neutral-50: #ffffff;
+    }
+
+    /* Enhanced borders and focus indicators */
+    input, select, button {
+        border-width: 3px;
+    }
+
+    .tab-button:focus,
+    input:focus,
+    select:focus,
+    button:focus {
+        outline: 3px solid var(--primary-500);
+        outline-offset: 3px;
+    }
+
+    /* Higher contrast text */
+    .result-item,
+    .chart-description {
+        border-width: 2px;
+    }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    /* Remove slide animations */
+    .tab-content.active {
+        animation: none;
+    }
+
+    .math-modal-overlay.show .math-modal-content {
+        animation: none;
+    }
+}
+
+/* Print Styles */
+@media print {
+    /* Hide interactive elements */
+    .tabs,
+    .chart-controls,
+    .math-info-button,
+    .calculate-btn,
+    .export-controls,
+    .dark-mode-btn,
+    .fullscreen-btn,
+    .scroll-top-btn {
+        display: none !important;
+    }
+
+    /* Simplify layout */
+    .tab-content {
+        display: block !important;
+        box-shadow: none;
+        border: 1px solid #000;
+        page-break-inside: avoid;
+    }
+
+    body {
+        background: white !important;
+        color: black !important;
+        font-size: 12pt;
+    }
+
+    .container {
+        max-width: none;
+        padding: 0;
+    }
+
+    /* Ensure charts are visible */
+    .chart-container {
+        page-break-inside: avoid;
+        border: 1px solid #000;
+    }
+
+    canvas {
+        max-width: 100%;
+        height: auto;
+    }
+
+    /* Improve table readability */
+    .result-section,
+    .frequency-table,
+    .waves-table {
+        border: 1px solid #000;
+        margin-bottom: 1rem;
+    }
+
+    .frequency-table th,
+    .frequency-table td,
+    .waves-table th,
+    .waves-table td {
+        border: 1px solid #000;
+        padding: 0.5rem;
+    }
+
+    /* Ensure headings are prominent */
+    h1, h2, h3, h4 {
+        color: #000 !important;
+        page-break-after: avoid;
+    }
+
+    /* Add page breaks for better layout */
+    .result-container {
+        page-break-inside: avoid;
+    }
+
+    .chart-description {
+        page-break-inside: avoid;
+    }
+}
+
+/* Mobile Optimizations */
+@media (max-width: 768px) {
+    /* Touch-friendly buttons */
+    button, .tab-button, .math-info-button {
+        min-height: 28px;
+        min-width: 28px;
+    }
+
+    /* Larger touch targets */
+    .chart-controls label {
+        padding: var(--space-3);
+        margin-bottom: var(--space-2);
+    }
+
+    /* Improve readability */
+    .chart-description {
+        font-size: 0.8rem;
+        line-height: 1.4;
+    }
+
+    /* Stack elements vertically on small screens */
+    .input-form {
+        flex-direction: column;
+        gap: var(--space-4);
+    }
+
+    .input-form .dimensions-group {
+        flex-direction: column;
+        border-right: none;
+        border-bottom: 2px solid var(--neutral-300);
+        padding-bottom: var(--space-4);
+        margin-bottom: var(--space-4);
+        margin-right: 0;
+    }
+}
+
+@media (max-width: 1024px) {
+    .container {
+        padding: var(--space-6);
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    .result-container {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: var(--space-5);
+    }
+}
+
+@media (max-width: 899px) {
+    .container {
+        padding: var(--space-4);
+    }
+
+    h1 {
+        font-size: 1.75rem;
+        margin-bottom: var(--space-6);
+    }
+
+    .tabs {
+        flex-direction: column;
+        gap: var(--space-2);
+        padding: var(--space-3);
+    }
+
+    .tab-button {
+        margin: 0;
+        width: 100%;
+        justify-content: center;
+    }
+
+    .tab-content {
+        padding: var(--space-6);
+    }
+
+    .input-form {
+        flex-direction: column;
+        gap: var(--space-1);
+        padding: var(--space-5);
+        align-items: center;
+    }
+
+    .input-form .dimensions-group {
+        flex-direction: row;
+        justify-content: center;
+        width: 100%;
+        padding-right: 0;
+        border-right: none;
+        margin-right: 0;
+        margin-bottom: var(--space-4);
+    }
+
+    .input-form .parameters-group {
+        flex-direction: row;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .input-group.dimension-input {
+        flex: 1;
+        min-width: 80px;
+        max-width: none;
+    }
+
+    .result-container {
+        grid-template-columns: 1fr;
+        gap: var(--space-4);
+    }
+
+    .result-section {
+        padding: var(--space-5);
+    }
+
+    .chart-controls {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        justify-content: flex-start;
+    }
+
+    .chart-controls label {
+        padding: var(--space-2);
+    }
+
+    .math-modal-content {
+        width: 95%;
+        max-height: 90vh;
+    }
+
+    .math-modal-header {
+        padding: var(--space-5);
+    }
+
+    .math-modal-body {
+        padding: var(--space-6);
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: var(--space-1);
+    }
+
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    .tab-content {
+        padding: var(--space-4);
+    }
+
+    .input-form {
+        padding: var(--space-3);
+    }
+
+    .result-section {
+        padding: var(--space-4);
+    }
+
+    .chart-description {
+        padding: var(--space-4);
+        font-size: 0.8rem;
+    }
+
+    .math-modal-header h2 {
+        font-size: 1.25rem;
+    }
+
+    .math-modal-body {
+        padding: var(--space-4);
+    }
+}
+
+@media (max-width: 600px) {
+    .range-control {
+        flex-direction: column;
+        align-items: stretch;
+        gap: var(--space-4);
+    }
+
+    .range-control input[type="range"] {
+        width: 100%;
+        min-width: unset;
+    }
+
+    #frequency-display-value {
+        text-align: center;
+        min-width: unset;
+    }
+}
+
+/* Large Screen Optimizations */
+@media (min-width: 1200px) {
+    .container {
+        padding: var(--space-12) var(--space-16);
+    }
+
+    .result-container {
+        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+        gap: var(--space-8);
+    }
+}
+
+/* Accessibility Enhancements */
+@media (prefers-reduced-motion: reduce) {
+    .tab-content.active {
+        animation: none;
+    }
+
+    .math-modal-content {
+        animation: none;
+    }
+
+    .calculate-btn:hover {
+        transform: none;
+    }
+
+    .math-info-button:hover {
+        transform: none;
+    }
+}
+
+/* Color scheme preferences */
+@media (prefers-color-scheme: light) {
+    /* Light mode specific adjustments */
+    .chart-container {
+        background: white;
+    }
+
+    .math-modal-content {
+        background: white;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    /* Dark mode specific adjustments */
+    .chart-container {
+        background: var(--neutral-100);
+    }
+
+    .math-modal-content {
+        background: var(--neutral-100);
+    }
+
+    .tab-content {
+        background: var(--neutral-100);
+    }
+}
+
+/* Focus visible for keyboard navigation */
+.tab-button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+button:focus-visible {
+    outline: 2px solid var(--primary-500);
+    outline-offset: 2px;
+}
+
+/* High contrast focus indicators */
+@media (prefers-contrast: high) {
+    .tab-button:focus-visible,
+    input:focus-visible,
+    select:focus-visible,
+    button:focus-visible {
+        outline: 3px solid var(--primary-500);
+        outline-offset: 3px;
+    }
+}

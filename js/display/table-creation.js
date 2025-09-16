@@ -97,7 +97,7 @@ function createResonanceTable(axialContainerId, tangentialContainerId, obliqueCo
             groupFrequencies.forEach(freq => {
                 const row = $(`
                 <tr>
-                    <td class="col-number"><span class="number-marker" style="background-color: ${typeColors[type]}">${freq.number}</span></td>
+                    <td class="col-number"><span class="number-marker" style="background-color: var(${typeColors[type]})">${freq.number}</span></td>
                     <td class="col-mode">(${freq.p},${freq.q},${freq.r})</td>
                     <td class="col-freq">${freq.frequency}</td>
                 </tr>
@@ -212,7 +212,7 @@ function createFrequencyTable(containerId, data) {
             if (data) {
                 row.append(`
                 <td>
-                    <span class="number-marker" style="background-color: ${dimensionColors[dimension]}">${data.number}</span>
+                    <span class="number-marker" style="background-color: var(${dimensionColors[dimension]})">${data.number}</span>
                     ${data.frequency} Hz
                 </td>
             `);
