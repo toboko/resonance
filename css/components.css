@@ -664,6 +664,153 @@ canvas {
     animation: fadeIn 0.3s ease-out;
 }
 
+/* Export Modal */
+.export-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(4px);
+    z-index: var(--z-modal-backdrop);
+    display: none;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.export-modal-overlay.show {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.export-modal-content {
+    background: white;
+    border-radius: var(--radius-xl);
+    width: 90%;
+    max-width: 500px;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: var(--shadow-xl);
+    border: 1px solid var(--neutral-200);
+    animation: modalSlideIn 0.4s ease-out;
+}
+
+.export-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-5) ;
+    border-bottom: 1px solid var(--neutral-200);
+    background: var(--neutral-50);
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.export-modal-header h2 {
+    margin: 0;
+    color: var(--primary-800);
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.export-modal-close {
+    background: none;
+    border: none;
+    font-size: var(--font-size-xl);
+    cursor: pointer;
+    color: var(--neutral-500);
+    padding: var(--space-2);
+    border-radius: var(--radius-md);
+    transition: all var(--transition-fast);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+}
+
+.export-modal-close:hover {
+    color: var(--neutral-700);
+    background: var(--neutral-100);
+}
+
+.export-modal-body {
+    padding: var(--space-8);
+    text-align: center;
+}
+
+.export-status {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
+    margin-bottom: var(--space-6);
+}
+
+.export-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid var(--neutral-200);
+    border-top: 4px solid var(--primary-500);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+#export-message {
+    font-size: var(--font-size-lg);
+    color: var(--neutral-700);
+    font-weight: var(--font-weight-medium);
+    margin: 0;
+}
+
+.export-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
+}
+
+#export-success-message {
+    font-size: var(--font-size-lg);
+    color: var(--success);
+    font-weight: var(--font-weight-semibold);
+    margin: 0;
+}
+
+.export-download-btn {
+    background: var(--success);
+    color: white;
+    border: none;
+    padding: var(--space-4) var(--space-8);
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+    transition: all var(--transition-normal);
+    box-shadow: var(--shadow-md);
+}
+
+.export-download-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+    background: var(--success);
+}
+
+.export-download-btn:active {
+    transform: translateY(0);
+}
+
 .math-modal-overlay.show {
     display: flex;
     justify-content: center;
@@ -1331,7 +1478,7 @@ mjx-chtml {
     }
 
     h2 {
-        font-size: 1.4rem;
+        font-size: var(--font-size-2xl);
     }
 
     .top-bar {

@@ -352,6 +352,26 @@
     </div>
 </div>
 
+<!-- Export Modal -->
+<div id="export-modal" class="export-modal-overlay">
+    <div class="export-modal-content">
+        <div class="export-modal-header">
+            <h2>Esportazione File</h2>
+            <button class="export-modal-close">&times;</button>
+        </div>
+        <div class="export-modal-body">
+            <div class="export-status">
+                <div class="export-spinner"></div>
+                <p id="export-message">Preparazione file...</p>
+            </div>
+            <div class="export-actions" style="display: none;">
+                <p id="export-success-message"></p>
+                <button id="export-download-btn" class="export-download-btn">Scarica File</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="js/constants.js"></script>
 <script src="js/utils.js"></script>
 <script src="js/calculations.js"></script>

@@ -249,10 +249,35 @@ function setupModalEnhancements() {
     }
 }
 
+// Export modal functions
+function showExportModal() {
+    $('#export-modal').addClass('show');
+}
+
+function hideExportModal() {
+    $('#export-modal').removeClass('show');
+}
+
+function updateExportModal(type, status, message) {
+    if (status === 'progress') {
+        $('#export-message').text(message);
+        $('.export-status').show();
+        $('.export-actions').hide();
+    } else if (status === 'success') {
+        $('#export-success-message').text(message);
+        $('.export-status').hide();
+        $('.export-actions').show();
+    }
+}
+
 // Export functions
 function setupExportHandlers() {
     // PDF Export
     $('#export-pdf-btn').on('click', function() {
+        // Show modal with progress
+        showExportModal();
+        updateExportModal('pdf', 'progress', 'PDF in creazione...');
+
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF('p', 'mm', 'a4'); // A4 format
 
@@ -363,13 +388,22 @@ function setupExportHandlers() {
                     yPosition += 4;
                 }
 
-                doc.save('room-acoustics-report.pdf');
+                // Update modal to success state
+                updateExportModal('pdf', 'success', 'PDF pronto per il download');
+
+                // Store the PDF document for download
+                window.currentPDFDoc = doc;
+                window.currentPDFFilename = 'room-acoustics-report.pdf';
             });
         }, 100); // 100ms delay
     });
 
     // CSV Export
     $('#export-csv-btn').on('click', function() {
+        // Show modal with progress
+        showExportModal();
+        updateExportModal('csv', 'progress', 'CSV in creazione...');
+
         // Always trigger calculation to ensure fresh data
         calculateBothSections();
         // Give more time for calculation and DOM update
@@ -414,11 +448,51 @@ function setupExportHandlers() {
         // Export the data with semicolon separator
         const csv = Papa.unparse(csvData, { delimiter: ';' });
         const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
-        link.download = 'room-acoustics-data.csv';
-        link.click();
+
+        // Update modal to success state
+        updateExportModal('csv', 'success', 'CSV pronto per il download');
+
+        // Store the CSV blob for download
+        window.currentCSVBlob = blob;
+        window.currentCSVFilename = 'room-acoustics-data.csv';
     }
+
+    // Download button handler
+    $('#export-download-btn').on('click', function() {
+        if (window.currentPDFDoc) {
+            // Download PDF
+            window.currentPDFDoc.save(window.currentPDFFilename);
+            window.currentPDFDoc = null;
+        } else if (window.currentCSVBlob) {
+            // Download CSV
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(window.currentCSVBlob);
+            link.download = window.currentCSVFilename;
+            link.click();
+            window.currentCSVBlob = null;
+        }
+
+        // Hide modal after download
+        hideExportModal();
+    });
+
+    // Modal close handlers
+    $('#export-modal .export-modal-close').on('click', function() {
+        hideExportModal();
+    });
+
+    $('#export-modal').on('click', function(e) {
+        if (e.target === this) {
+            hideExportModal();
+        }
+    });
+
+    // ESC key to close modal
+    $(document).on('keydown', function(e) {
+        if (e.key === 'Escape' && $('#export-modal').hasClass('show')) {
+            hideExportModal();
+        }
+    });
 }
 
 // Initialize all UI components
